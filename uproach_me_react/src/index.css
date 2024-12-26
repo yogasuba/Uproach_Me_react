@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  font-family: 'Inter', sans-serif ;
+}
+  /* Override the default checkbox appearance */
+  input[type="checkbox"] {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    position: relative;
+    outline: none;
+  }
+  
+  input[type="checkbox"]:checked {
+    background-color: black;
+    border-color: black;
+  }
+  
+  input[type="checkbox"]:checked::after {
+    content: '✔';
+    position: absolute;
+    left: 3px;
+    color: #f1f1f1;
+    font-size: 0.65rem;
+  }
+  
+  .custom-heading {
+    color: #1E1F24;
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 40px; /* 125% */
+    letter-spacing: -0.96px;
+  }
+
+  .custom-welcome{color: #1E1F24;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 130%;
+  letter-spacing: -0.96px;}
+
+  .or-divider {
+    display: flex;
+    padding: 8px 31px; /* Equivalent to var(--Spacing-s, 8px) 20px */
+    justify-content: center;
+    align-items: center;
+    margin-top:-4px;
+    margin-bottom:12px;
+    margin-left: -29px;
+  }
+  
+  .or-divider .line {
+    flex-grow: 1; /* Allows the line to stretch */
+    border-top: 1px solid #d1d5db; 
+    flex-shrink: 0;/* Equivalent to Tailwind border-gray-300 */
+
+  }
+  
+  .or-divider .text {
+    margin: 0 12px; /* Horizontal margin to space the "or" text */
+    color: #6b7280; /* Equivalent to Tailwind text-gray-500 */
+  }
+  .custom-remember-label {
+    color: #1E1F24;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+    /* letter-spacing: -0.14px; */
+  }
+
+  .custom-password-label{
+    color: #6139FF;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+    /* letter-spacing: -0.42px; */
+  }
+  .custom-paragraph {
+    color: #5C5C5C;
+    line-height: 22px;
+    /* letter-spacing: -0.14px; */
+  }
+
+  .custom-inputfeild{
+    letter-spacing: -0.28px;
+  }
+.custom-input-color{
+  color:#80828D;
+}
+  .custom-passages{color: #5C5C5C;
+font-size: 14px;
+font-weight: 400;
+line-height: 24px; /* 171.429% */
+letter-spacing: -0.42px;}
+
+.custom-cards-events{
+  color: #25077D;
+  font-weight: 800;
+  line-height: 32px; /* 133.333% */
+  letter-spacing: -0.72px;
+}
+
+.custom-sidbars{
+  color: #686A74;
+font-size: 14px;
+font-weight: 500;
+line-height: 24px; /* 171.429% */
+letter-spacing: -0.42px;
+}
+
+.custom-headingdashboard{
+  color: #1E1F24;
+  font-size: 21.624px;
+  font-weight: 900;
+  line-height: 42.212px;
+  letter-spacing: -1.739px;
+}
+
+.custom-setup{
+  color: #6139FF;
+font-weight: 600;
+line-height: 24px; /* 171.429% */
+letter-spacing: -0.42px;
+text-transform: uppercase;
+}
+
+.custom-timeing{
+  color: #555;
+  font-weight: 500;
+line-height: 24px; /* 200% */
+letter-spacing: -0.36px;
+}

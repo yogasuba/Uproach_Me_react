@@ -1,0 +1,22 @@
+<svg width="147" height="148" viewBox="0 0 147 148" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1000004938">
+<g id="Ellipse 107" opacity="0.4" filter="url(#filter0_f_2026_3940)">
+<circle cx="73.5" cy="74" r="22" fill="#6139FF"/>
+</g>
+<g id="Group 1000004937">
+<path id="Vector" d="M60.627 64.2874H63.5827H87.2285" stroke="#6139FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="Group 1000004936">
+<path id="Vector_2" d="M84.2721 64.2869V84.977C84.2721 85.7609 83.9607 86.5127 83.4064 87.067C82.8521 87.6213 82.1003 87.9327 81.3164 87.9327H66.5378C65.7538 87.9327 65.002 87.6213 64.4477 87.067C63.8934 86.5127 63.582 85.7609 63.582 84.977V64.2869M68.0156 64.2869V61.3312C68.0156 60.5473 68.327 59.7955 68.8813 59.2412C69.4356 58.6869 70.1874 58.3755 70.9713 58.3755H76.8828C77.6667 58.3755 78.4185 58.6869 78.9728 59.2412C79.5271 59.7955 79.8385 60.5473 79.8385 61.3312V64.2869" stroke="#6139FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M70.9707 71.6764V80.5436" stroke="#6139FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M76.8828 71.6764V80.5436" stroke="#6139FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_2026_3940" x="0.406422" y="0.906422" width="146.187" height="146.187" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="25.5468" result="effect1_foregroundBlur_2026_3940"/>
+</filter>
+</defs>
+</svg>
