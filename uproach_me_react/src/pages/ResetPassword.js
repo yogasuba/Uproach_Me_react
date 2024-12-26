@@ -29,7 +29,7 @@ export default function ResetPasswordPage() {
 
     try {
       // Send token and new password to backend
-      const response = await axios.post('http://localhost:5000/api/auth/reset-password', { // Replace with your backend URL
+      const response = await axios.post('', { // Replace with your backend URL
         token,
         newPassword,
       });
@@ -38,7 +38,7 @@ export default function ResetPasswordPage() {
         toast.success('Password changed successfully!');
         
         // Redirect to the sign-in page
-        navigate('/');
+        navigate('/signin');
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Something went wrong';

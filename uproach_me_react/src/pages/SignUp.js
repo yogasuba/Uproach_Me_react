@@ -27,7 +27,7 @@ export default function SignupPage() {
   };
   const handleGoogleSignIn = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/auth/google-signin'); // Redirect to backend for Google sign-in
+      const response = await axios.get(''); // Redirect to backend for Google sign-in
       if (response.status === 200) {
         toast.success('Successfully signed in with Google');
         navigate('/welcome');
@@ -51,7 +51,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', { email, password });
+      const response = await axios.post('', { email, password });
 
       if (response.status === 200) {
         const { token } = response.data;
@@ -88,7 +88,7 @@ export default function SignupPage() {
           <h1 className="custom-heading mb-3 tracking-tight sm:text-xl xxl:text-3xl">Sign up to Uproach Me</h1>
           <p className="mb-6 sm:text-xs xxl:text-sm">
             Already have an account?{' '}
-            <a href="/" className="text-[rgb(97,57,255)] font-medium">Sign in</a>
+            <a href="/signin" className="text-[rgb(97,57,255)] font-medium">Sign in</a>
           </p>
 
             {/* Google and Apple Buttons */}

@@ -22,7 +22,7 @@ export default function SigninPage() {
 
   const handleGoogleSignIn = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/auth/google-signin'); // Redirect to backend for Google sign-in
+      const response = await axios.get(''); // Redirect to backend for Google sign-in
       if (response.status === 200) {
         toast.success('Successfully signed in with Google');
         navigate('/home');
@@ -41,7 +41,7 @@ export default function SigninPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signin', { email, password });
+      const response = await axios.post('', { email, password });
       if (response.status === 200) {
         navigate('/home');
       } else {

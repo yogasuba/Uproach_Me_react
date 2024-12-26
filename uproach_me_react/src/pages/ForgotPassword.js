@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
 
     try {
       // Make API call to Node.js backend for password reset
-      const response = await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+      const response = await axios.post('', { email });
       
       if (response.status === 200) {
         setSubmitted(true); // Indicate that the form was submitted successfully
@@ -41,7 +41,7 @@ export default function ForgotPasswordPage() {
         <div className="max-w-md w-full mx-auto mb-[111px]">
           {/* Conditional rendering: hide back arrow if the form is submitted */}
           {!submitted && (
-            <a href="/" className="absolute top-4 left-4 text-gray-600 hover:text-gray-800">
+            <a href="/signin" className="absolute top-4 left-4 text-gray-600 hover:text-gray-800">
               <img src={IMAGES.ARROW_LEFT} width={24} height={24} className="xxl:m-[33px] sm:m-[22px]" />
             </a>
           )}
