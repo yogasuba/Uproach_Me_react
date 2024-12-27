@@ -403,7 +403,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
                 />
                 Reschedule
               </button>
-              <button className="w-full text-left text-sm text-gray-600 hover:text-red-600 flex items-center ">
+              <button className="w-full text-left text-sm text-gray-600 hover:text-red-600 flex items-center sm:ml-[41px] xxl:ml-0">
                 <img
                   src="/icons/cancel.svg" // Replace with actual cancel icon path
                   alt="Cancel"
@@ -437,7 +437,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
               className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                // Optional for a blurred background
             >
-                <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-[358px] h-[268px] relative sm:mb-[739px]  xxl:m-0 sm:ml-[68px] ml-0">
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-[358px] h-[268px] relative sm:mb-[739px]  xxl:m-0 ">
                 <div className="flex justify-center mb-4 mt-[-54px]">
                 <div>
                   <img
