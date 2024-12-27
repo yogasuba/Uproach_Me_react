@@ -289,7 +289,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
       
                   <div className="flex justify-between gap-4 xxl:flex xxl:flex-row sm:flex sm:flex-col">
                     {/* Email Section */}
-                    <div className="xxl:w-1/2 sm:w-[333px]">
+                    <div className="xxl:w-1/2 sm:w-[333px] md:w-[380px]">
                       <div className="bg-[#F6F6F9] rounded-lg p-4">
                         <p className="text-xs font-medium text-gray-500 mb-2 ml-[36px]">
                           Gmail
@@ -308,7 +308,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
                     </div>
       
                     {/* Phone Section */}
-                    <div className="xxl:w-1/2 sm:w-[333px]">
+                    <div className="xxl:w-1/2 sm:w-[333px] md:w-[380px]">
                       <div className="bg-[#F6F6F9] rounded-lg p-4">
                         <p className="text-xs font-medium text-gray-500 mb-2 ml-[36px]">
                           Phone Number
