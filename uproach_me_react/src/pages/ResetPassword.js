@@ -38,7 +38,7 @@ export default function ResetPasswordPage() {
         toast.success('Password changed successfully!');
         
         // Redirect to the sign-in page
-        navigate('/signin');
+        navigate('/');
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Something went wrong';
