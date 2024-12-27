@@ -403,7 +403,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
                 />
                 Reschedule
               </button>
-              <button className="w-full text-left text-sm text-gray-600 hover:text-red-600 flex items-center sm:ml-[41px] xxl:ml-0">
+              <button className="w-full text-left text-sm text-gray-600 hover:text-red-600 flex items-center md:ml-[41px] xxl:ml-0">
                 <img
                   src="/icons/cancel.svg" // Replace with actual cancel icon path
                   alt="Cancel"
