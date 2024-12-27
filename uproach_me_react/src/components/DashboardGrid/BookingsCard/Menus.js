@@ -393,7 +393,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
         </div>
 
         {/* Right Section */}
-        <div className="right-section sm:w-[416px]  xl:static fixed bottom-0 left-0 w-full bg-white p-4 shadow-lg sm:shadow-none z-50 border-t border-gray-200 ">
+        <div className="right-section sm:w-[364px] md:w-[416px]  xl:static fixed bottom-0 left-0 w-full bg-white p-4 shadow-lg sm:shadow-none z-50 border-t border-gray-200 ">
           <div className="xxl:space-y-4 xxl:mt-[55px] xxl:flex xxl:flex-col sm:flex sm:flex-row gap-4 sm:gap-2 items-center sm:overflow-x-auto xxl:overflow-visible ">
           <button className="w-full text-left text-sm text-gray-600 hover:text-purple-600 flex items-center ">
                 <img
