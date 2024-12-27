@@ -221,14 +221,14 @@ export default function DashboardGrid() {
 
    
 {/* Activity and Bookings */}
-<div className="lg:col-span-2 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[743px] xxl:h-[465px] xxl:w-[637px] sm:w-[303px]">
+<div className="lg:col-span-2 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[743px] xxl:h-[465px] xxl:w-[637px] sm:w-[303px] md:ml-[22px] ml-0">
 <ActivityCard />
 
 <div className="bg-muted mt-4 rounded"></div>
 </div>
 
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[465px] sm:w-[303px] sm:h-[479px]">
+<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[465px] sm:w-[303px] sm:h-[479px] md:ml-[22px] ml-0">
 <BookingsCard />
 
   {/* Content */}
@@ -236,7 +236,7 @@ export default function DashboardGrid() {
 </div>
 
 {/* Revenue and Recent Purchase */}
-<div className="bg-[#F9EDD7] p-6 rounded-lg xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] relative overflow-hidden sm:w-[303px] ">
+<div className="bg-[#F9EDD7] p-6 rounded-lg xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] relative overflow-hidden sm:w-[303px] md:ml-[22px] ml-0 ">
   {/* Gradient border at the top */}
   <div className="absolute top-0 left-0 w-full h-[4px]"
   style={{background : "linear-gradient(90deg, #1B7B72 0%, #536FD5 33.5%, #F87FF2 62.5%, #F15558 100%)"}}></div>
@@ -267,27 +267,27 @@ export default function DashboardGrid() {
   </div>
 </div>
 
-<div className="bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px]">
+<div className="bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px] md:ml-[22px] ml-0">
 <RevenueCard />
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px]">
+<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px] md:ml-[22px] ml-0">
 <RecentPurchase />
 
   {/* Content */}
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px]">
+<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px] md:ml-[22px] ml-0">
   <ContentCard />
 
   {/* Placeholder content */}
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px]">
+<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[479px] md:ml-[22px] ml-0">
   <CountriesCard />
 
   {/* Placeholder content */}
@@ -295,7 +295,7 @@ export default function DashboardGrid() {
 </div>
 
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[549px]">
+<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] sm:h-[549px] md:ml-[22px] ml-0">
 <VisitorSources />
 
   {/* Content */}
