@@ -1,4 +1,0 @@
-[build]
-  base    = "uproach_me_react"
-  publish = "build"
-  command = "npm run build"
