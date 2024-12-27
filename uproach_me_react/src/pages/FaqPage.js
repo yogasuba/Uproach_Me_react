@@ -48,7 +48,7 @@ const FAQPage = () => {
   ];
 
   return (
-    <div className="p-8 w-full xxl:min-h-screen sm:h-[1024px] bg-gray-50 sm:mt-[77px] xxl:mt-0">
+    <div className="p-8 w-full xxl:min-h-screen sm:h-[1024px] bg-gray-50">
       <h1 className="text-[22px] font-semibold text-gray-800">FAQs</h1>
       <hr className="border-gray-300 mb-3 mt-3" />
       <div className="space-y-6">

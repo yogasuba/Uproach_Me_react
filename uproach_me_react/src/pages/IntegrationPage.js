@@ -46,7 +46,7 @@ const IntegrationPage = () => {
   };
 
   return (
-        <div className="xxl:min-h-screen sm:h-[1136px] bg-gray-50 p-6 sm:mt-[77px] xxl:mt-0">
+        <div className="xxl:min-h-screen sm:h-[1136px] bg-gray-50 p-6">
         <div className="flex justify-between items-center xxl:mb-2 sm:mb-4">
             <h1 className="text-[22px] font-semibold text-gray-800">Integration</h1>
             <button

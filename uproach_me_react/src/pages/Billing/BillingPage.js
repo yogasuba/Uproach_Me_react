@@ -67,7 +67,7 @@ export default function BillingPage() {
   };
 
   return (
-    <div className="xxl:min-h-screen  sm:h-[836px] bg-gray-50 flex flex-col p-6 relative sm:mt-[77px] xxl:mt-0">
+    <div className="xxl:min-h-screen  sm:h-[836px] bg-gray-50 flex flex-col p-6 relative">
       {/* Billing text in the left corner with a horizontal line */}
       <div className="absolute top-6 left-6">
         <h1 className="text-xl font-bold">Billing</h1>

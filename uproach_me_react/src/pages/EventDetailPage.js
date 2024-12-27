@@ -162,7 +162,7 @@ export default function EventDetailPage() {
   }
 
   return (
-    <div className="xxl:min-h-screen sm:h-[1158px] flex flex-col sm:mt-[77px] xxl:mt-0">
+    <div className="xxl:min-h-screen sm:h-[1158px] flex flex-col">
       <button className="flex items-center text-gray-800 font-bold p-2" onClick={() => navigate(-1)}>
         <img src="/icons/back-arrow.svg" alt="Back Arrow" width={16} height={16} />
         <span className="ml-2">Back</span>

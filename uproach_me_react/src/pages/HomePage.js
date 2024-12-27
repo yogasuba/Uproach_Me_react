@@ -11,7 +11,7 @@ export default function HomePage() {
     document.title = 'Home'; // Set your desired page title here
   }, []);
   return (
-    <div className="flex flex-col min-h-screen sm:mt-[77px] xxl:mt-0">
+    <div className="flex flex-col min-h-screen">
       <ProfileHead />
       <ProfileHeader />
 
