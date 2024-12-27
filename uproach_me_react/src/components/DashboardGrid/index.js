@@ -25,13 +25,13 @@ export default function DashboardGrid() {
           }}
         >
           <div>
-            <h3 className="custom-cards-events xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px]">Create event</h3>
+            <h3 className="custom-cards-events xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px] xxxl:w-[156px]">Create event</h3>
             <button className="bg-white text-[14px] p-2 rounded-[70px] shadow-sm w-[74px]">Set Up</button>
           </div>
           <img
             src="/icons/create-event.svg" // Update the path to your image
             alt="Create Event"
-            className="sm:absolute sm:transform sm:scale-105 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-21px] sm:right-[12px] sm:bottom-[8px] xxxl:w-[150px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
+            className="sm:absolute sm:transform sm:scale-105 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-21px] sm:right-[12px] sm:bottom-[8px] xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
           />
         </div>
 
@@ -46,7 +46,7 @@ export default function DashboardGrid() {
           <img
             src="/icons/link-in-bio.svg" // Update the path to your image
             alt="Link in Bio"
-            className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-[10px] sm:bottom-0 xxxl:w-[150px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
+            className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-[10px] sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
           />
         </div>
 
@@ -61,7 +61,7 @@ export default function DashboardGrid() {
           <img
             src="/icons/sell-products.svg" // Update the path to your image
             alt="Sell Products"
-            className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-0 sm:bottom-0 xxxl:w-[150px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
+            className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-0 sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
           />
         </div>
       </div>
