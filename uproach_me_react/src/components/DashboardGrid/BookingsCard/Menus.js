@@ -382,7 +382,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50  ">
       <div className="bg-white rounded-lg shadow-lg xxxl:w-[1252.311px] xxxl:h-[722.089px] xxl:w-[1087px] xxl:h-[550px] flex relative">
         {/* Left Section */}
-        <div className="xxl:w-2/3 xxl:h-[550px] xxl:p-6 relative overflow-y-auto sm:w-full sm:h-[47rem] sm:p-4 sm:w-[23rem] ">
+        <div className="xxl:w-2/3 xxl:h-[550px] xxl:p-6 relative overflow-y-auto sm:w-full sm:h-[57rem] sm:p-4 sm:w-[23rem] ">
           {renderLeftSection()}
           <button
             onClick={onClose}
@@ -393,7 +393,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
         </div>
 
         {/* Right Section */}
-        <div className="right-section sm:w-[354px] xl:static fixed bottom-0 left-0 w-full bg-white p-4 shadow-lg sm:shadow-none z-50 border-t border-gray-200 ">
+        <div className="right-section sm:w-[416px]  xl:static fixed bottom-0 left-0 w-full bg-white p-4 shadow-lg sm:shadow-none z-50 border-t border-gray-200 ">
           <div className="xxl:space-y-4 xxl:mt-[55px] xxl:flex xxl:flex-col sm:flex sm:flex-row gap-4 sm:gap-2 items-center sm:overflow-x-auto xxl:overflow-visible ">
           <button className="w-full text-left text-sm text-gray-600 hover:text-purple-600 flex items-center ">
                 <img
@@ -437,7 +437,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
               className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                // Optional for a blurred background
             >
-                <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-[358px] h-[268px] relative sm:mb-[540px]  xxl:m-0">
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-[358px] h-[268px] relative sm:mb-[739px]  xxl:m-0 sm:ml-[68px]">
                 <div className="flex justify-center mb-4 mt-[-54px]">
                 <div>
                   <img
