@@ -9,22 +9,22 @@ export default function SignupPage() {
   useEffect(() => {
     document.title = 'Signup'; // Set your desired page title here
   }, []);
-
+  
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
+  
   const validatePassword = (password) => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordRegex.test(password);
   };
+  
   const handleGoogleSignIn = async () => {
     try {
       const response = await axios.get(''); // Redirect to backend for Google sign-in
@@ -39,28 +39,27 @@ export default function SignupPage() {
       toast.error('Google sign-in failed');
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!validatePassword(password)) {
-      setError('Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number.');
+      toast.error('Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number.');
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await axios.post('', { email, password });
-
+  
       if (response.status === 200) {
         const { token } = response.data;
         localStorage.setItem('token', token);
         toast.success('Signup successful!');
         navigate('/welcome');
-      } 
+      }
     } catch (err) {
-      setError(err.message);
       if (err.response && err.response.status === 409) {
         toast.error('User already exists!');
       } else {
@@ -70,7 +69,7 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
-
+  
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -79,6 +78,7 @@ export default function SignupPage() {
       </div>
     );
   }
+  
 
   return (
     <div className="min-h-screen flex">

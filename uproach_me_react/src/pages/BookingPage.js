@@ -269,9 +269,11 @@ export default function BookingPage() {
 
           <div className="text-gray-500 text-sm mt-9 mb-9 flex justify-center sm:hidden xl:block xl:ml-40 sm:flex">
             Powered by{" "}
-            <a href="#" className="text-purple-600 font-bold hover:underline ml-1">
+            <button
+             className="text-purple-600 font-bold hover:underline ml-1"
+             onClick={()=>console.log("uproach click")}>
               Uproach.Me
-            </a>
+            </button>
           </div>
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
           {/* Conditional rendering: hide back arrow if the form is submitted */}
           {!submitted && (
             <a href="/signin" className="absolute top-4 left-4 text-gray-600 hover:text-gray-800">
-              <img src={IMAGES.ARROW_LEFT} width={24} height={24} className="xxl:m-[33px] sm:m-[22px]" />
+              <img src={IMAGES.ARROW_LEFT} alt="arrow" width={24} height={24} className="xxl:m-[33px] sm:m-[22px]" />
             </a>
           )}
 

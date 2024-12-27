@@ -145,7 +145,7 @@ const IntegrationPage = () => {
                 <p className="text-gray-600 text-sm">
                 <strong>{selectedCalendar}</strong> requires you to set up an app-specific password to connect
                 with 3rd party apps like Uproach Me. To set that up, follow the step
-                <a href="#" className="text-[#1E1F24] font-semibold"> on this page</a>. Then come back here to finish connecting.
+                <a href="https://example.com" className="text-[#1E1F24] font-semibold"> on this page</a>. Then come back here to finish connecting.
                 </p>
             </div>
 

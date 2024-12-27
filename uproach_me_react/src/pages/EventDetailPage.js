@@ -1,5 +1,5 @@
 // src/pages/EventDetailPage.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo,useCallback} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProfileHeader } from '../components/ProfileHeader';
 
@@ -67,7 +67,7 @@ export default function EventDetailPage() {
   const [selectedTime, setSelectedTime] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentYear] = useState(new Date().getFullYear());
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
@@ -103,7 +103,7 @@ export default function EventDetailPage() {
 
   const [days, setDays] = useState(getNextSevenDays(currentYear, selectedMonth));
 
-  const formatSelectedDate = (selectedDay) => {
+  const formatSelectedDate = useCallback((selectedDay) => {
     if (selectedDay !== null && days[selectedDay]) {
       const { fullDate } = days[selectedDay];
       return {
@@ -113,7 +113,8 @@ export default function EventDetailPage() {
       };
     }
     return {};
-  };
+  }, [days]);
+  
 
   const getTimeRange = (selectedTime) => {
     if (selectedTime !== null) {
@@ -132,10 +133,13 @@ export default function EventDetailPage() {
     }
     return "";
   };
-
-  const selectedDateInfo = selectedDate !== null ? formatSelectedDate(selectedDate) : {};
+  
+  const selectedDateInfo = useMemo(() => {
+    return selectedDate !== null ? formatSelectedDate(selectedDate) : {};
+  }, [selectedDate, formatSelectedDate]);
+  
   const selectedTimeRange = getTimeRange(selectedTime);
-
+  
   useEffect(() => {
     localStorage.setItem("selectedDateInfo", JSON.stringify(selectedDateInfo));
     localStorage.setItem("selectedTimeRange", selectedTimeRange);
@@ -250,7 +254,7 @@ export default function EventDetailPage() {
             )}
 
           <div className="mt-10 text-sm text-gray-500 text-center">
-            Powered by <a href="#" className="text-purple-600 font-bold hover:underline ml-1">Uproach.Me</a>
+            Powered by <a href="https://example.com" className="text-purple-600 font-bold hover:underline ml-1">Uproach.Me</a>
           </div>
         </div>
 

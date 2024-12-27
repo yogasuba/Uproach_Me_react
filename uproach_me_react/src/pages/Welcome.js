@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {IMAGES} from "../constants";
@@ -14,16 +14,7 @@ const WelcomePage = () => {
   const [error, setError] = useState('');
   const [isAvailable, setIsAvailable] = useState(null);
 
-  useEffect(() => {
-    if (username.trim() !== '') {
-      checkUsernameAvailability();
-    } else {
-      setError('');
-      setIsAvailable(null);
-    }
-  }, [username]);
-
-  const checkUsernameAvailability = async () => {
+  const checkUsernameAvailability = useCallback(async () => {
     try {
       // Simulate availability check
       const available = Math.random() > 0.5; // Replace this with a real check if needed
@@ -38,7 +29,16 @@ const WelcomePage = () => {
     } catch (error) {
       toast.error('Error checking username availability');
     }
-  };
+  },[username]);
+
+  useEffect(() => {
+    if (username.trim() !== '') {
+      checkUsernameAvailability();
+    } else {
+      setError('');
+      setIsAvailable(null);
+    }
+  }, [username,checkUsernameAvailability]);
 
   const handleContinue = () => {
     if (!username.trim()) {

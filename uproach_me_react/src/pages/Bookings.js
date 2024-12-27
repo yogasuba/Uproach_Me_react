@@ -5,7 +5,7 @@ import EventDetailsPopup from "../components/DashboardGrid/BookingsCard/Menus";
 const BookingPage = () => {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTab, setSelectedTab] = useState("Upcoming");
+  const [selectedTab] = useState("Upcoming");
   const [activeCallType, setActiveCallType] = useState("1:1"); // New state for call type
   const [menuOpenId, setMenuOpenId] = useState(null); // Track which menu is open
   const [cancelModalOpen, setCancelModalOpen] = useState(false); // Track modal visibility

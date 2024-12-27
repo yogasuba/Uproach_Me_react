@@ -16,7 +16,7 @@ export const ProfileHeader = ({ showShareButton = true, roundedClass = "" }) => 
         <div className="flex items-center space-x-4">
           <img
             src="/profile-photo.png" // Replace with your image path
-            alt="Profile Picture"
+            alt="name"
             width={40} // Smaller width for mobile
             height={40} // Smaller height for mobile
             className="rounded-full sm:w-50 sm:h-50" // Larger size for desktop
@@ -29,7 +29,7 @@ export const ProfileHeader = ({ showShareButton = true, roundedClass = "" }) => 
             <div className="flex items-center xl:text-sm text-gray-500 sm:text-xs">
               <img
                 src="/icons/map-pin.svg" // Path to your map icon in the public folder
-                alt="Map Icon"
+                alt="Location marker"
                 width={14} // Smaller size for mobile
                 height={14}
                 className="mr-1"
@@ -48,7 +48,7 @@ export const ProfileHeader = ({ showShareButton = true, roundedClass = "" }) => 
             <span>Share</span>
             <img
               src="/icons/download.svg" // Path to your custom share icon in the public folder
-              alt="Share Icon"
+              alt="Share"
               width={14} // Smaller icon for mobile
               height={14}
               className="sm:w-2 sm:h-2 xl:w-5 xl:h-5" // Larger size for desktop
@@ -72,7 +72,7 @@ export const ProfileHeader = ({ showShareButton = true, roundedClass = "" }) => 
               {/* Profile Picture */}
               <img
                 src="/profile-photo.png"
-                alt="Profile Picture"
+                alt="name"
                 width={50}
                 height={50}
                 className="rounded-full mb-4"
@@ -86,69 +86,84 @@ export const ProfileHeader = ({ showShareButton = true, roundedClass = "" }) => 
                 <div className="flex justify-center space-x-3">
                   {/* Adjusted spacing */}
                   <div className="flex flex-col items-center" style={{ width: '50px' }}>
-                    <a href="#" className="p-2 bg-gray-800 rounded-full">
+                    <button
+                      className="p-2 bg-gray-800 rounded-full"
+                      onClick={() => console.log("Copy URL clicked")} // Replace with actual functionality
+                    >
                       <img
                         src="/icons/mdi_link-variant.svg"
-                        alt="Link Icon"
-                        width={16} // Smaller icon size for mobile
+                        alt="Copy URL"
+                        width={16}
                         height={16}
                       />
-                    </a>
+                    </button>
                     <p className="mt-2 text-xs text-center text-gray-600 sm:text-[10px]">Copy url</p>
                   </div>
                   <div className="flex flex-col items-center" style={{ width: '50px' }}>
-                    <a href="#" className="p-2 bg-[#26D367] rounded-full">
+                    <button
+                    className="p-2 bg-[#26D367] rounded-full"
+                    onClick={()=> console.log("Whatsapp clicked")}
+                    >
                       <img
                         src="/icons/ic_baseline-whatsapp.svg"
-                        alt="WhatsApp Icon"
+                        alt="WhatsApp"
                         width={16} // Smaller icon size for mobile
                         height={16}
                       />
-                    </a>
+                    </button>
                     <p className="mt-2 text-xs text-center text-gray-600 sm:text-[10px]">WhatsApp</p>
                   </div>
                   <div className="flex flex-col items-center" style={{ width: '50px' }}>
-                    <a href="#" className="p-2 bg-gradient-to-br from-[#8C48DB] via-[#CC4499] to-[#FFB133] rounded-full">
+                    <button 
+                    className="p-2 bg-gradient-to-br from-[#8C48DB] via-[#CC4499] to-[#FFB133] rounded-full"
+                    onClick={()=>console.log("Instagram clicked")}
+                    >
                       <img
                         src="/icons/ion_logo-instagram.svg"
-                        alt="Instagram Icon"
+                        alt="Instagram"
                         width={16} // Smaller icon size for mobile
                         height={16}
                       />
-                    </a>
+                    </button>
                     <p className="mt-2 text-xs text-center text-gray-600 sm:text-[10px]">Instagram</p>
                   </div>
                   <div className="flex flex-col items-center" style={{ width: '50px' }}>
-                    <a href="#" className="p-2 bg-[#27A1FC] rounded-full">
+                    <button 
+                    className="p-2 bg-[#27A1FC] rounded-full"
+                    onClick={()=>console.log("Telegram clicked")}>
                       <img
                         src="/icons/icons8-telegram-app.svg"
-                        alt="Telegram Icon"
+                        alt="Telegram"
                         width={16} // Smaller icon size for mobile
                         height={16}
                       />
-                    </a>
+                    </button>
                     <p className="mt-2 text-xs text-center text-gray-600 sm:text-[10px]">Telegram</p>
                   </div>
                   <div className="flex flex-col items-center" style={{ width: '50px' }}>
-                    <a href="#" className="p-2 bg-[#1DA1F3] rounded-full">
+                    <button 
+                    className="p-2 bg-[#1DA1F3] rounded-full"
+                    onClick={()=>console.log("Twitter click")}>
                       <img
                         src="/icons/radix-icons_twitter-logo.svg"
-                        alt="Twitter Icon"
+                        alt="Twitter"
                         width={16} // Smaller icon size for mobile
                         height={16}
                       />
-                    </a>
+                    </button>
                     <p className="mt-2 text-xs text-center text-gray-600 sm:text-[10px]">Twitter</p>
                   </div>
                   <div className="flex flex-col items-center" style={{ width: '50px' }}>
-                    <a href="#" className="p-2 bg-[#3B3B3B] rounded-full">
+                    <button 
+                    className="p-2 bg-[#3B3B3B] rounded-full"
+                    onClick={()=>console.log("More click")}>
                       <img
                         src="/icons/icon_doted.svg"
-                        alt="More Icon"
+                        alt="More"
                         width={16} // Smaller icon size for mobile
                         height={16}
                       />
-                    </a>
+                    </button>
                     <p className="mt-2 text-xs text-center text-gray-600 sm:text-[10px]">More</p>
                   </div>
                 </div>

@@ -12,7 +12,6 @@ export default function SigninPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -37,7 +36,6 @@ export default function SigninPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
@@ -48,7 +46,6 @@ export default function SigninPage() {
         throw new Error(response.data.message || 'Login failed');
       }
     } catch (err) {
-      setError(err.message);
       if (err.response && err.response.status === 401 && err.response.data.message === 'Incorrect password') {
         toast.error('Incorrect password');
       } else if (err.response && err.response.status === 404) {
