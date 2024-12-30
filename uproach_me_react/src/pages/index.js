@@ -17,8 +17,9 @@ import Welcome from "./Welcome";
 import BillingPopup from "./Billing/BillingPopup";
 import BillingPage from "./Billing/BillingPage";
 import IntegrationPage from "./IntegrationPage";
-import Bookings from "./Bookings";
+import BookingsMenu from "./BookingsMenu";
 import PagesMenu from "./PagesMenu";
+import AnalyticsMenu from "./AnalyticsMenu";
 export{BookingPage,
 DashboardPage,
 EventDetailPage,
@@ -38,6 +39,7 @@ Welcome,
 BillingPopup,
 BillingPage,
 IntegrationPage,
-Bookings,
+BookingsMenu,
 PagesMenu,
+AnalyticsMenu,
 };

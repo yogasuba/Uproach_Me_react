@@ -1,9 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast'; 
-import {IMAGES,ICONS} from "../constants";
-
+import { IMAGES, ICONS } from "../constants";
 
 export default function SignupPage() {
   useEffect(() => {
@@ -42,25 +41,25 @@ export default function SignupPage() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (!validatePassword(password)) {
-      toast.error('Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number.');
-      return;
-    }
-  
     setLoading(true);
   
     try {
-      const response = await axios.post('', { email, password });
-  
-      if (response.status === 200) {
-        const { token } = response.data;
-        localStorage.setItem('token', token);
-        toast.success('Signup successful!');
+      const response = await axios.post(
+        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signup',
+        { email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success('user created successfully.Please verify your mail');
         navigate('/welcome');
       }
     } catch (err) {
-      if (err.response && err.response.status === 409) {
+      if (err.response && err.response.status === 400) {
         toast.error('User already exists!');
       } else {
         toast.error('Signup failed. Please try again.');

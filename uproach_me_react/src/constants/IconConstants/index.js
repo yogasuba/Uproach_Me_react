@@ -22,7 +22,14 @@ import analytics from "../../assets/icons/analytics.svg";
 import users from "../../assets/icons/users.svg";
 import availability from "../../assets/icons/availability.svg"
 import search from "../../assets/icons/search.svg"
-
+import share from "../../assets/icons/share.svg"
+import horizontal_line from "../../assets/icons/horizontal_line.svg"
+import copy_link from "../../assets/icons/copy_link.svg"
+import event_details from "../../assets/icons/event_details.svg"
+import share_icon from "../../assets/icons/share_icon.svg"
+import trash from "../../assets/icons/trash.svg"
+import reschedule from "../../assets/icons/reschedule.svg"
+import cancel from "../../assets/icons/cancel.svg"
 export const ICONS = {
     LOGO : logo,
     APPLE_ICON : appleicon,
@@ -48,5 +55,13 @@ export const ICONS = {
     USERS : users,
     AVAILABILITY : availability,
     SEARCH : search,
+    SHARE : share,
+    HORIZONTAL_DOTS : horizontal_line,
+    COPY_LINK : copy_link,
+    EVENT_DETAILS : event_details,
+    SHARE_ICON : share_icon,
+    TRASH :trash,
+    RESCHEDULE : reschedule,
+    CANCEL : cancel
 
 }

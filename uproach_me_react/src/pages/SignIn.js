@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import {IMAGES,ICONS} from "../constants";
+import { IMAGES, ICONS } from "../constants";
 
 export default function SigninPage() {
   useEffect(() => {
@@ -39,15 +39,31 @@ export default function SigninPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('', { email, password });
+      const response = await axios.post(
+        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
+        { email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
       if (response.status === 200) {
+        const { token} = response.data;
+        toast.success('Login successful');
+
+        // Save the token if necessary (e.g., localStorage, context, or Redux)
+        localStorage.setItem('authToken', token);
+
+        // Redirect to the home page or another page
         navigate('/home');
       } else {
         throw new Error(response.data.message || 'Login failed');
       }
     } catch (err) {
-      if (err.response && err.response.status === 401 && err.response.data.message === 'Incorrect password') {
-        toast.error('Incorrect password');
+      if (err.response && err.response.status === 401) {
+        toast.error('Incorrect email or password');
       } else if (err.response && err.response.status === 404) {
         toast.error('User not found. Please sign up.');
       } else {

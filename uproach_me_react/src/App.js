@@ -21,8 +21,9 @@ import {
   BillingPopup,
   BillingPage,
   IntegrationPage,
-  Bookings,
+  BookingsMenu,
   PagesMenu,
+  AnalyticsMenu,
 } from "./pages";
 
 import DashboardLayout from './layouts/DashboardLayout';
@@ -108,7 +109,7 @@ function App() {
           path="/bookings"
           element={
             <DashboardLayout showHeader={false}>
-              <Bookings/>
+              <BookingsMenu/>
             </DashboardLayout>
           }
         />
@@ -117,6 +118,14 @@ function App() {
           element={
             <DashboardLayout showHeader={false}>
               <PagesMenu/>
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <DashboardLayout showHeader={false}>
+              <AnalyticsMenu/>
             </DashboardLayout>
           }
         />

@@ -30,7 +30,7 @@ const BookingPage = () => {
 
     },
     {
-        id: 1,
+        id: 2,
         date: "Fri, 8 Nov 2024",
         time: "9:00 AM",
         duration: "1/2 Hr",
@@ -43,19 +43,19 @@ const BookingPage = () => {
       },
       
     {
-      id: 2,
+      id: 3,
       date: "Thu, 7 Nov 2024",
       time: "10:00 AM",
       duration: "1 Hr",
       title: "Project review meeting",
       participant: "3 Participants",
       status: "Paid",
-      completed: true,
+      completed: false,
       callType: "Group", // New field for call type
 
     },
     {
-      id: 3,
+      id: 4,
       date: "Wed, 6 Nov 2024",
       time: "2:00 PM",
       duration: "45 Min",
@@ -67,7 +67,7 @@ const BookingPage = () => {
 
     },
     {
-      id: 4,
+      id: 5,
       date: "Tue, 5 Nov 2024",
       time: "4:00 PM",
       duration: "1/2 Hr",
@@ -123,7 +123,7 @@ const BookingPage = () => {
   });
 
   return (
-    <div className="p-6 font-sans bg-gray-100 min-h-screen">
+    <div className="p-6 font-sans bg-gray-100 h-screenmin-">
       {/* Header */}
       <h1 className="text-2xl font-bold mb-6">Booking</h1>
 
@@ -264,26 +264,51 @@ const BookingPage = () => {
             </button>
             {/* Dropdown Menu */}
             {menuOpenId === booking.id && (
-              <div className="absolute right-0 mt-40 bg-white shadow-lg rounded-md text-sm z-10">
+              <div className="absolute right-[114px]  bg-white shadow-lg rounded-md text-sm z-10">
                 <ul>
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={openModal}
+                  <button
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 w-full text-left text-sm"
+                  onClick={openModal}
                   >
+                  <img
+                    src={ICONS.EVENT_DETAILS}
+                    alt="Delete"
+                    className="w-5 h-5"
+                  />
                     Event details
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => openRescheduleModal(booking)}
+                  </button>
+                  <button
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 w-full text-left text-sm"
+                  onClick={() => openRescheduleModal(booking)}
                   >
+                  <img
+                    src={ICONS.RESCHEDULE}
+                    alt="Delete"
+                    className="w-5 h-5"
+                  />
                     Reschedule
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => openCancelModal(booking)}
+                  </button>
+                  <button
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 w-full text-left text-sm"
+                  onClick={() => openCancelModal(booking)}
                   >
+                  <img
+                    src={ICONS.CANCEL}
+                    alt="Delete"
+                    className="w-5 h-5"
+                  />
                     Cancel
-                  </li>
+                  </button>
+                  <button
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 w-full text-left text-sm text-red-500"
+                >
+                  <img
+                    src={ICONS.TRASH}
+                    alt="Delete"
+                    className="w-5 h-5"
+                  />
+                  Delete
+                </button>
                 </ul>
               </div>
             )}
@@ -527,7 +552,7 @@ const BookingPage = () => {
                 </div>
               </div>
             )}
-            {isModalOpen && (
+        {isModalOpen && (
         <EventDetailsPopup
           isOpen={isModalOpen}
           onClose={closeModal}
