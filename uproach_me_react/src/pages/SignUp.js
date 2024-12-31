@@ -19,10 +19,7 @@ export default function SignupPage() {
     setShowPassword(!showPassword);
   };
   
-  const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    return passwordRegex.test(password);
-  };
+
   
   const handleGoogleSignIn = async () => {
     try {
@@ -181,7 +178,7 @@ export default function SignupPage() {
       </div>
 
       {/* Right Side - Background Image */}
-      <div className="hidden xxl:block xl:block w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${IMAGES.BACKGROUND_PATTERN})` }}>
+      <div className="hidden xxl:flex xl:flex xxl:w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${IMAGES.BACKGROUND_PATTERN})` }}>
         <div className="flex items-center justify-center w-full h-full ml-[22px]">
           <img src={IMAGES.RIGHT_IMAGE} alt="Right side design" width={400} height={400} className="object-contain" />
         </div>

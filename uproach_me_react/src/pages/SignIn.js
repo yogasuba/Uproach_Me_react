@@ -50,7 +50,7 @@ export default function SigninPage() {
       );
 
       if (response.status === 200) {
-        const { token} = response.data;
+        const { token, user } = response.data;
         toast.success('Login successful');
 
         // Save the token if necessary (e.g., localStorage, context, or Redux)
@@ -193,7 +193,7 @@ export default function SigninPage() {
       </div>
 
       {/* Right Side - Background with Image */}
-      <div className="hidden xxl:block xl:block w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${IMAGES.BACKGROUND_PATTERN})` }}>
+      <div className="hidden xxl:flex xl:flex xxl:w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${IMAGES.BACKGROUND_PATTERN})` }}>
         <div className="flex items-center justify-center w-full h-full ml-[22px]">
           <img src={IMAGES.RIGHT_IMAGE} alt="Right side design" width={400} height={400} className="object-contain" />
         </div>
