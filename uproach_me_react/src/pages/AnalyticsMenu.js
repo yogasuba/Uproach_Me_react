@@ -3,18 +3,43 @@ import React, { useState } from "react";
 const AnalyticsPage = () => {
   // Initial target value and dummy data
   const [target, setTarget] = useState(1000);
+  const [stats, setStats] = useState("7 Days"); // Current stats period
 
   const dummyData = {
-    statsPeriod: {
-      startDate: "Nov 2, 2024",
-      endDate: "Nov 29, 2024",
-      location: "Worldwide",
-      stats: [
-        { title: "Created events", count: 0 },
-        { title: "Completed Events", count: 0 },
-        { title: "Rescheduled events", count: 0 },
-        { title: "Cancelled events", count: 0 },
-      ],
+    statsPeriods: {
+      "7 Days": {
+        startDate: "Dec 1, 2024",
+        endDate: "Dec 7, 2024",
+        location: "Worldwide",
+        stats: [
+          { title: "Created events", count: 12 },
+          { title: "Completed Events", count: 8 },
+          { title: "Rescheduled events", count: 3 },
+          { title: "Cancelled events", count: 1 },
+        ],
+      },
+      "28 Days": {
+        startDate: "Nov 1, 2024",
+        endDate: "Nov 28, 2024",
+        location: "Worldwide",
+        stats: [
+          { title: "Created events", count: 50 },
+          { title: "Completed Events", count: 40 },
+          { title: "Rescheduled events", count: 10 },
+          { title: "Cancelled events", count: 5 },
+        ],
+      },
+      "12 Months": {
+        startDate: "Jan 1, 2024",
+        endDate: "Dec 31, 2024",
+        location: "Worldwide",
+        stats: [
+          { title: "Created events", count: 300 },
+          { title: "Completed Events", count: 250 },
+          { title: "Rescheduled events", count: 30 },
+          { title: "Cancelled events", count: 20 },
+        ],
+      },
     },
     popularEvents: [
       { name: "15-minute demo", count: 839 },
@@ -35,16 +60,23 @@ const AnalyticsPage = () => {
     ],
   };
 
+  const currentStats = dummyData.statsPeriods[stats];
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
         <h1 className="text-2xl font-semibold text-gray-800">Analytics</h1>
         <div className="flex space-x-4">
-          {["7 Days", "28 Days", "12 Months", "Filter"].map((button) => (
+          {["7 Days", "28 Days", "12 Months","Filter"].map((button) => (
             <button
               key={button}
-              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-md"
+              onClick={() => setStats(button)}
+              className={`px-4 py-2 text-sm font-medium rounded-md ${
+                stats === button
+                  ? "text-white bg-purple-600"
+                  : "text-gray-600 bg-gray-100"
+              }`}
             >
               {button}
             </button>
@@ -74,11 +106,11 @@ const AnalyticsPage = () => {
         <div className="col-span-1 lg:col-span-3 bg-white p-6 rounded-lg shadow">
           <h2 className="text-lg font-semibold text-gray-800">Stats This Period</h2>
           <p className="text-sm text-gray-500 mb-6">
-            {dummyData.statsPeriod.startDate} - {dummyData.statsPeriod.endDate} ·{" "}
-            {dummyData.statsPeriod.location}
+            {currentStats.startDate} - {currentStats.endDate} ·{" "}
+            {currentStats.location}
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {dummyData.statsPeriod.stats.map((stat) => (
+            {currentStats.stats.map((stat) => (
               <div
                 key={stat.title}
                 className="p-4 bg-gray-50 border border-gray-200 rounded-lg text-center"
@@ -134,23 +166,47 @@ const AnalyticsPage = () => {
           <button className="mt-4 text-sm text-purple-600">View All Content</button>
         </div>
 
-        {/* Popular Days of the Week */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Popular Days Of The Week
-          </h2>
-          <div className="h-40 flex items-end space-x-4">
-            {dummyData.popularDays.map((bar) => (
-              <div key={bar.day} className="text-center">
-                <div
-                  className="w-8 bg-green-500 rounded"
-                  style={{ height: `${bar.value * 4}px` }}
-                ></div>
-                <p className="mt-2 text-sm text-gray-600">{bar.day}</p>
-              </div>
-            ))}
+{/* Popular Days of the Week */}
+<div className="bg-white p-6 rounded-lg shadow">
+  <h2 className="text-lg font-semibold text-gray-800 mb-4">
+    Popular Days Of The Week
+  </h2>
+  <div className="relative h-64 w-full">
+    {/* Y-axis labels */}
+    <div className="absolute left-0 top-0 h-full flex flex-col justify-between -ml-4">
+      {[31, 30, 29, 28, 27, 26, 25].map((value) => (
+        <p key={value} className="text-sm text-gray-500">{value}</p>
+      ))}
+    </div>
+
+    {/* Horizontal scrollable container */}
+    <div className="overflow-x-auto h-full scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+      <div className="flex items-end justify-start h-full space-x-4 pr-4">
+        {[
+          { day: "Mon", value: 28 },
+          { day: "Tue", value: 27 },
+          { day: "Wed", value: 26 },
+          { day: "Thu", value: 30 },
+          { day: "Fri", value: 29 },
+          { day: "Sat", value: 27 },
+          { day: "Sun", value: 28 },
+        ].map((bar) => (
+          <div key={bar.day} className="text-center min-w-[50px]">
+            {/* Bar */}
+            <div
+              className="w-8 mx-auto bg-teal-600 rounded transition-all"
+              style={{ height: `${bar.value * 2}px` }} // Adjust bar height dynamically
+            ></div>
+            {/* Day */}
+            <p className="mt-2 text-sm text-gray-600">{bar.day}</p>
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
         {/* Users With The Most Events */}
         <div className="bg-white p-6 rounded-lg shadow">

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast'; 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import firebaseApp from '../firebase/firebaseConfig'; // Adjust path as necessary
 import { IMAGES, ICONS } from "../constants";
 
 export default function SignupPage() {
@@ -22,19 +24,40 @@ export default function SignupPage() {
 
   
   const handleGoogleSignIn = async () => {
+    const auth = getAuth(firebaseApp);
+    const provider = new GoogleAuthProvider();
+
     try {
-      const response = await axios.get(''); // Redirect to backend for Google sign-in
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Get Firebase ID Token
+      const idToken = await user.getIdToken();
+
+      // Send the token to your backend API
+      const response = await axios.post(
+        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
+        { idToken },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
       if (response.status === 200) {
-        toast.success('Successfully signed in with Google');
+        toast.success('Successfully signed up with Google');
+        localStorage.setItem('authToken', response.data.token); // Save the token if needed
         navigate('/welcome');
       } else {
-        toast.error('Failed to sign in with Google');
+        toast.error('Failed to sign up with Google');
       }
     } catch (error) {
-      console.error('Google sign-in error:', error.message);
-      toast.error('Google sign-in failed');
+      console.error('Google Sign-In error:', error);
+      toast.error('Google sign-in failed. Please try again.');
     }
   };
+
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +80,7 @@ export default function SignupPage() {
       }
     } catch (err) {
       if (err.response && err.response.status === 400) {
-        toast.error('User already exists!');
+        toast.error('The email address is already in use by another account.');
       } else {
         toast.error('Signup failed. Please try again.');
       }

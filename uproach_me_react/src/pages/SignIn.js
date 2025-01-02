@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { IMAGES, ICONS } from "../constants";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import firebaseApp from '../firebase/firebaseConfig'; // Adjust path as necessary
+import { IMAGES, ICONS } from '../constants';
 
 export default function SigninPage() {
   useEffect(() => {
@@ -20,17 +22,37 @@ export default function SigninPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    const auth = getAuth(firebaseApp);
+    const provider = new GoogleAuthProvider();
+
     try {
-      const response = await axios.get(''); // Redirect to backend for Google sign-in
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Get Firebase ID Token
+      const idToken = await user.getIdToken();
+      console.log("id",idToken)
+      // Send the token to your backend API
+      const response = await axios.post(
+        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
+        { idToken },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
       if (response.status === 200) {
         toast.success('Successfully signed in with Google');
+        localStorage.setItem('authToken', response.data.token); // Save the token if needed
         navigate('/home');
       } else {
         toast.error('Failed to sign in with Google');
       }
     } catch (error) {
-      console.error('Google sign-in error:', error.message);
-      toast.error('Google sign-in failed');
+      console.error('Google Sign-In error:', error);
+      toast.error('Google sign-in failed. Please try again.');
     }
   };
 
@@ -49,8 +71,8 @@ export default function SigninPage() {
         }
       );
 
-      if (response.status === 200) {
-        const { token, user } = response.data;
+      if (response.status === 201) {
+        const { token } = response.data;
         toast.success('Login successful');
 
         // Save the token if necessary (e.g., localStorage, context, or Redux)
@@ -94,21 +116,21 @@ export default function SigninPage() {
             <a href="/signup" className="text-[rgb(97,57,255)] font-medium">Sign up</a>
           </p>
 
-            {/* Google and Apple Buttons */}
-            <div className="flex space-x-4 mb-4">
-              <button
-                onClick={handleGoogleSignIn}
-                className="xxl:w-[202px] xxl:h-[40px] sm:w-[135px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px] border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap"
-              >
-                <img src={ICONS.GOOGLE_ICON} alt="Google" width={20} height={20} className="mr-2" />
-                Continue with <span className="font-bold ml-1">Google</span> {/* Bold only "Google" */}
-              </button>
-              
-              <button className="xxl:w-[202px] xxl:h-[40px] sm:w-[128px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px]  border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap ">
-                <img src={ICONS.APPLE_ICON} alt="Apple" width={20} height={20} className="mr-2" />
-                Continue with <span className="font-bold ml-1">Apple</span> {/* Bold only "Apple" */}
-              </button>
-            </div>
+          {/* Google and Apple Buttons */}
+          <div className="flex space-x-4 mb-4">
+            <button
+              onClick={handleGoogleSignIn}
+              className="xxl:w-[202px] xxl:h-[40px] sm:w-[135px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px] border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap"
+            >
+              <img src={ICONS.GOOGLE_ICON} alt="Google" width={20} height={20} className="mr-2" />
+              Continue with <span className="font-bold ml-1">Google</span> {/* Bold only "Google" */}
+            </button>
+
+            <button className="xxl:w-[202px] xxl:h-[40px] sm:w-[128px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px]  border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap ">
+              <img src={ICONS.APPLE_ICON} alt="Apple" width={20} height={20} className="mr-2" />
+              Continue with <span className="font-bold ml-1">Apple</span> {/* Bold only "Apple" */}
+            </button>
+          </div>
 
           {/* OR Divider */}
           <div className="or-divider">
