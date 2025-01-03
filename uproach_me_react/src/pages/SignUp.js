@@ -36,7 +36,7 @@ export default function SignupPage() {
 
       // Send the token to your backend API
       const response = await axios.post(
-        ' https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signup',
+        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signup',
         { idToken },
         {
           headers: {
@@ -73,7 +73,7 @@ export default function SignupPage() {
         }
       );
   
-      if (response.status === 200) {
+      if (response.status === 201) {
         const { token } = response.data; // Assuming the API returns a token upon signup
   
         // Store the token in localStorage

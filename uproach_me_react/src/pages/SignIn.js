@@ -31,7 +31,6 @@ export default function SigninPage() {
 
       // Get Firebase ID Token
       const idToken = await user.getIdToken();
-      console.log("id",idToken)
       // Send the token to your backend API
       const response = await axios.post(
         'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
@@ -43,9 +42,8 @@ export default function SigninPage() {
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         toast.success('Successfully signed in with Google');
-        localStorage.setItem('authToken', response.data.token); // Save the token if needed
         navigate('/home');
       } else {
         toast.error('Failed to sign in with Google');
@@ -71,7 +69,7 @@ export default function SigninPage() {
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         toast.success('Login successful');
         navigate('/home');
       } else {

@@ -17,13 +17,7 @@ const WelcomePage = () => {
 
   const checkUsernameAvailability = useCallback(async () => {
     try {
-      const token = localStorage.getItem("authToken"); // Retrieve token from localStorage
-
-      if (!token) {
-        toast.error("User authentication failed. Please log in again.");
-        navigate("/signin"); // Redirect to signin if no token
-        return;
-      }
+      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Nzc2NWZkNDcxMzIwOWFlMDZiYmQ2NGMiLCJpYXQiOjE3MzU4MjQ3MTEsImV4cCI6MTczNTgyODMxMX0.YtjCWk5PApwKyY7nA4pkE4OkqM0z3VaiHlQyF60C2Vs"; // Replace with the actual JWT token
 
       const response = await axios.get(
         "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/checkUsernameAvailability",
@@ -31,23 +25,27 @@ const WelcomePage = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          params: { username },
+          params: {
+            username, // Adds ?username=<value> to the URL
+          },
         }
       );
+
+      console.log("API Response:", response.data); // Log the API response
 
       if (response.data?.available) {
         setIsAvailable(true);
         setError("");
       } else {
         setIsAvailable(false);
-        setError(`Username "${username}" is not available.`);
+        setError(`Username "${username}" is not available`);
       }
     } catch (err) {
       console.error("API Error:", err);
-      toast.error("Error checking username availability.");
+      toast.error("Error checking username availability");
       setIsAvailable(null);
     }
-  }, [username, navigate]);
+  }, [username]);
 
   useEffect(() => {
     if (username.trim() !== "") {
@@ -63,19 +61,14 @@ const WelcomePage = () => {
 
   const handleContinue = () => {
     if (!username.trim()) {
-      toast.error("Username cannot be empty.");
-      return;
-    }
-
-    if (isAvailable === false) {
-      toast.error("Please choose an available username.");
+      toast.error("Username cannot be empty");
       return;
     }
 
     setIsSubmitting(true);
     setTimeout(() => {
-      toast.success("Username created successfully.");
-      navigate("/profiledetails"); // Navigate to profile details page
+      toast.success("Username created successfully");
+      navigate("/profiledetails");
       setIsSubmitting(false);
     }, 2000);
   };
