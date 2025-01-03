@@ -72,13 +72,7 @@ export default function SigninPage() {
       );
 
       if (response.status === 200) {
-        const { token } = response.data;
         toast.success('Login successful');
-
-        // Save the token if necessary (e.g., localStorage, context, or Redux)
-        localStorage.setItem('authToken', token);
-
-        // Redirect to the home page or another page
         navigate('/home');
       } else {
         throw new Error(response.data.message || 'Login failed');
