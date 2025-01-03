@@ -73,9 +73,14 @@ export default function SignupPage() {
           },
         }
       );
-
+  
       if (response.status === 201) {
-        toast.success('user created successfully.Please verify your mail');
+        const { token } = response.data; // Assuming the API returns a token upon signup
+  
+        // Store the token in localStorage
+        localStorage.setItem('authToken', token);
+  
+        toast.success('User created successfully. Please verify your mail');
         navigate('/welcome');
       }
     } catch (err) {
@@ -88,6 +93,7 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
+  
   
   if (loading) {
     return (
