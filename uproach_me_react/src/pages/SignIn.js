@@ -71,7 +71,7 @@ export default function SigninPage() {
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         const { token } = response.data;
         toast.success('Login successful');
 
