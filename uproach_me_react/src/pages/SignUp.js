@@ -36,7 +36,7 @@ export default function SignupPage() {
 
       // Send the token to your backend API
       const response = await axios.post(
-        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
+        ' https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signup',
         { idToken },
         {
           headers: {
