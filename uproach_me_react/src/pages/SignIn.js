@@ -43,7 +43,7 @@ export default function SigninPage() {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success('Successfully signed in with Google');
         localStorage.setItem('authToken', response.data.token); // Save the token if needed
         navigate('/home');
@@ -71,7 +71,7 @@ export default function SigninPage() {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success('Login successful');
         navigate('/home');
       } else {
