@@ -44,7 +44,7 @@ export default function SigninPage() {
 
       if (response.status === 200) {
         toast.success('Successfully signed in with Google');
-        navigate('/home');
+        navigate('/dashboard');
       } else {
         toast.error('Failed to sign in with Google');
       }
