@@ -47,7 +47,6 @@ export default function SignupPage() {
 
       if (response.status === 200) {
         toast.success('Successfully signed up with Google');
-        localStorage.setItem('authToken', response.data.token); // Save the token if needed
         navigate('/welcome');
       } else {
         toast.error('Failed to sign up with Google');
@@ -74,7 +73,7 @@ export default function SignupPage() {
         }
       );
   
-      if (response.status === 201) {
+      if (response.status === 200) {
         const { token } = response.data; // Assuming the API returns a token upon signup
   
         // Store the token in localStorage
