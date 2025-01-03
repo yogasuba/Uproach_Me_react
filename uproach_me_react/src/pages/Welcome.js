@@ -9,69 +9,103 @@ const WelcomePage = () => {
     document.title = "Welcome"; // Set your desired page title here
   }, []);
 
-  const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
   const [isAvailable, setIsAvailable] = useState(null);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const checkUsernameAvailability = useCallback(async () => {
     try {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Nzc2NWZkNDcxMzIwOWFlMDZiYmQ2NGMiLCJpYXQiOjE3MzU4MjQ3MTEsImV4cCI6MTczNTgyODMxMX0.YtjCWk5PApwKyY7nA4pkE4OkqM0z3VaiHlQyF60C2Vs"; // Replace with the actual JWT token
-
-      const response = await axios.get(
+      const token = localStorage.getItem("authToken");
+      const uid = localStorage.getItem("userId");
+  
+      if (!token || !uid) {
+        toast.error("Authentication details missing. Please log in again.");
+        navigate("/login");
+        return;
+      }
+  
+      const availabilityResponse = await axios.get(
         "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/checkUsernameAvailability",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          params: {
-            username, // Adds ?username=<value> to the URL
-          },
+          params: { username },
         }
       );
-
-      console.log("API Response:", response.data); // Log the API response
-
-      if (response.data?.available) {
+  
+      console.log("Availability API Response:", availabilityResponse.data);
+  
+      if (availabilityResponse.data?.available) {
         setIsAvailable(true);
         setError("");
       } else {
         setIsAvailable(false);
-        setError(`Username "${username}" is not available`);
+        setError(`Username "${username}" is not available.`);
+        return; // Stop here if the username is unavailable
       }
+  
+      // Update the username only if available
+      const updateResponse = await axios.put(
+        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/username",
+        { uid, username },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      console.log("Update API Response:", updateResponse.data);
+      toast.success("Username updated successfully");
     } catch (err) {
       console.error("API Error:", err);
-      toast.error("Error checking username availability");
+      toast.error("Error occurred while processing your request.");
       setIsAvailable(null);
     }
-  }, [username]);
+  }, [username, navigate]);
+  
+  
 
   useEffect(() => {
     if (username.trim() !== "") {
+      setIsAvailable(null); // Reset availability when username changes
+      setError(""); // Reset error message
+  
       const delayDebounce = setTimeout(() => {
         checkUsernameAvailability();
       }, 500); // Debounce API calls by 500ms
+  
       return () => clearTimeout(delayDebounce);
     } else {
       setError("");
       setIsAvailable(null);
     }
   }, [username, checkUsernameAvailability]);
+  
 
   const handleContinue = () => {
     if (!username.trim()) {
-      toast.error("Username cannot be empty");
+      toast.error("Username cannot be empty.");
       return;
     }
-
+  
+    if (isAvailable === false) {
+      toast.error("Username is not available. Please choose another one.");
+      return;
+    }
+  
     setIsSubmitting(true);
     setTimeout(() => {
-      toast.success("Username created successfully");
+      toast.success("Username created successfully.");
       navigate("/profiledetails");
       setIsSubmitting(false);
     }, 2000);
   };
+  
 
   const isButtonDisabled =
     username.trim() === "" || isSubmitting || isAvailable === false;
@@ -125,6 +159,7 @@ const WelcomePage = () => {
                     : "border-gray-100"
                 } bg-[rgb(246,246,249)] rounded-[10px] focus:ring-indigo-500 focus:border-indigo-500 text-[14px]`}
               />
+
               {isAvailable === true && (
                 <span className="absolute inset-y-0 xxl:right-[-66px] sm:right-0 pr-3 flex items-center text-green-500">
                   <img
