@@ -14,15 +14,15 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  
 
-  
   const handleGoogleSignIn = async () => {
     const auth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
@@ -57,29 +57,35 @@ export default function SignupPage() {
     }
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Passwords do not match.');
+      toast.error('Passwords do not match.');
+      return;
+    }
+
+    setConfirmPasswordError(''); // Clear any existing error
     setLoading(true);
-  
+
     try {
       const response = await axios.post(
         'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signup',
-        { email, password },
+        { email, password, confirmPassword },
         {
           headers: {
             'Content-Type': 'application/json',
           },
         }
       );
-  
+
       if (response.status === 201) {
         const { token, uid } = response.data; // Extract token and uid from the response
-  
+
         // Store the token and uid in localStorage
         localStorage.setItem('authToken', token);
         localStorage.setItem('userId', uid);
-  
+
         toast.success('User created successfully. Please verify your email.');
         navigate('/welcome');
       }
@@ -93,9 +99,7 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
-  
-  
-  
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -104,7 +108,6 @@ export default function SignupPage() {
       </div>
     );
   }
-  
 
   return (
     <div className="min-h-screen flex">
@@ -117,21 +120,21 @@ export default function SignupPage() {
             <a href="/" className="text-[rgb(97,57,255)] font-medium">Sign in</a>
           </p>
 
-            {/* Google and Apple Buttons */}
-            <div className="flex space-x-4 mb-4">
-              <button
-                onClick={handleGoogleSignIn}
-                className="xxl:w-[202px] xxl:h-[40px] sm:w-[135px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px] border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap"
-              >
-                <img src={ICONS.GOOGLE_ICON} alt="Google" width={20} height={20} className="mr-2" />
-                Continue with <span className="font-bold ml-1">Google</span> {/* Bold only "Google" */}
-              </button>
-              
-              <button className="xxl:w-[202px] xxl:h-[40px] sm:w-[128px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px]  border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap ">
-                <img src={ICONS.APPLE_ICON} alt="Apple" width={20} height={20} className="mr-2" />
-                Continue with <span className="font-bold ml-1">Apple</span> {/* Bold only "Apple" */}
-              </button>
-            </div>
+          {/* Google and Apple Buttons */}
+          <div className="flex space-x-4 mb-4">
+            <button
+              onClick={handleGoogleSignIn}
+              className="xxl:w-[202px] xxl:h-[40px] sm:w-[135px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px] border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap"
+            >
+              <img src={ICONS.GOOGLE_ICON} alt="Google" width={20} height={20} className="mr-2" />
+              Continue with <span className="font-bold ml-1">Google</span> {/* Bold only "Google" */}
+            </button>
+
+            <button className="xxl:w-[202px] xxl:h-[40px] sm:w-[128px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px]  border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap ">
+              <img src={ICONS.APPLE_ICON} alt="Apple" width={20} height={20} className="mr-2" />
+              Continue with <span className="font-bold ml-1">Apple</span> {/* Bold only "Apple" */}
+            </button>
+          </div>
 
           <div className="or-divider">
             <div className="line"></div>
@@ -182,7 +185,39 @@ export default function SignupPage() {
               >
                 <img src={showPassword ? IMAGES.EYE : IMAGES.EYE_OFF} alt="Toggle password visibility" width={20} height={20} />
               </div>
+            </div>
 
+            <div className="relative mb-4 custom-inputfeild">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="confirm-password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  if (password === e.target.value) {
+                    setConfirmPasswordError('');
+                  } else {
+                    setConfirmPasswordError('Passwords do not match.');
+                  }
+                }}
+                className="xxl:w-[418px] sm:w-[276px] h-[48px] p-3 border rounded-[10px] xxl:text-[14px] sm:text-xs bg-white focus:outline-none focus:ring-0 transition-all duration-300"
+                required
+              />
+              <label
+                htmlFor="confirm-password"
+                className={`absolute left-3 top-3 custom-input-color transition-all transform ${
+                  confirmPassword ? '-translate-y-4 scale-75 text-[12px] pt-[3px]' : 'xxl:text-[14px]'
+                }`}
+              >
+                Confirm Password
+              </label>
+              <div
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer mr-10 "
+                onClick={togglePasswordVisibility}
+              >
+                <img src={showPassword ? IMAGES.EYE : IMAGES.EYE_OFF} alt="Toggle password visibility" width={20} height={20} />
+              </div>
+              {confirmPasswordError && <p className="text-red-500 text-xs mt-1">{confirmPasswordError}</p>}
             </div>
 
             <button

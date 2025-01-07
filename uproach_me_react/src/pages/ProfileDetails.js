@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Cropper from "react-easy-crop";
 import getCroppedImg from '../lib/getCroppedImg';
-import {IMAGES} from "../constants"
+import { IMAGES } from "../constants";
 
 const ProfileDetails = () => {
   useEffect(() => {
@@ -33,15 +33,28 @@ const ProfileDetails = () => {
     setIsSubmitting(true);
 
     const profilePicToSave = profilePic === "/SVGRepo_iconCarrier.svg" ? null : profilePic;
-    const token = localStorage.getItem("token");
+    const uid = localStorage.getItem("userId");
+    const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+      toast.error("Authentication token is missing. Please sign in again.");
+      setIsSubmitting(false);
+      navigate("/signin");
+      return;
+    }
 
     try {
-      const response = await axios.post(
-        "/api/auth/update-profile",
-        { profilePic: profilePicToSave, profilename, bio },
+      const response = await axios.put(
+        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-details",
+        {
+          uid,
+          profilePicture: profilePicToSave,
+          profileName: profilename,
+          bio,
+        },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );

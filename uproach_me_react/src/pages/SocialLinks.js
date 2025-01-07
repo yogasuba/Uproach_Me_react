@@ -1,6 +1,7 @@
-import { useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {ICONS} from "../constants";
+import { ICONS } from "../constants";
+import axios from "axios";
 
 // Social Input Component for better scalability
 const SocialInput = ({ imgSrc, bgColor, placeholder, label, value, onChange }) => {
@@ -72,25 +73,39 @@ const SocialLinksPage = () => {
 
   const handleSubmit = async () => {
     try {
-      // Example of an API call - replace `/api/social-links` with your actual endpoint
-      const token = localStorage.getItem("token"); // Assuming you're using a token for authorization
-      const response = await fetch("/api/social-links", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(inputValues),
-      });
+      const uid = localStorage.getItem("userId");
+      const authToken = localStorage.getItem("authToken");
 
-      if (response.ok) {
-        // Redirect to the success page on successful submission
-        navigate("/success");
+      // Filter out empty input values
+      const filteredLinks = Object.entries(inputValues)
+        .filter(([_, value]) => value.trim() !== "")
+        .map(([key, value]) => ({ platform: key, url: value }));
+
+      // Construct the request payload
+      const requestBody = {
+        socialMedia: filteredLinks,
+      };
+
+      // API Call
+      const response = await axios.put(
+        `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log(response.data.message); // Log success message
+        navigate("/success"); // Redirect to success page
       } else {
-        console.error("Failed to submit social links");
+        console.error("Error:", response.data.message || "Failed to submit social media links");
       }
     } catch (error) {
-      console.error("Error submitting social links:", error);
+      console.error("Error submitting social media links:", error);
     }
   };
 
