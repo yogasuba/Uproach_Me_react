@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import {AllContent,AllCountries,AllVisitorSources,AllRecentPurchases} from "./components";
+import { Toaster } from 'react-hot-toast'; // Import Toaster
+import { AllContent, AllCountries, AllVisitorSources, AllRecentPurchases } from "./components";
 import {
   SignUp,
   SignIn,
@@ -25,26 +26,31 @@ import {
   PagesMenu,
   AnalyticsMenu,
 } from "./pages";
-
 import DashboardLayout from './layouts/DashboardLayout';
- 
 
 function App() {
   return (
     <Router>
+      <Toaster
+        position="top-center" 
+        reverseOrder={false}  
+        toastOptions={{
+          duration: 3000,     
+        }}
+      />
       <Routes>
-        <Route path="/" element={<SignIn />} />  
-        <Route path="/signup" element={<SignUp />} /> 
-        <Route path="/forgotpassword" element={<ForgotPassword />} /> 
-        <Route path="/resetpassword" element={<ResetPassword />} /> 
-        <Route path="/welcome" element={<Welcome />} /> 
-        <Route path="/profiledetails" element={<ProfileDetails />} /> 
+        <Route path="/" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/profiledetails" element={<ProfileDetails />} />
         <Route path="/sociallinks" element={<SocialLinks />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/events/:slug" element={<EventDetailPage />} />      
+        <Route path="/events/:slug" element={<EventDetailPage />} />
         <Route path="/booking/:slug" element={<BookingPage />} />
-        <Route path="/scheduled/:slug" element={<ScheduledPage />} /> 
+        <Route path="/scheduled/:slug" element={<ScheduledPage />} />
         <Route path="/all-sources" element={<AllVisitorSources />} />
         <Route path="/countries" element={<AllCountries />} />
         <Route path="/content" element={<AllContent />} />
@@ -56,7 +62,7 @@ function App() {
               <DashboardPage />
             </DashboardLayout>
           }
-        />           
+        />
         <Route
           path="/profile"
           element={
@@ -109,7 +115,7 @@ function App() {
           path="/bookings"
           element={
             <DashboardLayout showHeader={false}>
-              <BookingsMenu/>
+              <BookingsMenu />
             </DashboardLayout>
           }
         />
@@ -117,7 +123,7 @@ function App() {
           path="/pages"
           element={
             <DashboardLayout showHeader={false}>
-              <PagesMenu/>
+              <PagesMenu />
             </DashboardLayout>
           }
         />
@@ -125,12 +131,11 @@ function App() {
           path="/analytics"
           element={
             <DashboardLayout showHeader={false}>
-              <AnalyticsMenu/>
+              <AnalyticsMenu />
             </DashboardLayout>
           }
         />
-
-        </Routes>
+      </Routes>
     </Router>
   );
 }
