@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import CreateEventTypeModal from "../../components/DashboardGrid/CreateEventTypeModal";
 import 
 {
 ActivityCard,
@@ -6,65 +8,92 @@ RevenueCard,
 ContentCard,
 CountriesCard,
 VisitorSources,
-BookingsCard
+BookingsCard,
 }from '../../components';
 
+const DashboardGrid = () => {
+  const [activeModal, setActiveModal] = useState(null);
 
+  const handleOpenModal = (modalName) => {
+    setActiveModal(modalName);
+  };
 
-export default function DashboardGrid() {
+  const handleCloseModal = () => {
+    setActiveModal(null);
+  };
     return (
      <div className="bg-[#F5F5F5] p-6 pb-[244px] min-h-screen flex flex-col ">
        <div className="grid gap-6 lg:grid-cols-3 sm:grid-cols-1">
          
        <div className="lg:col-span-3 flex xl:space-x-4 xxl:space-x-10 sm:space-x-3 sm:overflow-x-auto xxl:overflow-visible sm:flex-nowrap ">
         {/* Create Event Card */}
-        <div
-          className="bg-secondary text-secondary-foreground xxl:w-[356px] xxl:h-[115px] sm:w-[316px] p-6 rounded-[8px] flex items-center justify-between sm:relative "
+        <button
+          className="bg-secondary text-secondary-foreground xxl:w-[356px] xxl:h-[115px] sm:w-[316px] p-6 rounded-[8px] flex items-center justify-between sm:relative"
           style={{
             background: "linear-gradient(0deg, #D8CCFC 0%, #D8CCFC 100%), #E7EBF7",
           }}
+          onClick={() => handleOpenModal("createEvent")}
         >
           <div>
-            <h3 className="custom-cards-events xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px] xxxl:w-[156px]">Create event</h3>
-            <button className="bg-white text-[14px] p-2 rounded-[70px] shadow-sm w-[74px]">Set Up</button>
+            <h3 className="custom-cards-events xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px] xxxl:w-[156px]">
+              Create event
+            </h3>
+            <button className="bg-white text-[14px] p-2 rounded-[70px] shadow-sm w-[74px]">
+              Set Up
+            </button>
           </div>
           <img
-            src="/icons/create-event.svg" // Update the path to your image
+            src="/icons/create-event.svg"
             alt="Create Event"
             className="sm:absolute sm:transform sm:scale-105 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-21px] sm:right-[12px] sm:bottom-[8px] xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
           />
-        </div>
+        </button>
 
         {/* Link in Bio Card */}
-        <div
+        <button
           className="bg-[rgba(236,183,218,1)] text-secondary-foreground p-6 rounded-[8px] xxl:w-[356px] xxl:h-[115px] xl:w-[323px] sm:w-[316px] flex items-center justify-between relative"
+          onClick={() => alert("Link in Bio clicked!")} // Replace with your navigation logic
         >
           <div>
-            <h3 className="custom-cards-events  text-[#7D215E] xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px]">Link in Bio</h3>
-            <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px]">Set Up</button>
+            <h3 className="custom-cards-events text-[#7D215E] xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px]">
+              Link in Bio
+            </h3>
+            <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px]">
+              Set Up
+            </button>
           </div>
           <img
-            src="/icons/link-in-bio.svg" // Update the path to your image
+            src="/icons/link-in-bio.svg"
             alt="Link in Bio"
             className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-[10px] sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
           />
-        </div>
+        </button>
 
         {/* Sell Products Card */}
-        <div
+        <button
           className="bg-[rgba(168,224,250,1)] text-secondary-foreground p-6 rounded-[8px] xxl:w-[356px] xxl:h-[115px] xl:w-[323px] sm:w-[316px] flex items-center justify-between relative"
+          onClick={() => alert("Sell Products clicked!")} // Replace with your navigation logic
         >
           <div>
-            <h3 className="custom-cards-events text-[#096590] xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px]">Sell Products</h3>
-            <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px]">Set Up</button>
+            <h3 className="custom-cards-events text-[#096590] xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px]">
+              Sell Products
+            </h3>
+            <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px]">
+              Set Up
+            </button>
           </div>
           <img
-            src="/icons/sell-products.svg" // Update the path to your image
+            src="/icons/sell-products.svg"
             alt="Sell Products"
             className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-0 sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
           />
-        </div>
+        </button>
       </div>
+
+      {/* Conditionally Render Modals */}
+      {activeModal === "createEvent" && (
+        <CreateEventTypeModal onClose={handleCloseModal} />
+      )}
 
 
       {/* Templates You May Like - Button Grid */}
@@ -308,4 +337,4 @@ export default function DashboardGrid() {
 </div>  
      );
    }
-   
+export default DashboardGrid;

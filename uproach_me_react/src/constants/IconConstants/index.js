@@ -30,6 +30,11 @@ import share_icon from "../../assets/icons/share_icon.svg"
 import trash from "../../assets/icons/trash.svg"
 import reschedule from "../../assets/icons/reschedule.svg"
 import cancel from "../../assets/icons/cancel.svg"
+import one_on_one from "../../assets/icons/one_on_one.svg"
+import group from "../../assets/icons/group.svg"
+import collective from "../../assets/icons/collective.svg"
+import round_robin from "../../assets/icons/round_robin.svg"
+import right_arrow from "../../assets/icons/right_arrow.svg"
 export const ICONS = {
     LOGO : logo,
     APPLE_ICON : appleicon,
@@ -62,6 +67,10 @@ export const ICONS = {
     SHARE_ICON : share_icon,
     TRASH :trash,
     RESCHEDULE : reschedule,
-    CANCEL : cancel
-
+    CANCEL : cancel,
+    ONE_ON_ONE : one_on_one,
+    GROUP : group,
+    COLLECTIVE : collective,
+    ROUND_ROBIN : round_robin,
+    RIGHT_ARROW : right_arrow
 }
