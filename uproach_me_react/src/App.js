@@ -26,6 +26,8 @@ import {
   PagesMenu,
   AnalyticsMenu,
 } from "./pages";
+import CreateEventTypeModal from "./components/DashboardGrid/CreateEventTypeModal";
+import OneOnOnePage from "./pages/OneOnOnePage";
 import DashboardLayout from './layouts/DashboardLayout';
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
         <Route path="/countries" element={<AllCountries />} />
         <Route path="/content" element={<AllContent />} />
         <Route path="/recent-purchases" element={<AllRecentPurchases />} />
+        <Route path="/" element={<CreateEventTypeModal />} />
+        <Route path="/createevent/oneonone" element={<OneOnOnePage />} />
         <Route
           path="/dashboard"
           element={

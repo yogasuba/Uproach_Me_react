@@ -1,9 +1,12 @@
 import React from "react";
 import {ICONS } from "../../../constants";
+import { useNavigate } from "react-router-dom";
 
 
 
 const CreateEventTypeModal = ({ onClose }) => {
+  
+  const navigate = useNavigate();
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
       <div className="bg-white w-11/12 max-w-lg rounded-lg shadow-lg p-6 relative">
@@ -25,7 +28,7 @@ const CreateEventTypeModal = ({ onClose }) => {
           {/* One-on-One */}
           <div
             className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-100"
-            onClick={() => console.log("One-on-One selected")}
+            onClick={() => navigate("/createevent/oneonone")}
           >
             <div className="flex items-center space-x-4">
               <img src={ICONS.ONE_ON_ONE} alt="One-on-One" className="w-10 h-10" />
