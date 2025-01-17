@@ -22,6 +22,7 @@ export default function SigninPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    setLoading(true); // Start loading
     const auth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
 
@@ -44,7 +45,6 @@ export default function SigninPage() {
 
       if (response.status === 200) {
         toast.success('Successfully signed in with Google');
-        setLoading(true);
         navigate('/dashboard');
       } else {
         toast.error('Failed to sign in with Google');
@@ -52,12 +52,14 @@ export default function SigninPage() {
     } catch (error) {
       console.error('Google Sign-In error:', error);
       toast.error('Google sign-in failed. Please try again.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post(
         'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
@@ -68,34 +70,36 @@ export default function SigninPage() {
           },
         }
       );
-
+  
       if (response.status === 200) {
-        const { token, uid } = response.data; 
-
+        const { token, uid } = response.data;
+  
         // Store the token and uid in localStorage
         localStorage.setItem('authToken', token);
         localStorage.setItem('userId', uid);
         toast.success('Login successful');
-        setLoading(true);
+        setLoading(true); // Show loading only on success
         navigate('/dashboard');
-      } 
+      }
     } catch (err) {
       if (err.response && err.response.status === 401) {
         toast.error('Incorrect email or password');
       } else if (err.response && err.response.status === 400) {
         toast.error('User not found. Please sign up.');
-      } 
+      } else {
+        toast.error('An error occurred. Please try again.');
+      }
     }
   };
 
   return (
     <div className="min-h-screen flex">
       {loading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-75">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-75 z-50">
           <h2 className="text-lg font-semibold">Loading... Please wait</h2>
         </div>
       )}
-      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6 lg:p-12 ">
+      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6 lg:p-12">
         <div className="max-w-md xxl:ml-[3.5rem] sm:ml-[12px]">
           <img src={ICONS.LOGO} alt="Uproach Me Logo" width={130} height={50} className="mb-4" />
           <h1 className="custom-heading mb-3 tracking-tight sm:text-xl xxl:text-3xl">Login to Uproach Me</h1>
@@ -111,12 +115,12 @@ export default function SigninPage() {
               className="xxl:w-[202px] xxl:h-[40px] sm:w-[135px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px] border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap"
             >
               <img src={ICONS.GOOGLE_ICON} alt="Google" width={20} height={20} className="mr-2" />
-              Continue with <span className="font-bold ml-1">Google</span> {/* Bold only "Google" */}
+              Continue with <span className="font-bold ml-1">Google</span>
             </button>
 
-            <button className="xxl:w-[202px] xxl:h-[40px] sm:w-[128px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px]  border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap ">
+            <button className="xxl:w-[202px] xxl:h-[40px] sm:w-[128px] sm:w-1/1 inline-flex items-center justify-center rounded-[10px] border border-gray-300 bg-white px-4 py-2 xxl:text-sm sm:text-[9px] font-regular text-gray-700 shadow-sm hover:bg-gray-50 whitespace-nowrap">
               <img src={ICONS.APPLE_ICON} alt="Apple" width={20} height={20} className="mr-2" />
-              Continue with <span className="font-bold ml-1">Apple</span> {/* Bold only "Apple" */}
+              Continue with <span className="font-bold ml-1">Apple</span>
             </button>
           </div>
 
@@ -140,7 +144,7 @@ export default function SigninPage() {
               />
               <label
                 htmlFor="email"
-                className={`absolute left-3 top-3 custom-input-color transition-all transform  ${
+                className={`absolute left-3 top-3 custom-input-color transition-all transform ${
                   email ? '-translate-y-4 scale-75 text-[12px] pt-[3px]' : 'xxl:text-[14px]'
                 }`}
               >

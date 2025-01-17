@@ -66,7 +66,7 @@ export default function SignupPage() {
     }
 
     setConfirmPasswordError(''); // Clear any existing error
-    
+    setLoading(true); // Set loading to true before making the request
 
     try {
       const response = await axios.post(
@@ -80,23 +80,28 @@ export default function SignupPage() {
       );
 
       if (response.status === 201) {
-        const { token, uid } = response.data; 
+        const { token, uid } = response.data;
 
         // Store the token and uid in localStorage
         localStorage.setItem('authToken', token);
         localStorage.setItem('userId', uid);
 
         toast.success('User created successfully. Please verify your email.');
-        setLoading(true);
-        navigate('/welcome');
+
+        // Delay navigation to ensure the loading state renders
+        setTimeout(() => {
+          setLoading(false); // Optionally set loading back to false
+          navigate('/welcome');
+        }, 500); // Adjust delay if needed
       }
     } catch (err) {
+      setLoading(false); // Ensure loading state is reset on failure
       if (err.response && err.response.status === 400) {
         toast.error('The email address is already in use by another account.');
       } else {
         toast.error('Signup failed. Please try again.');
       }
-    } 
+    }
   };
 
   if (loading) {
