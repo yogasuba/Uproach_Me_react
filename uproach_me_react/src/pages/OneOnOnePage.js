@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
+import { BsEmojiSmile } from "react-icons/bs";
+import Picker from "@emoji-mart/react";
+
+
 
 const OneOnOnePage = () => {
   const [duration, setDuration] = useState("");
@@ -7,6 +11,11 @@ const OneOnOnePage = () => {
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
   const [step, setStep] = useState(1);
   const [meetingType, setMeetingType] = useState("");
+  const [sellSessionRecording, setSellSessionRecording] = useState(false);
+  const [increaseConversation, setIncreaseConversation] = useState(false);
+  const [text, setText] = useState(""); // State to store textarea value
+  const textareaRef = useRef(null); // Ref to manipulate the textarea
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   useEffect(() => {
     const today = new Date();
@@ -25,8 +34,22 @@ const OneOnOnePage = () => {
     setWeekDays(days);
   }, []);
 
-  const handleNext = () => {
-    setStep(step + 1);
+
+  // Function to insert emojis
+  const insertEmoji = (emoji) => {
+    const textarea = textareaRef.current;
+    const start = textarea.selectionStart;
+    const beforeText = textarea.value.substring(0, start);
+    const afterText = textarea.value.substring(start);
+
+    setText(beforeText + emoji.native + afterText);
+
+    // Reset cursor position after emoji insertion
+    setTimeout(() => {
+      textarea.selectionStart = textarea.selectionEnd = start + emoji.native.length;
+      textarea.focus();
+    }, 0);
+    setShowEmojiPicker(false);
   };
 
   return (
@@ -104,12 +127,40 @@ const OneOnOnePage = () => {
               </div>
 
               <div className="mb-6">
+                {/* Toolbar */}
+                <div className="flex items-center justify-between p-2 border border-[#CCCDD6] rounded-t-lg bg-gray-100">
+                    <div className="flex space-x-2 text-gray-600">
+                    <button
+                        type="button"
+                        className="p-1 hover:text-black"
+                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    >
+                        <BsEmojiSmile />
+                    </button>
+                    </div>
+                </div>
+
+                {/* Emoji Picker */}
+                {showEmojiPicker && (
+                    <div className="absolute z-10 p-2 border border-gray-300 bg-white rounded-lg">
+                    <Picker
+                        onEmojiSelect={insertEmoji}
+                        theme="light" // Change to "dark" if needed
+                    />
+                    </div>
+                )}
+
+                {/* Textarea */}
                 <textarea
-                  placeholder="Description..."
-                  rows={4}
-                  className="custom-inputfeild w-full text-[14px] p-[10px] border border-[#CCCDD6] rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    ref={textareaRef}
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Description..."
+                    rows={4}
+                    className="w-full text-[14px] p-[10px] border border-[#CCCDD6] rounded-b-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
                 ></textarea>
-              </div>
+                </div>
+
               <div className="mb-6">
                 <label className="block text-gray-700 text-[14px] font-medium mb-2">
                   How long are you meeting for?
@@ -219,18 +270,148 @@ const OneOnOnePage = () => {
               </div>
             </>
           )}
+            {step === 4 && (
+                <>
+                <h1 className="text-[24px] font-semibold text-gray-800 mb-2 text-center">
+                    Pricing
+                </h1>
+                <p className="text-[14px] text-gray-600 text-center mb-6">
+                    Lorem ipsum dolor sit amet condt sifd evn nakjdcn hbncin jniunl
+                </p>
 
-          <div className="flex justify-between">
-            <button className="w-[170px] px-6 py-2 text-black font-medium bg-gray-200 rounded-[32px]">
-              Cancel
+                {/* Amount Input */}
+                <div className="mb-6">
+                    <label className="block text-gray-700 text-[14px] font-medium mb-2">
+                    Amount
+                    </label>
+                    <div className="flex items-center border border-gray-300 rounded-lg">
+                    <div className="bg-gray-100 px-4 py-2 flex items-center justify-center">
+                        <span className="text-gray-500">₹</span>
+                    </div>
+                    <div className="border-l border-gray-300 h-full"></div>
+                    <input
+                        type="number"
+                        placeholder="0"
+                        className="w-full text-[14px] px-4 py-2 focus:outline-none"
+                    />
+                    </div>
+                </div>
+
+                {/* Toggle for "Sell session recording" */}
+                <div className="flex items-center mb-6">
+                    <input
+                    type="checkbox"
+                    id="sellRecording"
+                    className="hidden"
+                    checked={sellSessionRecording}
+                    onChange={() => setSellSessionRecording(!sellSessionRecording)}
+                    />
+                    <label
+                    htmlFor="sellRecording"
+                    className={`relative w-8 h-4 flex items-center rounded-full cursor-pointer transition-colors ${
+                        sellSessionRecording ? "bg-black" : "bg-gray-300"
+                    }`}
+                    >
+                    <div
+                        className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${
+                        sellSessionRecording ? "translate-x-4" : "translate-x-0"
+                        }`}
+                    ></div>
+                    </label>
+                    <span className="ml-3 text-sm text-gray-700">
+                    Sell session recording
+                    </span>
+                </div>
+
+                {/* Toggle for "Increase conversation by slash pricing" */}
+                <div className="flex items-center mb-6">
+                    <input
+                    type="checkbox"
+                    id="slashPricing"
+                    className="hidden"
+                    checked={increaseConversation}
+                    onChange={() => setIncreaseConversation(!increaseConversation)}
+                    />
+                    <label
+                    htmlFor="slashPricing"
+                    className={`relative w-8 h-4 flex items-center rounded-full cursor-pointer transition-colors ${
+                        increaseConversation ? "bg-black" : "bg-gray-300"
+                    }`}
+                    >
+                    <div
+                        className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${
+                        increaseConversation ? "translate-x-4" : "translate-x-0"
+                        }`}
+                    ></div>
+                    </label>
+                    <span className="ml-3 text-sm text-gray-700">
+                    Increase conversation by slash pricing
+                    </span>
+                </div>
+
+                <div className="border border-[#CCCDD6] rounded-lg p-4 mb-[147px]">
+                    <div className="flex space-x-4">
+                        {/* Actual Amount */}
+                        <div className="flex-1">
+                        <label className="block text-gray-700 text-[14px] font-medium mb-2">
+                            Actual Amount
+                        </label>
+                        <div className="flex items-center border border-[#CCCDD6] rounded-lg">
+                            <span className="p-[10px] text-gray-500 ">₹</span>
+                            <input
+                            type="number"
+                            placeholder="0"
+                            className="w-full text-[14px] p-[10px] focus:outline-none"
+                            />
+                        </div>
+                        </div>
+
+                        {/* Slashed Amount */}
+                        <div className="flex-1">
+                        <label className="block text-gray-700 text-[14px] font-medium mb-2">
+                            Slashed Amount
+                        </label>
+                        <div className="flex items-center border border-[#CCCDD6] rounded-lg">
+                            <span className="p-[10px] text-gray-500 ">₹</span>
+                            <input
+                            type="number"
+                            placeholder="0"
+                            className="w-full text-[14px] p-[10px] focus:outline-none"
+                            />
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+
+
+                {/* Create Link Button */}
+                <div className="mt-8 flex justify-center">
+                    <button
+                    onClick={() => alert("Link Created!")} // Replace with your final step logic
+                    className="w-[407px] px-6 py-3 text-white font-medium bg-[rgb(97,57,255)] rounded-[32px] hover:bg-customPurple"
+                    >
+                    Create Link
+                    </button>
+                </div>
+                </>
+            )}
+
+        {step < 4 && (
+        <div className="flex justify-between mt-6">
+            <button
+            onClick={() => setStep(step - 1)} // Go to previous step
+            className="w-[170px] px-6 py-2 text-black font-medium bg-gray-200 rounded-[32px]"
+            >
+            Cancel
             </button>
             <button
-              onClick={handleNext}
-              className="w-[170px] px-6 py-2 text-white font-medium bg-[rgb(97,57,255)] rounded-[32px] hover:bg-customPurple"
+            onClick={() => setStep(step + 1)} // Go to next step
+            className="w-[170px] px-6 py-2 text-white font-medium bg-[rgb(97,57,255)] rounded-[32px] hover:bg-customPurple"
             >
-              Next
+            Next
             </button>
-          </div>
+        </div>
+        )}
         </div>
       </div>
 

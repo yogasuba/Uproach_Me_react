@@ -71,7 +71,7 @@ export default function SigninPage() {
 
       if (response.status === 200) {
         toast.success('Login successful');
-        navigate('/home');
+        navigate('/dashboard');
       } else {
         throw new Error(response.data.message || 'Login failed');
       }
