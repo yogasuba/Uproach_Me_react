@@ -21,7 +21,7 @@ export default function ProfilePage() {
     bio: "Lorem ipsum dolor sit amet consectetur. Eget dui convallis potenti lacus cras nec. Tempus enim accumsan malesuada at vitae in euismod in odio.",
   });
 
-
+  
   const [activeTab, setActiveTab] = useState("profile"); // State for active tab
   const [selectedMethod, setSelectedMethod] = useState("bank");
   const [isEditing, setIsEditing] = useState(false);
