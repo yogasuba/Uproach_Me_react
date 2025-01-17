@@ -59,6 +59,8 @@ const WelcomePage = () => {
         }
       );
   
+      console.log("Update API Response:", updateResponse.data);
+
     } catch (err) {
       console.error("API Error:", err);
       toast.error("Error occurred while processing your request.");
