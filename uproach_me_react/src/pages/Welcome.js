@@ -59,8 +59,6 @@ const WelcomePage = () => {
         }
       );
   
-      console.log("Update API Response:", updateResponse.data);
-      toast.success("Username updated successfully");
     } catch (err) {
       console.error("API Error:", err);
       toast.error("Error occurred while processing your request.");
@@ -93,10 +91,7 @@ const WelcomePage = () => {
       return;
     }
   
-    if (isAvailable === false) {
-      toast.error("Username is not available. Please choose another one.");
-      return;
-    }
+
   
     setIsSubmitting(true);
     setTimeout(() => {
