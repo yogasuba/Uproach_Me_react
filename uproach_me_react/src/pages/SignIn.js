@@ -44,6 +44,7 @@ export default function SigninPage() {
 
       if (response.status === 200) {
         toast.success('Successfully signed in with Google');
+        setLoading(true);
         navigate('/dashboard');
       } else {
         toast.error('Failed to sign in with Google');
@@ -56,7 +57,6 @@ export default function SigninPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -70,35 +70,31 @@ export default function SigninPage() {
       );
 
       if (response.status === 200) {
+        const { token, uid } = response.data; 
+
+        // Store the token and uid in localStorage
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', uid);
         toast.success('Login successful');
+        setLoading(true);
         navigate('/dashboard');
-      } else {
-        throw new Error(response.data.message || 'Login failed');
-      }
+      } 
     } catch (err) {
       if (err.response && err.response.status === 401) {
         toast.error('Incorrect email or password');
-      } else if (err.response && err.response.status === 404) {
+      } else if (err.response && err.response.status === 400) {
         toast.error('User not found. Please sign up.');
-      } else {
-        toast.error('Login failed. Please try again.');
-      }
-    } finally {
-      setLoading(false);
+      } 
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <h2 className="text-lg font-semibold">Loading... Please wait</h2>
-        {/* Optional loading animations */}
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen flex">
+      {loading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-75">
+          <h2 className="text-lg font-semibold">Loading... Please wait</h2>
+        </div>
+      )}
       <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6 lg:p-12 ">
         <div className="max-w-md xxl:ml-[3.5rem] sm:ml-[12px]">
           <img src={ICONS.LOGO} alt="Uproach Me Logo" width={130} height={50} className="mb-4" />
@@ -193,7 +189,7 @@ export default function SigninPage() {
               type="submit"
               className="xxl:w-[418px] sm:w-[276px] h-[48px] mt-8 flex justify-center rounded-full bg-[rgb(97,57,255)] py-3 px-2 text-sm font-medium text-white shadow-sm hover:bg-customPurple"
             >
-              Get Started
+              Sign In
             </button>
           </form>
 

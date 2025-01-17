@@ -20,36 +20,44 @@ export default function SuccessPage() {
       .then((response) => response.json())
       .then((data) => setAnimationData(data))
       .catch((error) => console.error("Error loading animation:", error));
+  }, []);
 
-    const fetchUserData = async () => {
+  useEffect(() => {
+    const fetchUserProfile = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          toast.error("Authentication token is missing.");
+        const uid = localStorage.getItem("userId");
+        if (!uid) {
+          toast.error("User ID is missing.");
           return;
         }
 
-        const response = await axios.get("/api/auth/update-profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.post(
+          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/success-page",
+          { uid },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-        if (response.status === 200) {
-          const { profilePic: savedProfilePic, profilename: savedProfilename } = response.data;
-          setProfilePic(savedProfilePic || "/SVGRepo_iconCarrier.svg");
-          setProfilename(savedProfilename || "User");
-        } else {
-          throw new Error("Failed to fetch user data");
-        }
+        // Destructure response and set state
+        const { profilePhoto = "/SVGRepo_iconCarrier.svg", profileName = "User" } = response.data || {};
+        setProfilePic(profilePhoto);
+        setProfilename(profileName);
       } catch (error) {
         toast.error("Error fetching profile data. Please try again.");
-        console.error(error);
+        console.error("Error fetching profile data:", error);
       }
     };
 
-    fetchUserData();
+    fetchUserProfile();
   }, []);
+
+  const handleSubmitSuccessPage = () => {
+    // Define what should happen on "Get Started" click
+    navigate("/dashboard"); // Navigate to a dashboard or another page
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white relative overflow-hidden">
@@ -69,7 +77,7 @@ export default function SuccessPage() {
         <div className="relative mt-10 mb-10 w-40 h-40 flex items-center justify-center">
           <div className="absolute w-[13rem] h-[13rem] rounded-lg border-4 border-white overflow-hidden">
             <div
-              className="w-full h-full"
+              className="w-[396px] h-[396px]"
               style={{
                 backgroundImage: `url(${profilePic || "/defaultbackground.jpg"})`,
                 filter: "blur(5px)",
@@ -84,7 +92,7 @@ export default function SuccessPage() {
             <img
               src={profilePic}
               alt="User Profile"
-              className="shadow-lg relative z-10 w-[132px] h-[115px] rounded-full object-cover"
+              className="shadow-lg relative z-10 w-[135px] h-[135px]  object-cover"
               onError={(e) => (e.target.src = "/SVGRepo_iconCarrier.svg")}
             />
           ) : (
@@ -111,7 +119,7 @@ export default function SuccessPage() {
         <button
           type="button"
           className="xxl:w-[418px] sm:w-[276px] h-[48px] mt-[122px] flex justify-center rounded-full border border-transparent bg-[rgb(97,57,255)] py-3 px-2 text-sm font-medium text-white shadow-sm hover:bg-customPurple"
-          onClick={() => navigate("/dashboard")}
+          onClick={handleSubmitSuccessPage}
         >
           Get Started
         </button>

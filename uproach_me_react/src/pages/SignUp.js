@@ -66,7 +66,7 @@ export default function SignupPage() {
     }
 
     setConfirmPasswordError(''); // Clear any existing error
-    setLoading(true);
+    
 
     try {
       const response = await axios.post(
@@ -80,13 +80,14 @@ export default function SignupPage() {
       );
 
       if (response.status === 201) {
-        const { token, uid } = response.data; // Extract token and uid from the response
+        const { token, uid } = response.data; 
 
         // Store the token and uid in localStorage
         localStorage.setItem('authToken', token);
         localStorage.setItem('userId', uid);
 
         toast.success('User created successfully. Please verify your email.');
+        setLoading(true);
         navigate('/welcome');
       }
     } catch (err) {
@@ -95,9 +96,7 @@ export default function SignupPage() {
       } else {
         toast.error('Signup failed. Please try again.');
       }
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   if (loading) {

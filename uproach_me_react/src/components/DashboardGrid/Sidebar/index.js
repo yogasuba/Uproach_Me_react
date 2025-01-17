@@ -2,14 +2,12 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import BillingPopup from '../../../pages/Billing/BillingPopup';
 import {ICONS} from "../../../constants"
+import axios from "axios";
+import { toast } from "react-toastify";
 
 
 export default function Sidebar() {
-  // Dummy user data
-  const user = {
-    username: "dummyUser123",
-    profilePic: "/profile.jpg", // Default profile picture
-  };
+
 
   // Navigation links
   const navLinks = [
@@ -24,6 +22,8 @@ export default function Sidebar() {
   // Dropdown state
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [user, setUser] = useState({ profilePic: "", username: "" });
+
 
   const handleClose = () => {
     setPopupOpen(false);
@@ -45,6 +45,31 @@ export default function Sidebar() {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const uid = localStorage.getItem("userId");
+        if (!uid) {
+          toast.error("User ID is missing.");
+          return;
+        }
+        const response = await axios.post(
+          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/success-page",
+          { uid},
+        );
+        if (response.status === 200) {
+          const data = response.data;
+          setUser({ profilePic: data.profilePhoto, username: data.profileName });
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   return (
     <aside className="lg:flex lg:flex-col bg-card xxxl:p-4 xxl:p-4 sm:p-0 lg:w-60 lg:min-h-screen lg:relative">
       {/* Sidebar for Desktop */}
@@ -249,9 +274,14 @@ export default function Sidebar() {
 
               {/* Sign Out */}
               <div
-                className="flex items-center text-[14px] text-[#1C2434] px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer mb-2"
-                onClick={() => setDropdownOpen(false)}
-              >
+              className="flex items-center text-[14px] text-[#1C2434] px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer mb-2"
+              onClick={() => {
+                // Clear token from local storage
+                localStorage.removeItem("authToken");
+                // Redirect to sign-in page
+                window.location.href = "/";
+              }}
+            >
                 <img
                   src="/icons/log-out.svg"
                   alt="Sign Out"

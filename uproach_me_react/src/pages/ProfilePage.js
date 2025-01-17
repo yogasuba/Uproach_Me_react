@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { HexColorPicker } from "react-colorful";
+import { HexColorPicker } from 'react-colorful';
 import {ICONS, IMAGES} from "../constants";
 
 
@@ -9,12 +9,10 @@ export default function ProfilePage() {
     document.title = 'Profile'; // Set your desired page title here
   }, []);
 
-  const [activeTab, setActiveTab] = useState("profile"); // State for active tab
-  const [selectedMethod, setSelectedMethod] = useState("bank");
 
   const [profileData] = useState({
     profilePic: "/profile.jpg", // Default Profile Picture
-    lastupadte: "Updated on 19 Oct",
+    lastUpdate: "Updated on 19 Oct",
     profileUrl: "Uproach me.in/vignesh03",
     profileName: "vignesh03",
     email: "vignesh03@gmail.com",
@@ -24,38 +22,90 @@ export default function ProfilePage() {
   });
 
 
-  const [themeColor, setThemeColor] = useState("#6A35FF"); // Selected color state
-  const [showColorPicker, setShowColorPicker] = useState(false); // Toggle picker
-  const [savedColors, setSavedColors] = useState(["#FF0000", "#FFA500", "#FFFF00", "#008000", "#0000FF", "#4B0082"]); // Default saved colors
+  const [activeTab, setActiveTab] = useState("profile"); // State for active tab
+  const [selectedMethod, setSelectedMethod] = useState("bank");
+  const [isEditing, setIsEditing] = useState(false);
+  const [newProfilePic, setNewProfilePic] = useState(profileData.profilePic);
+  const [isEditingMobile, setIsEditingMobile] = useState(false);
+  const [editableMobile, setEditableMobile] = useState(profileData.mobile);
 
-  const [rgbaValues, setRgbaValues] = useState({
-    r: 106,
-    g: 53,
-    b: 255,
-    a: 100, // Alpha percentage
-  });
+  // State variables for password
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [editablePassword, setEditablePassword] = useState("");
+    // Define updateProfileData locally
+    const updateProfileData = (field, value) => {
+      console.log(`Updated ${field} to: ${value}`);
+      // Update the profile data (e.g., call an API or update local state)
+      if (field === "mobile") {
+        setEditableMobile(value);
+      } else if (field === "password") {
+        setEditablePassword(value);
+      }
+    };
 
-  // Update RGBA based on HEX
-  const updateRgbaFromHex = (hex) => {
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    setRgbaValues((prev) => ({ ...prev, r, g, b }));
+  const handleEditPhotoClick = () => {
+    setIsEditing(true);
   };
 
-  // Update HEX based on RGBA
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setNewProfilePic(profileData.profilePic);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const fileReader = new FileReader();
+      fileReader.onload = (event) => {
+        setNewProfilePic(event.target.result); // Temporary preview
+      };
+      fileReader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleSavePhotoClick = () => {
+    // Implement save logic here, e.g., send `newProfilePic` to the server
+    alert("Profile photo saved!");
+    setIsEditing(false);
+  };
+
+
+
+
+  const [themeColor, setThemeColor] = React.useState('#000000');
+  const [showColorPicker, setShowColorPicker] = React.useState(false);
+  const [rgbaValues, setRgbaValues] = React.useState({ r: 0, g: 0, b: 0, a: 100 });
+  const [savedColors, setSavedColors] = React.useState([]);
+
+  const hexToRgba = (hex) => {
+      const bigint = parseInt(hex.replace('#', ''), 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return { r, g, b, a: 100 }; // Default alpha as 100%
+  };
+
+  const rgbaToHex = ({ r, g, b }) => {
+      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+  };
+
+  const updateRgbaFromHex = (hex) => {
+      setRgbaValues(hexToRgba(hex));
+  };
+
   const updateHexFromRgba = () => {
-    const { r, g, b } = rgbaValues;
-    const hex = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-    setThemeColor(hex);
+      setThemeColor(rgbaToHex(rgbaValues));
   };
 
   const handleSaveColor = () => {
-    if (!savedColors.includes(themeColor)) {
-      setSavedColors([...savedColors, themeColor]);
-    }
+      if (!savedColors.includes(themeColor)) {
+          setSavedColors([...savedColors, themeColor]);
+      }
   };
+
+  const profileStyle = {
+      backgroundColor: themeColor,
+  };
+
 
 
   const handleSaveChanges = () => {
@@ -63,6 +113,8 @@ export default function ProfilePage() {
   };
 
   return (
+    <div className="profile-container" style={profileStyle}>
+
     <div className="p-8 w-full xxl:min-h-screen sm:h-[1872px] bg-gray-50">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
@@ -119,11 +171,22 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-6">
                 <div className="relative">
                   <img
-                    src={profileData.profilePic}
+                    src={isEditing ? newProfilePic : profileData.profilePic}
                     alt="Profile"
                     className="xxl:w-[103px] xxl:h-[103px] sm:w-[74px] h-[74px] rounded-full object-cover"
                     onError={(e) => (e.target.src = "/SVGRepo_iconCarrier.svg")} // Fallback
                   />
+                  {isEditing && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                      />
+                      <span className="text-white font-bold">Change</span>
+                    </div>
+                  )}
                   <button className="absolute bottom-0 right-0 bg-white rounded-[7px] xxl:w-[44px] xxl:h-[44px] sm:w-[24px] sm:h-[24px]">
                     <img
                       src="/icons/Qr-code.svg"
@@ -137,15 +200,23 @@ export default function ProfilePage() {
                   <h2 className="xxl:text-[28px] sm:text-[20px] font-bold text-gray-800">
                     Profile Photo
                   </h2>
-                  <p className="text-gray-500 text-sm">{profileData.lastupadte}</p>
+                  <p className="text-gray-500 text-sm">{profileData.lastUpdate}</p>
                 </div>
               </div>
 
               {/* Edit Photo Button */}
               <div className="text-[#6139FF] xxl:text-[14px] sm:text-[7px] font-semibold">
-                <button>Edit photo</button>
+                {isEditing ? (
+                  <div className="flex space-x-4">
+                    <button onClick={handleSavePhotoClick}>Save</button>
+                    <button onClick={handleCancelClick}>Cancel</button>
+                  </div>
+                ) : (
+                  <button onClick={handleEditPhotoClick}>Edit photo</button>
+                )}
               </div>
             </div>
+
 
             {/* Information Section */}
             <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
@@ -272,157 +343,157 @@ export default function ProfilePage() {
                 ))}
               </div>
             </div>
+            {/* Display Section */}
+            <h2 className="text-lg font-semibold mt-8 mb-2 xxl:ml-[149px] xxxl:ml-[237px]">
+                Display
+            </h2>
+            <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md mt-5">
+                {/* Profile Theme */}
+                <div className="pb-6 border-b border-gray-300">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <h3 className="text-md font-medium">Profile theme</h3>
+                            <p className="text-gray-500 text-sm">Customize your profile to your brand</p>
+                        </div>
+                        <div className="flex items-center space-x-2 relative">
+                            {/* Color Preview */}
+                            <div
+                                className="w-6 h-6 rounded-sm border border-gray-300 cursor-pointer"
+                                style={{ backgroundColor: themeColor }}
+                                onClick={() => setShowColorPicker(!showColorPicker)}
+                            ></div>
+                            <button
+                                className="text-indigo-600 font-medium hover:underline"
+                                onClick={() => setShowColorPicker(!showColorPicker)}
+                            >
+                                Edit
+                            </button>
 
-          {/* Display Section */}
-          <h2 className="text-lg font-semibold mt-8 mb-2 xxl:ml-[149px] xxxl:ml-[237px]">
-              Display
-          </h2>
-          <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md mt-5">
-              {/* Profile Theme */}
-              <div className="pb-6 border-b border-gray-300">
-              <div className="flex justify-between items-center">
-                  <div>
-                  <h3 className="text-md font-medium">Profile theme</h3>
-                  <p className="text-gray-500 text-sm">Customize your profile to your brand</p>
-                  </div>
-                  <div className="flex items-center space-x-2 relative">
-                  {/* Color Preview */}
-                  <div
-                      className="w-6 h-6 rounded-sm border border-gray-300 cursor-pointer"
-                      style={{ backgroundColor: themeColor }}
-                      onClick={() => setShowColorPicker(!showColorPicker)}
-                  ></div>
-                  <button
-                      className="text-indigo-600 font-medium hover:underline"
-                      onClick={() => setShowColorPicker(!showColorPicker)}
-                  >
-                      Edit
-                  </button>
+                            {/* Color Picker */}
+                            {showColorPicker && (
+                                <div className="absolute bottom-full left-0 mt-2 z-10 bg-white shadow-lg p-4 rounded-md">
+                                    <HexColorPicker
+                                        color={themeColor}
+                                        onChange={(color) => {
+                                            setThemeColor(color);
+                                            updateRgbaFromHex(color);
+                                        }}
+                                        className="mb-4"
+                                    />
 
-                {/* Color Picker */}
-                {showColorPicker && (
-                  <div className="absolute bottom-full left-0 mt-2 z-10 bg-white shadow-lg p-4 rounded-md">
-                    <HexColorPicker
-                      color={themeColor}
-                      onChange={(color) => {
-                        setThemeColor(color);
-                        updateRgbaFromHex(color);
-                      }}
-                      className="mb-4"
-                    />
+                                    {/* HEX Input */}
+                                    <div className="flex items-center space-x-2 mb-4">
+                                        <label className="text-sm text-gray-500">HEX:</label>
+                                        <input
+                                            type="text"
+                                            value={themeColor}
+                                            onChange={(e) => {
+                                                setThemeColor(e.target.value);
+                                                updateRgbaFromHex(e.target.value);
+                                            }}
+                                            className="border rounded-md px-2 py-1 text-sm w-full"
+                                        />
+                                    </div>
 
-                    {/* HEX Input */}
-                    <div className="flex items-center space-x-2 mb-4">
-                      <label className="text-sm text-gray-500">HEX:</label>
-                      <input
-                        type="text"
-                        value={themeColor}
-                        onChange={(e) => {
-                          setThemeColor(e.target.value);
-                          updateRgbaFromHex(e.target.value);
-                        }}
-                        className="border rounded-md px-2 py-1 text-sm w-full"
-                      />
+                                    {/* RGB Inputs */}
+                                    <div className="flex items-center space-x-4 mb-4">
+                                        <div className="flex flex-col">
+                                            <label className="text-sm text-gray-500">R:</label>
+                                            <input
+                                                type="number"
+                                                value={rgbaValues.r}
+                                                onChange={(e) => setRgbaValues((prev) => ({ ...prev, r: +e.target.value }))}
+                                                onBlur={updateHexFromRgba}
+                                                className="border rounded-md px-2 py-1 text-sm w-16"
+                                                min={0}
+                                                max={255}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <label className="text-sm text-gray-500">G:</label>
+                                            <input
+                                                type="number"
+                                                value={rgbaValues.g}
+                                                onChange={(e) => setRgbaValues((prev) => ({ ...prev, g: +e.target.value }))}
+                                                onBlur={updateHexFromRgba}
+                                                className="border rounded-md px-2 py-1 text-sm w-16"
+                                                min={0}
+                                                max={255}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <label className="text-sm text-gray-500">B:</label>
+                                            <input
+                                                type="number"
+                                                value={rgbaValues.b}
+                                                onChange={(e) => setRgbaValues((prev) => ({ ...prev, b: +e.target.value }))}
+                                                onBlur={updateHexFromRgba}
+                                                className="border rounded-md px-2 py-1 text-sm w-16"
+                                                min={0}
+                                                max={255}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <label className="text-sm text-gray-500">A:</label>
+                                            <input
+                                                type="number"
+                                                value={rgbaValues.a}
+                                                onChange={(e) => setRgbaValues((prev) => ({ ...prev, a: +e.target.value }))}
+                                                className="border rounded-md px-2 py-1 text-sm w-16"
+                                                min={0}
+                                                max={100}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Saved Colors */}
+                                    <div className="mb-4">
+                                        <label className="text-sm text-gray-500 mb-2">Saved Colors:</label>
+                                        <div className="flex items-center space-x-2 mt-2">
+                                            {savedColors.map((color, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="w-6 h-6 rounded-full cursor-pointer border"
+                                                    style={{ backgroundColor: color }}
+                                                    onClick={() => setThemeColor(color)}
+                                                ></div>
+                                            ))}
+                                            <button
+                                                className="w-6 h-6 border rounded-full flex items-center justify-center text-xs font-bold text-gray-600"
+                                                onClick={handleSaveColor}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
+                </div>
 
-                    {/* RGB Inputs */}
-                    <div className="flex items-center space-x-4 mb-4">
-                      <div className="flex flex-col">
-                        <label className="text-sm text-gray-500">R:</label>
-                        <input
-                          type="number"
-                          value={rgbaValues.r}
-                          onChange={(e) => setRgbaValues((prev) => ({ ...prev, r: +e.target.value }))}
-                          onBlur={updateHexFromRgba}
-                          className="border rounded-md px-2 py-1 text-sm w-16"
-                          min={0}
-                          max={255}
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <label className="text-sm text-gray-500">G:</label>
-                        <input
-                          type="number"
-                          value={rgbaValues.g}
-                          onChange={(e) => setRgbaValues((prev) => ({ ...prev, g: +e.target.value }))}
-                          onBlur={updateHexFromRgba}
-                          className="border rounded-md px-2 py-1 text-sm w-16"
-                          min={0}
-                          max={255}
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <label className="text-sm text-gray-500">B:</label>
-                        <input
-                          type="number"
-                          value={rgbaValues.b}
-                          onChange={(e) => setRgbaValues((prev) => ({ ...prev, b: +e.target.value }))}
-                          onBlur={updateHexFromRgba}
-                          className="border rounded-md px-2 py-1 text-sm w-16"
-                          min={0}
-                          max={255}
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <label className="text-sm text-gray-500">A:</label>
-                        <input
-                          type="number"
-                          value={rgbaValues.a}
-                          onChange={(e) => setRgbaValues((prev) => ({ ...prev, a: +e.target.value }))}
-                          className="border rounded-md px-2 py-1 text-sm w-16"
-                          min={0}
-                          max={100}
-                        />
-                      </div>
+                {/* Font Size */}
+                <div className="pt-6">
+                    <div className="flex flex-col xxl:flex-row xxl:justify-between xxl:items-center sm:items-bottom">
+                        <div>
+                            <h3 className="text-md font-medium">Font Size</h3>
+                            <p className="text-gray-500 text-sm">
+                                Customize your profile to your brand
+                            </p>
+                        </div>
+                        <div className="mt-4 flex items-center sm:space-x-4 ">
+                            {/* Font Size Control */}
+                            <span className="text-gray-500 text-sm font-medium">A</span>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                className="w-32 h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-indigo-500 mx-4 sm:mx-0"
+                            />
+                            <span className="text-gray-800 text-lg font-medium">A</span>
+                        </div>
                     </div>
-
-                    {/* Saved Colors */}
-                    <div className="mb-4">
-                      <label className="text-sm text-gray-500 mb-2">Saved Colors:</label>
-                      <div className="flex items-center space-x-2 mt-2">
-                        {savedColors.map((color, index) => (
-                          <div
-                            key={index}
-                            className="w-6 h-6 rounded-full cursor-pointer border"
-                            style={{ backgroundColor: color }}
-                            onClick={() => setThemeColor(color)}
-                          ></div>
-                        ))}
-                        <button
-                          className="w-6 h-6 border rounded-full flex items-center justify-center text-xs font-bold text-gray-600"
-                          onClick={handleSaveColor}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          {/* Font Size */}
-          <div className="pt-6">
-            <div className="flex flex-col xxl:flex-row xxl:justify-between xxl:items-center sm:items-bottom">
-              <div>
-                <h3 className="text-md font-medium">Font Size</h3>
-                <p className="text-gray-500 text-sm">
-                  Customize your profile to your brand
-                </p>
-              </div>
-              <div className="mt-4 flex items-center sm:space-x-4 ">
-                {/* Font Size Control */}
-                <span className="text-gray-500 text-sm font-medium">A</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  className="w-32 h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-indigo-500 mx-4 sm:mx-0"
-                />
-                <span className="text-gray-800 text-lg font-medium">A</span>
-              </div>
-  </div>
-        </div>
+                </div>
       </div>
     </div>
     </>
@@ -444,24 +515,65 @@ export default function ProfilePage() {
             <hr className="border-gray-300 mt-2" />
           </div>
 
-          {/* Mobile Number */}
-          <div>
-            <label className="block text-sm text-gray-500 mb-1">Mobile number</label>
+      {/* Mobile Number */}
+      <div className="flex justify-between items-center">
+        <div>
+          <label className="block text-sm text-gray-500 mb-1">Mobile Number</label>
+          {isEditingMobile ? (
+            <input
+              type="text"
+              className="border border-gray-300 rounded px-2 py-1 text-sm"
+              value={editableMobile}
+              onChange={(e) => setEditableMobile(e.target.value)}
+            />
+          ) : (
             <p className="text-gray-900 text-sm font-medium">{profileData.mobile}</p>
-            <hr className="border-gray-300 mt-2" />
-          </div>
+          )}
+        </div>
+        <button
+          className="text-indigo-600 text-sm font-semibold hover:underline"
+          onClick={() => {
+            if (isEditingMobile) {
+              // Save the changes
+              updateProfileData("mobile", editableMobile);
+            }
+            setIsEditingMobile(!isEditingMobile);
+          }}
+        >
+          {isEditingMobile ? "Save" : "Change"}
+        </button>
+      </div>
+      <hr className="border-gray-300 mt-2" />
 
-          {/* Password */}
-          <div className="flex justify-between items-center">
-            <div>
-              <label className="block text-sm text-gray-500 mb-1">Password</label>
-              <p className="text-gray-900 text-sm font-medium">{profileData.password}</p>
-            </div>
-            <button className="text-indigo-600 text-sm font-semibold hover:underline">
-              Change
-            </button>
-          </div>
-          <hr className="border-gray-300 mt-2" />
+      {/* Password */}
+      <div className="flex justify-between items-center">
+        <div>
+          <label className="block text-sm text-gray-500 mb-1">Password</label>
+          {isEditingPassword ? (
+            <input
+              type="password"
+              className="border border-gray-300 rounded px-2 py-1 text-sm"
+              value={editablePassword}
+              onChange={(e) => setEditablePassword(e.target.value)}
+            />
+          ) : (
+            <p className="text-gray-900 text-sm font-medium">{"••••••••"}</p>
+          )}
+        </div>
+        <button
+          className="text-indigo-600 text-sm font-semibold hover:underline"
+          onClick={() => {
+            if (isEditingPassword) {
+              // Save the changes
+              updateProfileData("password", editablePassword);
+            }
+            setIsEditingPassword(!isEditingPassword);
+          }}
+        >
+          {isEditingPassword ? "Save" : "Change"}
+        </button>
+      </div>
+      <hr className="border-gray-300 mt-2" />
         </div>
       </div>
     </div>
@@ -720,6 +832,7 @@ export default function ProfilePage() {
             </div>
         </div>
       )}
+  </div>
   </div>
   );
 }
