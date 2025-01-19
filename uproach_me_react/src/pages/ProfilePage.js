@@ -1,6 +1,9 @@
 import React, { useState,useEffect } from "react";
 import { HexColorPicker } from 'react-colorful';
 import {ICONS, IMAGES} from "../constants";
+import axios from "axios";
+import { toast } from 'react-hot-toast';
+
 
 
 
@@ -9,19 +12,61 @@ export default function ProfilePage() {
     document.title = 'Profile'; // Set your desired page title here
   }, []);
 
-
-  const [profileData] = useState({
-    profilePic: "/profile.jpg", // Default Profile Picture
-    lastUpdate: "Updated on 19 Oct",
-    profileUrl: "Uproach me.in/vignesh03",
-    profileName: "vignesh03",
-    email: "vignesh03@gmail.com",
-    mobile: "+91 9876543210",
-    password: "********",
-    bio: "Lorem ipsum dolor sit amet consectetur. Eget dui convallis potenti lacus cras nec. Tempus enim accumsan malesuada at vitae in euismod in odio.",
+  const [profileData, setProfileData] = useState({
+    profileUrl: "", // Profile URL from API
+    lastUpdate: "Loading...",
+    profileName: "",
+    username: "",
+    bio: "",
   });
+  const [socialMedia, setSocialMedia] = useState({
+    url: "",
+    instagram: "",
+    tiktok: "",
+    youtube: "",
+    twitch: "",
+    twitter: "",
+    linkedin: "",
+  });
+    // Handle input change
+    const handleChange = (e, key) => {
+      setSocialMedia({ ...socialMedia, [key]: e.target.value });
+    };
 
-  
+  // Fetch profile data from API
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const uid = localStorage.getItem("userId");
+        if (!uid) {
+          console.error("User ID not found in localStorage.");
+          return;
+        }
+
+        const response = await axios.get(
+          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile",
+          {
+            params: { uid },
+          }
+        );
+
+        const { username, profileName, profileURL, bio } = response.data;
+
+        setProfileData({
+          profilePic: profileURL || "/SVGRepo_iconCarrier.svg",
+          lastUpdate: "Updated recently",
+          profileName,
+          username,
+          bio,
+        });
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
+
   const [activeTab, setActiveTab] = useState("profile"); // State for active tab
   const [selectedMethod, setSelectedMethod] = useState("bank");
   const [isEditing, setIsEditing] = useState(false);
@@ -29,6 +74,121 @@ export default function ProfilePage() {
   const [isEditingMobile, setIsEditingMobile] = useState(false);
   const [editableMobile, setEditableMobile] = useState(profileData.mobile);
 
+  const handleEditPhotoClick = () => {
+    setIsEditing(true);
+    setNewProfilePic(profileData.profilePic);
+  };
+
+
+    const handleCancelClick = () => {
+      setIsEditing(true);
+      setNewProfilePic(profileData.profilePic);
+    };
+  
+    const handleFileChange = (e) => {
+      if (e.target.files && e.target.files[0]) {
+        const fileReader = new FileReader();
+        fileReader.onload = (event) => {
+          setNewProfilePic(event.target.result); // Temporary preview
+        };
+        fileReader.readAsDataURL(e.target.files[0]);
+      }
+    };
+  
+    const handleSaveChanges = async () => {
+      try {
+        const uid = localStorage.getItem("userId");
+        const authToken = localStorage.getItem("authToken");
+    
+        if (!uid) {
+          console.error("User ID not found in localStorage.");
+          toast.error("User ID is missing. Please log in again.");
+          return;
+        }
+    
+        // Flag to check if changes are made
+        let profileUpdated = false;
+        let socialMediaUpdated = false;
+    
+        // Update Profile Picture if it has been edited
+        if (isEditing) {
+          if (!newProfilePic) {
+            console.error("Profile URL is empty.");
+            toast.error("Profile picture cannot be empty.");
+            return;
+          }
+    
+          const profileResponse = await axios.put(
+            "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-url",
+            {
+              uid, // Required in the profile API
+              profileURL: newProfilePic, // This is only for the profile API
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }
+          );
+    
+          if (profileResponse.status === 200) {
+            profileUpdated = true;
+            setProfileData((prev) => ({
+              ...prev,
+              profilePic: newProfilePic,
+              lastUpdate: "Updated just now",
+            }));
+          }
+        }
+    
+        // Update Social Media Links if they have been modified
+        if (socialMedia && Object.keys(socialMedia).length > 0) {
+          console.log("Payload for social media API:", socialMedia); // Debugging line
+    
+          try {
+            // Construct the payload as an array of objects
+            const socialMediaPayload = Object.entries(socialMedia)
+              .filter(([_, value]) => value.trim() !== "")
+              .map(([key, value]) => ({ platform: key, url: value }));
+    
+            if (socialMediaPayload.length > 0) {
+              const socialMediaResponse = await axios.put(
+                `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
+                { socialMedia: socialMediaPayload },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`,
+                  },
+                }
+              );
+    
+              if (socialMediaResponse.status === 200) {
+                socialMediaUpdated = true;
+              }
+            }
+          } catch (socialMediaError) {
+            console.error("Error updating social media links:", socialMediaError.response || socialMediaError);
+            toast.error(
+              socialMediaError.response?.data?.message || "An error occurred while updating social media links."
+            );
+          }
+        }
+    
+        // Final Success Message
+        if (profileUpdated || socialMediaUpdated) {
+          toast.success("Profile changes saved successfully!");
+        } else {
+          toast.info("No changes were made.");
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        toast.error(error.response?.data?.message || "Failed to save profile changes.");
+      } finally {
+        setIsEditing(false);
+      }
+    };
+    
   // State variables for password
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [editablePassword, setEditablePassword] = useState("");
@@ -42,33 +202,6 @@ export default function ProfilePage() {
         setEditablePassword(value);
       }
     };
-
-  const handleEditPhotoClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancelClick = () => {
-    setIsEditing(false);
-    setNewProfilePic(profileData.profilePic);
-  };
-
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const fileReader = new FileReader();
-      fileReader.onload = (event) => {
-        setNewProfilePic(event.target.result); // Temporary preview
-      };
-      fileReader.readAsDataURL(e.target.files[0]);
-    }
-  };
-
-  const handleSavePhotoClick = () => {
-    // Implement save logic here, e.g., send `newProfilePic` to the server
-    alert("Profile photo saved!");
-    setIsEditing(false);
-  };
-
-
 
 
   const [themeColor, setThemeColor] = React.useState('#000000');
@@ -107,10 +240,6 @@ export default function ProfilePage() {
   };
 
 
-
-  const handleSaveChanges = () => {
-    alert("Profile changes saved!");
-  };
 
   return (
     <div className="profile-container" style={profileStyle}>
@@ -163,103 +292,101 @@ export default function ProfilePage() {
 
       {activeTab === "profile" && (
         <>
-          {/* Profile Section */}
-          <div>
-            {/* Profile Picture Section */}
-            <div className="flex items-center justify-between mb-6 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px]">
-              {/* Profile Picture */}
-              <div className="flex items-center space-x-6">
-                <div className="relative">
-                  <img
-                    src={isEditing ? newProfilePic : profileData.profilePic}
-                    alt="Profile"
-                    className="xxl:w-[103px] xxl:h-[103px] sm:w-[74px] h-[74px] rounded-full object-cover"
-                    onError={(e) => (e.target.src = "/SVGRepo_iconCarrier.svg")} // Fallback
-                  />
-                  {isEditing && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                      />
-                      <span className="text-white font-bold">Change</span>
-                    </div>
-                  )}
-                  <button className="absolute bottom-0 right-0 bg-white rounded-[7px] xxl:w-[44px] xxl:h-[44px] sm:w-[24px] sm:h-[24px]">
-                    <img
-                      src="/icons/Qr-code.svg"
-                      alt="QR Code"
-                      className="w-[33px] h-[33px] cursor-pointer ml-[6px]"
-                      onClick={() => alert("QR Code clicked!")}
+        {/* Profile Section */}
+        <div>
+          {/* Profile Picture Section */}
+          <div className="flex items-center justify-between mb-6 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px]">
+            {/* Profile Picture */}
+            <div className="flex items-center space-x-6">
+              <div className="relative">
+                <img
+                  src={isEditing ? newProfilePic : profileData.profilePic}
+                  alt="Profile"
+                  className="xxl:w-[103px] xxl:h-[103px] sm:w-[74px] h-[74px] rounded-full object-cover"
+                  onError={(e) => (e.target.src = "/SVGRepo_iconCarrier.svg")} // Fallback
+                />
+                {isEditing && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
                     />
-                  </button>
-                </div>
-                <div>
-                  <h2 className="xxl:text-[28px] sm:text-[20px] font-bold text-gray-800">
-                    Profile Photo
-                  </h2>
-                  <p className="text-gray-500 text-sm">{profileData.lastUpdate}</p>
-                </div>
-              </div>
-
-              {/* Edit Photo Button */}
-              <div className="text-[#6139FF] xxl:text-[14px] sm:text-[7px] font-semibold">
-                {isEditing ? (
-                  <div className="flex space-x-4">
-                    <button onClick={handleSavePhotoClick}>Save</button>
-                    <button onClick={handleCancelClick}>Cancel</button>
+                    <span className="text-white font-bold">Change</span>
                   </div>
-                ) : (
-                  <button onClick={handleEditPhotoClick}>Edit photo</button>
                 )}
+                <button className="absolute bottom-0 right-0 bg-white rounded-[7px] xxl:w-[44px] xxl:h-[44px] sm:w-[24px] sm:h-[24px]">
+                  <img
+                    src="/icons/Qr-code.svg"
+                    alt="QR Code"
+                    className="w-[33px] h-[33px] cursor-pointer ml-[6px]"
+                    onClick={() => alert("QR Code clicked!")}
+                  />
+                </button>
+              </div>
+              <div>
+                <h2 className="xxl:text-[28px] sm:text-[20px] font-bold text-gray-800">
+                  Profile Photo
+                </h2>
+                <p className="text-gray-500 text-sm">{profileData.lastUpdate}</p>
               </div>
             </div>
 
+            {/* Edit Photo Button */}
+            <div className="text-[#6139FF] xxl:text-[14px] sm:text-[7px] font-semibold">
+              {isEditing ? (
+                <div className="flex space-x-4">
+                  <button onClick={handleCancelClick}>Cancel</button>
+                </div>
+              ) : (
+                <button onClick={handleEditPhotoClick}>Edit photo</button>
+              )}
+            </div>
+          </div>
 
-            {/* Information Section */}
-            <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
-              Information
-            </h2>
-            <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
-              {/* Profile URL */}
-              <div className="mb-6">
-                <label className="block text-[12px] text-gray-700 font-medium mb-2">
-                  Profile URL
+          {/* Information Section */}
+          <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
+            Information
+          </h2>
+          <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
+            {/* Profile URL */}
+            <div className="mb-6">
+              <label className="block text-[12px] text-gray-700 font-medium mb-2">
+              Profile URL
                 </label>
                 <div className="flex items-center text-[14px]">
                   <span className="text-gray-500">Uproach.me.in/</span>
-                  <span className="ml-1 text-gray-700">{profileData.profileName}</span>
-                  <img
-                    src="/icons/green_tick.svg"
-                    alt="QR Code"
-                    className="ml-auto cursor-pointer"
-                    onClick={() => alert("success")}
-                  />
-                </div>
-              </div>
-
-              <hr className="border-gray-300 mb-3" />
-
-              {/* Profile Name */}
-              <div className="mb-6">
-                <label className="block text-[12px] text-gray-700 font-medium mb-2">
-                  Profile Name
-                </label>
-                <div className="text-[14px] text-gray-700">{profileData.profileName}</div>
-              </div>
-
-              <hr className="border-gray-300 mb-3" />
-
-              {/* Bio */}
-              <div>
-                <label className="block text-[12px] text-gray-700 font-medium mb-2">
-                  Bio
-                </label>
-                <div className="text-[14px] text-gray-700">{profileData.bio}</div>
+                  <span className="ml-1 text-gray-700">{profileData.username}</span>
+                <img
+                  src="/icons/green_tick.svg"
+                  alt="QR Code"
+                  className="ml-auto cursor-pointer"
+                  onClick={() => alert("success")}
+                />
               </div>
             </div>
+
+            <hr className="border-gray-300 mb-3" />
+
+            {/* Profile Name */}
+            <div className="mb-6">
+              <label className="block text-[12px] text-gray-700 font-medium mb-2">
+                Profile Name
+              </label>
+              <div className="text-[14px] text-gray-700">{profileData.profileName}</div>
+            </div>
+
+            <hr className="border-gray-300 mb-3" />
+
+            {/* Bio */}
+            <div>
+              <label className="block text-[12px] text-gray-700 font-medium mb-2">
+                Bio
+              </label>
+              <div className="text-[14px] text-gray-700">{profileData.bio}</div>
+            </div>
+          </div>
 
             {/* Social Media Section */}
             <h2 className="text-lg font-semibold mt-8 mb-2 xxl:ml-[149px] xxxl:ml-[237px]">
@@ -274,6 +401,7 @@ export default function ProfilePage() {
                     icon: ICONS.URLICON,
                     bgColor: "#F6F6F9",
                     iconSize: "w-6 h-6",
+                    key: "url",
                   },
                   {
                     placeholder: "Instagram Username",
@@ -281,35 +409,41 @@ export default function ProfilePage() {
                     bgColor:
                       "linear-gradient(to bottom right, #8C48DB, #CC4499, #FFB133)",
                     iconSize: "w-8 h-8",
+                    key: "instagram",
                   },
                   {
                     placeholder: "Tik Tok Username",
                     icon: ICONS.TIKTOK,
                     bgColor: "#010101",
                     iconSize: "w-7 h-7",
+                    key: "tiktok",
                   },
                   {
                     placeholder: "YouTube Username",
                     icon: ICONS.YOUTUBE,
                     bgColor: "#FF0000",
                     iconSize: "w-7 h-7",
+                    key: "youtube",
                   },
                   {
                     placeholder: "Twitch Username",
                     icon: ICONS.TWITCHS,
                     bgColor: "rgb(156, 66, 255)",
+                    key: "twitch",
                   },
                   {
                     placeholder: "Twitter Username",
                     icon: ICONS.TWITTER,
                     bgColor: "#010101",
                     iconSize: "w-7 h-7",
+                    key: "twitter",
                   },
                   {
                     placeholder: "LinkedIn Username",
                     icon: ICONS.LINKEDIN,
                     bgColor: "#0077B5",
                     iconSize: "w-7 h-7",
+                    key: "linkedin",
                   },
                 ].map((item, index) => (
                   <div key={index} className="relative mb-6">
@@ -326,15 +460,17 @@ export default function ProfilePage() {
                     </div>
 
                     {/* Input and Floating Label */}
-                    <div className="flex flex-col ml-12">
+                    <div className="flex flex-col ml-12 relative">
                       <input
                         type="text"
-                        id={`input-${index}`}
+                        value={socialMedia[item.key] || ""} // Ensure it defaults to an empty string
+                        onChange={(e) => handleChange(e, item.key)}
                         className="peer mt-4 w-full bg-transparent focus:outline-none text-gray-800 border-b border-gray-300 focus:ring-0 placeholder-transparent"
+                        placeholder={item.placeholder} // Placeholder added here for accessibility
                       />
                       <label
                         htmlFor={`input-${index}`}
-                        className="absolute left-12 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:transform peer-placeholder-shown:translate-y-0 peer-focus:top-0 peer-focus:text-xs"
+                        className="absolute left-0 top-0 transform -translate-y-3 text-gray-500 text-sm transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-gray-400 peer-focus:top-0 peer-focus:text-xs peer-focus:text-gray-500"
                       >
                         {item.placeholder}
                       </label>
