@@ -67,12 +67,13 @@ export default function ProfilePage() {
     fetchProfileData();
   }, []);
 
+  
+
   const [activeTab, setActiveTab] = useState("profile"); // State for active tab
   const [selectedMethod, setSelectedMethod] = useState("bank");
   const [isEditing, setIsEditing] = useState(false);
   const [newProfilePic, setNewProfilePic] = useState(profileData.profilePic);
-  const [isEditingMobile, setIsEditingMobile] = useState(false);
-  const [editableMobile, setEditableMobile] = useState(profileData.mobile);
+
 
   const handleEditPhotoClick = () => {
     setIsEditing(true);
@@ -106,9 +107,10 @@ export default function ProfilePage() {
           return;
         }
     
-        // Flag to check if changes are made
+        // Flags to check if changes are made
         let profileUpdated = false;
         let socialMediaUpdated = false;
+        let contactInfoUpdated = false;
     
         // Update Profile Picture if it has been edited
         if (isEditing) {
@@ -175,8 +177,49 @@ export default function ProfilePage() {
           }
         }
     
+        // Update Phone Number and Password
+        if (editableMobile || editablePassword) {
+          const payload = {};
+          if (editableMobile) payload.phoneNumber = editableMobile;
+          if (editablePassword) payload.password = editablePassword;
+    
+          try {
+            const authToken = localStorage.getItem("authToken");
+            if (!authToken) {
+              console.error("Authorization token is missing.");
+              toast.error("Authorization token is missing. Please log in again.");
+              return;
+            }
+            const contactResponse = await axios.put(
+              `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/updatePhoneNumberAndPassword`,
+              {
+                params: { uid }, // Pass UID as query parameter
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`, // Pass token for authentication
+
+                },
+              }
+            );
+    
+            if (contactResponse.status === 200) {
+              contactInfoUpdated = true;
+              // Update local state for contact data
+              if (editableMobile) {
+                setContactData((prev) => ({ ...prev, mobile: editableMobile }));
+              }
+              setEditablePassword(""); // Clear password input after saving
+            }
+          } catch (contactError) {
+            console.error("Error updating phone number or password:", contactError.response || contactError);
+            toast.error(
+              contactError.response?.data?.message || "An error occurred while updating contact information."
+            );
+          }
+        }
+    
         // Final Success Message
-        if (profileUpdated || socialMediaUpdated) {
+        if (profileUpdated || socialMediaUpdated || contactInfoUpdated) {
           toast.success("Profile changes saved successfully!");
         } else {
           toast.info("No changes were made.");
@@ -189,19 +232,43 @@ export default function ProfilePage() {
       }
     };
     
-  // State variables for password
-  const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [editablePassword, setEditablePassword] = useState("");
-    // Define updateProfileData locally
-    const updateProfileData = (field, value) => {
-      console.log(`Updated ${field} to: ${value}`);
-      // Update the profile data (e.g., call an API or update local state)
-      if (field === "mobile") {
-        setEditableMobile(value);
-      } else if (field === "password") {
-        setEditablePassword(value);
-      }
-    };
+
+    
+    // State variables for password
+    const [isEditingPassword, setIsEditingPassword] = useState(false);
+    const [editablePassword, setEditablePassword] = useState("");
+    const [isEditingMobile, setIsEditingMobile] = useState(false);
+    const [editableMobile, setEditableMobile] = useState(profileData.mobile);
+    const [contactData, setContactData] = useState({ email: "", mobile: "" });
+    
+    useEffect(() => {
+      const fetchData = async () => {
+        const uid = localStorage.getItem("userId");
+        const authToken = localStorage.getItem("authToken");
+    
+        try {
+          const response = await axios.get(
+            `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/getUserCreds`,
+            {
+              params: { uid }, // Pass UID as query parameter
+              headers: {
+                Authorization: `Bearer ${authToken}`, // Pass token for authentication
+              },
+            }
+          );
+    
+          const { email, phoneNumber } = response.data;
+          setContactData({ email, mobile: phoneNumber });
+          console.log("Fetched Data:", response.data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+    
+      fetchData();
+    }, []);
+    
+
 
 
   const [themeColor, setThemeColor] = React.useState('#000000');
@@ -635,9 +702,9 @@ export default function ProfilePage() {
     </>
   )}  
 
-    {activeTab === "account" && (
-    <div className="bg-gray-50 flex items-center justify-center">
-    <div className=" w-[677px]">
+{activeTab === "account" && (
+  <div className="bg-gray-50 flex items-center justify-center">
+    <div className="w-[677px]">
       {/* Header */}
       <h3 className="text-[16px] font-semibold text-[#1E1F24] mb-4">Information</h3>
 
@@ -647,69 +714,57 @@ export default function ProfilePage() {
           {/* Email Address */}
           <div>
             <label className="block text-sm text-gray-500 mb-1">Email address</label>
-            <p className="text-gray-900 text-sm font-medium">{profileData.email}</p>
+            <p className="text-gray-900 text-sm font-medium">{contactData.email}</p>
             <hr className="border-gray-300 mt-2" />
           </div>
 
-      {/* Mobile Number */}
-      <div className="flex justify-between items-center">
-        <div>
-          <label className="block text-sm text-gray-500 mb-1">Mobile Number</label>
-          {isEditingMobile ? (
-            <input
-              type="text"
-              className="border border-gray-300 rounded px-2 py-1 text-sm"
-              value={editableMobile}
-              onChange={(e) => setEditableMobile(e.target.value)}
-            />
-          ) : (
-            <p className="text-gray-900 text-sm font-medium">{profileData.mobile}</p>
-          )}
-        </div>
-        <button
-          className="text-indigo-600 text-sm font-semibold hover:underline"
-          onClick={() => {
-            if (isEditingMobile) {
-              // Save the changes
-              updateProfileData("mobile", editableMobile);
-            }
-            setIsEditingMobile(!isEditingMobile);
-          }}
-        >
-          {isEditingMobile ? "Save" : "Change"}
-        </button>
-      </div>
-      <hr className="border-gray-300 mt-2" />
+          {/* Mobile Number */}
+          <div className="flex justify-between items-center">
+            <div>
+              <label className="block text-sm text-gray-500 mb-1">Mobile Number</label>
+              {isEditingMobile ? (
+                <input
+                  type="text"
+                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                  value={editableMobile}
+                  onChange={(e) => setEditableMobile(e.target.value)}
+                />
+              ) : (
+                <p className="text-gray-900 text-sm font-medium">{contactData.mobile}</p>
+              )}
+            </div>
+            <button
+              className="text-indigo-600 text-sm font-semibold hover:underline"
+              onClick={() => setIsEditingMobile(!isEditingMobile)}
+            >
+              {isEditingMobile ? "Cancel" : "Change"}
+            </button>
+          </div>
+          <hr className="border-gray-300 mt-2" />
 
-      {/* Password */}
-      <div className="flex justify-between items-center">
-        <div>
-          <label className="block text-sm text-gray-500 mb-1">Password</label>
-          {isEditingPassword ? (
-            <input
-              type="password"
-              className="border border-gray-300 rounded px-2 py-1 text-sm"
-              value={editablePassword}
-              onChange={(e) => setEditablePassword(e.target.value)}
-            />
-          ) : (
-            <p className="text-gray-900 text-sm font-medium">{"••••••••"}</p>
-          )}
-        </div>
-        <button
-          className="text-indigo-600 text-sm font-semibold hover:underline"
-          onClick={() => {
-            if (isEditingPassword) {
-              // Save the changes
-              updateProfileData("password", editablePassword);
-            }
-            setIsEditingPassword(!isEditingPassword);
-          }}
-        >
-          {isEditingPassword ? "Save" : "Change"}
-        </button>
-      </div>
-      <hr className="border-gray-300 mt-2" />
+          {/* Password */}
+          <div className="flex justify-between items-center">
+            <div>
+              <label className="block text-sm text-gray-500 mb-1">Password</label>
+              {isEditingPassword ? (
+                <input
+                  type="password"
+                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                  value={editablePassword}
+                  onChange={(e) => setEditablePassword(e.target.value)}
+                />
+              ) : (
+                <p className="text-gray-900 text-sm font-medium">{"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}</p>
+              )}
+            </div>
+            <button
+              className="text-indigo-600 text-sm font-semibold hover:underline"
+              onClick={() => setIsEditingPassword(!isEditingPassword)}
+            >
+              {isEditingPassword ? "Cancel" : "Change"}
+            </button>
+          </div>
+          <hr className="border-gray-300 mt-2" />
         </div>
       </div>
     </div>
