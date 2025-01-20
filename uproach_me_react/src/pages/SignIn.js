@@ -93,12 +93,11 @@ export default function SigninPage() {
         navigate('/dashboard');
       } 
     } catch (err) {
-      if (err.response) {
-        if (err.response.status === 400) {
-          toast.error('Invalid login credentials. Please try again.');
-        } else {
-          toast.error(`Error: ${err.response.data.error.message || 'Something went wrong.'}`);
-        }
+      // Handle Firebase Authentication errors
+      if (err.code || (err.response && err.response.status === 400)) {
+        toast.error('Invalid login credentials. Please check your email and password.');
+      } else if (err.code === 'auth/too-many-requests') {
+        toast.error('Too many login attempts. Please try again later.');
       } 
     }
   };
