@@ -79,17 +79,26 @@ export default function ProfilePage() {
   const [selectedMethod, setSelectedMethod] = useState("bank");
   const [isEditing, setIsEditing] = useState(false);
   const [newProfilePic, setNewProfilePic] = useState(profileData.profilePic);
+  const [newProfileUrl, setNewProfileUrl] = useState(profileData.username);
+  const [newProfileName, setNewProfileName] = useState(profileData.profileName);
+  const [newBio, setNewBio] = useState(profileData.bio);
 
 
   const handleEditPhotoClick = () => {
     setIsEditing(true);
     setNewProfilePic(profileData.profilePic);
+    setNewProfileName(profileData.profileName);
+    setNewProfileUrl(profileData.username);
+    setNewBio(profileData.bio);
   };
 
 
     const handleCancelClick = () => {
-      setIsEditing(true);
+      setIsEditing(false);
       setNewProfilePic(profileData.profilePic);
+      setNewProfileName(profileData.profileName);
+      setNewProfileUrl(profileData.username);
+      setNewBio(profileData.bio);
     };
   
     const handleFileChange = (e) => {
@@ -102,141 +111,143 @@ export default function ProfilePage() {
       }
     };
   
-    const handleSaveChanges = async () => {
-      try {
+ const handleSaveChanges = async () => {
+    try {
         const uid = localStorage.getItem("userId");
         const authToken = localStorage.getItem("authToken");
-    
+
         if (!uid) {
-          console.error("User ID not found in localStorage.");
-          toast.error("User ID is missing. Please log in again.");
-          return;
+            console.error("User ID not found in localStorage.");
+            toast.error("User ID is missing. Please log in again.");
+            return;
         }
-    
+
         // Flags to check if changes are made
         let profileUpdated = false;
         let socialMediaUpdated = false;
         let contactInfoUpdated = false;
-    
+
         // Update Profile Picture if it has been edited
         if (isEditing) {
-          if (!newProfilePic) {
-            console.error("Profile URL is empty.");
-            toast.error("Profile picture cannot be empty.");
-            return;
-          }
-    
-          const profileResponse = await axios.put(
-            "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-url",
-            {
-              uid, // Required in the profile API
-              profileURL: newProfilePic, // This is only for the profile API
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-              },
+            if (!newProfilePic) {
+                console.error("Profile URL is empty.");
+                toast.error("Profile picture cannot be empty.");
+                return;
             }
-          );
-    
-          if (profileResponse.status === 200) {
-            profileUpdated = true;
-            setProfileData((prev) => ({
-              ...prev,
-              profilePic: newProfilePic,
-              lastUpdate: "Updated just now",
-            }));
-          }
+
+            const profileResponse = await axios.put(
+                "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-url",
+                {
+                    uid, // Required in the profile API
+                    profileURL: newProfilePic, // This is only for the profile API
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                }
+            );
+
+            if (profileResponse.status === 200) {
+                profileUpdated = true;
+                setProfileData((prev) => ({
+                    ...prev,
+                    profilePic: newProfilePic,
+                    lastUpdate: "Updated just now",
+                }));
+                toast.success("Profile picture updated successfully!"); // Immediate feedback
+            }
         }
-    
+
         // Update Social Media Links if they have been modified
         if (socialMedia && Object.keys(socialMedia).length > 0) {
-          console.log("Payload for social media API:", socialMedia); // Debugging line
-    
-          try {
-            // Construct the payload as an array of objects
-            const socialMediaPayload = Object.entries(socialMedia)
-              .filter(([_, value]) => value.trim() !== "")
-              .map(([key, value]) => ({ platform: key, url: value }));
-    
-            if (socialMediaPayload.length > 0) {
-              const socialMediaResponse = await axios.put(
-                `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
-                { socialMedia: socialMediaPayload },
-                {
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${authToken}`,
-                  },
+            console.log("Payload for social media API:", socialMedia); // Debugging line
+
+            try {
+                // Construct the payload as an array of objects
+                const socialMediaPayload = Object.entries(socialMedia)
+                    .filter(([_, value]) => value.trim() !== "")
+                    .map(([key, value]) => ({ platform: key, url: value }));
+
+                if (socialMediaPayload.length > 0) {
+                    const socialMediaResponse = await axios.put(
+                        `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
+                        { socialMedia: socialMediaPayload },
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${authToken}`,
+                            },
+                        }
+                    );
+
+                    if (socialMediaResponse.status === 200) {
+                        socialMediaUpdated = true;
+                        toast.success("Social media links updated successfully!"); // Immediate feedback
+                    }
                 }
-              );
-    
-              if (socialMediaResponse.status === 200) {
-                socialMediaUpdated = true;
-              }
+            } catch (socialMediaError) {
+                console.error("Error updating social media links:", socialMediaError.response || socialMediaError);
+                toast.error(
+                    socialMediaError.response?.data?.message || "An error occurred while updating social media links."
+                );
             }
-          } catch (socialMediaError) {
-            console.error("Error updating social media links:", socialMediaError.response || socialMediaError);
-            toast.error(
-              socialMediaError.response?.data?.message || "An error occurred while updating social media links."
-            );
-          }
         }
-    
+
         // Update Phone Number and Password
         if (editableMobile || editablePassword) {
-          const payload = {};
-          if (editableMobile) payload.phoneNumber = editableMobile;
-          if (editablePassword) payload.password = editablePassword;
-    
-          try {
-            const authToken = localStorage.getItem("authToken");
-            if (!authToken) {
-              console.error("Authorization token is missing.");
-              toast.error("Authorization token is missing. Please log in again.");
-              return;
-            }
-            const contactResponse = await axios.put(
-              `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/updatePhoneNumberAndPassword`,
-              {
-                params: { uid }, // Pass UID as query parameter
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${authToken}`, // Pass token for authentication
+            const payload = {};
+            if (editableMobile) payload.phoneNumber = editableMobile;
+            if (editablePassword) payload.password = editablePassword;
 
-                },
-              }
-            );
-    
-            if (contactResponse.status === 200) {
-              contactInfoUpdated = true;
-              // Update local state for contact data
-              if (editableMobile) {
-                setContactData((prev) => ({ ...prev, mobile: editableMobile }));
-              }
-              setEditablePassword(""); // Clear password input after saving
+            try {
+                const authToken = localStorage.getItem("authToken");
+                if (!authToken) {
+                    console.error("Authorization token is missing.");
+                    toast.error("Authorization token is missing. Please log in again.");
+                    return;
+                }
+                const contactResponse = await axios.put(
+                    `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/updatePhoneNumberAndPassword`,
+                    {
+                        params: { uid }, // Pass UID as query parameter
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${authToken}`, // Pass token for authentication
+
+                        },
+                    }
+                );
+
+                if (contactResponse.status === 200) {
+                    contactInfoUpdated = true;
+                    // Update local state for contact data
+                    if (editableMobile) {
+                        setContactData((prev) => ({ ...prev, mobile: editableMobile }));
+                    }
+                    setEditablePassword(""); // Clear password input after saving
+                    toast.success("Contact information updated successfully!"); // Immediate feedback
+                }
+            } catch (contactError) {
+                console.error("Error updating phone number or password:", contactError.response || contactError);
+                toast.error(
+                    contactError.response?.data?.message || "An error occurred while updating contact information."
+                );
             }
-          } catch (contactError) {
-            console.error("Error updating phone number or password:", contactError.response || contactError);
-            toast.error(
-              contactError.response?.data?.message || "An error occurred while updating contact information."
-            );
-          }
         }
-    
+
         // Final Success Message
-        if (profileUpdated || socialMediaUpdated || contactInfoUpdated) {
-          toast.success("Profile changes saved successfully!");
-        } else {
-          toast.info("No changes were made.");
+        if (!profileUpdated && !socialMediaUpdated && !contactInfoUpdated) {
+            toast.info("No changes were made.");
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Error updating profile:", error);
         toast.error(error.response?.data?.message || "Failed to save profile changes.");
-      } finally {
+    } finally {
         setIsEditing(false);
-      }
-    };
+    }
+};
+
     
 
     
@@ -413,52 +424,78 @@ export default function ProfilePage() {
                   <button onClick={handleCancelClick}>Cancel</button>
                 </div>
               ) : (
-                <button onClick={handleEditPhotoClick}>Edit photo</button>
+                <button onClick={handleEditPhotoClick}>Edit profile</button>
               )}
             </div>
           </div>
 
-          {/* Information Section */}
-          <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
-            Information
-          </h2>
-          <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
-            {/* Profile URL */}
-            <div className="mb-6">
-              <label className="block text-[12px] text-gray-700 font-medium mb-2">
-              Profile URL
-                </label>
-                <div className="flex items-center text-[14px]">
-                  <span className="text-gray-500">Uproach.me.in/</span>
-                  <span className="ml-1 text-gray-700">{profileData.username}</span>
-                <img
-                  src="/icons/green_tick.svg"
-                  alt="QR Code"
-                  className="ml-auto cursor-pointer"
-                  onClick={() => alert("success")}
-                />
-              </div>
-            </div>
+      {/* Information Section */}
+      <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
+        Information
+      </h2>
+      <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
+        {/* Profile URL */}
+        <div className="mb-6">
+          <label className="block text-[12px] text-gray-700 font-medium mb-2">
+            Profile URL
+          </label>
+          <div className="flex items-center text-[14px]">
+            <span className="text-gray-500">Uproach.me.in/</span>
+            {isEditing ? (
+              <input
+                type="text"
+                value={newProfileUrl}
+                onChange={(e) => setNewProfileUrl(e.target.value)}
+                className="ml-1 text-gray-700 border rounded-md p-1"
+              />
+            ) : (
+              <span className="ml-1 text-gray-700">{profileData.username}</span>
+            )}
+            <img
+              src="/icons/green_tick.svg"
+              alt="QR Code"
+              className="ml-auto cursor-pointer"
+              onClick={() => alert("success")}
+            />
+          </div>
+        </div>
 
-            <hr className="border-gray-300 mb-3" />
+        <hr className="border-gray-300 mb-3" />
 
-            {/* Profile Name */}
-            <div className="mb-6">
-              <label className="block text-[12px] text-gray-700 font-medium mb-2">
-                Profile Name
-              </label>
-              <div className="text-[14px] text-gray-700">{profileData.profileName}</div>
-            </div>
+        {/* Profile Name */}
+        <div className="mb-6">
+          <label className="block text-[12px] text-gray-700 font-medium mb-2">
+            Profile Name
+          </label>
+          {isEditing ? (
+            <input
+              type="text"
+              value={newProfileName}
+              onChange={(e) => setNewProfileName(e.target.value)}
+              className="text-[14px] text-gray-700 border rounded-md p-1"
+            />
+          ) : (
+            <div className="text-[14px] text-gray-700">{profileData.profileName}</div>
+          )}
+        </div>
 
-            <hr className="border-gray-300 mb-3" />
+        <hr className="border-gray-300 mb-3" />
 
-            {/* Bio */}
-            <div>
-              <label className="block text-[12px] text-gray-700 font-medium mb-2">
-                Bio
-              </label>
-              <div className="text-[14px] text-gray-700">{profileData.bio}</div>
-            </div>
+        {/* Bio */}
+        <div>
+          <label className="block text-[12px] text-gray-700 font-medium mb-2">
+            Bio
+          </label>
+          {isEditing ? (
+            <textarea
+              value={newBio}
+              onChange={(e) => setNewBio(e.target.value)}
+              className="text-[14px] text-gray-700 border rounded-md p-1 w-full"
+            />
+          ) : (
+            <div className="text-[14px] text-gray-700">{profileData.bio}</div>
+          )}
+        </div>
           </div>
 
             {/* Social Media Section */}
