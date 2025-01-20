@@ -30,6 +30,7 @@ export default function SuccessPage() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        const token = localStorage.getItem("authToken");
         const uid = localStorage.getItem("userId");
         if (!uid) {
           toast.error("User ID is missing.");
@@ -42,6 +43,7 @@ export default function SuccessPage() {
           {
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
           }
         );

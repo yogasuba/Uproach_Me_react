@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider ,signInWithEmailAndPassword} from 'firebase/auth';
 import firebaseApp from '../firebase/firebaseConfig'; // Adjust path as necessary
 import { IMAGES, ICONS } from '../constants';
-import { useAuth } from "../context/AuthContext"; // Correct named import
 
 
 export default function SigninPage() {
@@ -18,7 +17,6 @@ export default function SigninPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useAuth(); // Use useAuth to access AuthContext
 
 
   const togglePasswordVisibility = () => {
@@ -48,6 +46,11 @@ export default function SigninPage() {
       );
 
       if (response.status === 200) {
+        const { token, uid } = response.data;
+
+        // Store the token and uid in localStorage
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', uid);
         toast.success('Successfully signed in with Google');
         navigate('/dashboard');
       } else {
@@ -61,40 +64,42 @@ export default function SigninPage() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleEmailSignin = async (e) => {
     e.preventDefault();
-  
+    const auth = getAuth(firebaseApp);
+
     try {
-      const response = await axios.post(
-        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin",
-        { email, password },
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const idToken = await userCredential.user.getIdToken();
+
+      const response = await axios.post('https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin', 
+        { idToken },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
-  
+
+
       if (response.status === 200) {
         const { token, uid } = response.data;
-  
-        localStorage.setItem("authToken", token);
-        localStorage.setItem("userId", uid);
-  
-        // Update user context
-        setUser({ token, userId: uid });
-  
-        toast.success("Login successful");
-        navigate("/dashboard");
-      }
+
+        // Store the token and uid in localStorage
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', uid);
+
+        toast.success('User login successfully');
+        navigate('/dashboard');
+      } 
     } catch (err) {
-      if (err.response && err.response.status === 401) {
-        toast.error("Incorrect email or password");
-      } else if (err.response && err.response.status === 400) {
-        toast.error("User not found. Please sign up.");
-      } else {
-        toast.error("An error occurred. Please try again.");
-      }
+      if (err.response) {
+        if (err.response.status === 400) {
+          toast.error('Invalid login credentials. Please try again.');
+        } else {
+          toast.error(`Error: ${err.response.data.error.message || 'Something went wrong.'}`);
+        }
+      } 
     }
   };
 
@@ -138,7 +143,7 @@ export default function SigninPage() {
           </div>
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleEmailSignin}>
             <div className="relative mb-4 custom-inputfeild">
               <input
                 type="email"

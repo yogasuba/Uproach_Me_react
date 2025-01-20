@@ -37,6 +37,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        const token = localStorage.getItem("authToken");
         const uid = localStorage.getItem("userId");
         if (!uid) {
           console.error("User ID not found in localStorage.");
@@ -47,7 +48,12 @@ export default function ProfilePage() {
           "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile",
           {
             params: { uid },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
+
         );
 
         const { username, profileName, profileURL, bio } = response.data;

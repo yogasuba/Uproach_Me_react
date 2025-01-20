@@ -48,6 +48,7 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        const token = localStorage.getItem("authToken");
         const uid = localStorage.getItem("userId");
         if (!uid) {
           toast.error("User ID is missing.");
@@ -56,6 +57,12 @@ export default function Sidebar() {
         const response = await axios.post(
           "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/success-page",
           { uid},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (response.status === 200) {
           const data = response.data;
