@@ -5,6 +5,8 @@ import { toast } from 'react-hot-toast';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import firebaseApp from '../firebase/firebaseConfig'; // Adjust path as necessary
 import { IMAGES, ICONS } from '../constants';
+import { useAuth } from "../context/AuthContext"; // Correct named import
+
 
 export default function SigninPage() {
   useEffect(() => {
@@ -16,6 +18,8 @@ export default function SigninPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useAuth(); // Use useAuth to access AuthContext
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -62,11 +66,11 @@ export default function SigninPage() {
   
     try {
       const response = await axios.post(
-        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
+        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin",
         { email, password },
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
@@ -74,20 +78,22 @@ export default function SigninPage() {
       if (response.status === 200) {
         const { token, uid } = response.data;
   
-        // Store the token and uid in localStorage
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userId', uid);
-        toast.success('Login successful');
-        setLoading(true); // Show loading only on success
-        navigate('/dashboard');
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("userId", uid);
+  
+        // Update user context
+        setUser({ token, userId: uid });
+  
+        toast.success("Login successful");
+        navigate("/dashboard");
       }
     } catch (err) {
       if (err.response && err.response.status === 401) {
-        toast.error('Incorrect email or password');
+        toast.error("Incorrect email or password");
       } else if (err.response && err.response.status === 400) {
-        toast.error('User not found. Please sign up.');
+        toast.error("User not found. Please sign up.");
       } else {
-        toast.error('An error occurred. Please try again.');
+        toast.error("An error occurred. Please try again.");
       }
     }
   };

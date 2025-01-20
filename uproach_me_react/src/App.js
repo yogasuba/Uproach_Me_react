@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast'; // Import Toaster
 import { AllContent, AllCountries, AllVisitorSources, AllRecentPurchases } from "./components";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import {
   SignUp,
   SignIn,
@@ -32,7 +34,9 @@ import DashboardLayout from './layouts/DashboardLayout';
 
 function App() {
   return (
+
     <Router>
+    <AuthProvider>
       <Toaster
         position="top-center" 
         reverseOrder={false}  
@@ -57,90 +61,112 @@ function App() {
         <Route path="/countries" element={<AllCountries />} />
         <Route path="/content" element={<AllContent />} />
         <Route path="/recent-purchases" element={<AllRecentPurchases />} />
-        <Route path="/" element={<CreateEventTypeModal />} />
+        <Route path="/create-event-modal" element={<CreateEventTypeModal />} />
         <Route path="/createevent/oneonone" element={<OneOnOnePage />} />
         <Route
           path="/dashboard"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={true}>
               <DashboardPage />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/profile"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <ProfilePage />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/faq"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <FaqPage />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/feedback"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <FeedbackPage />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/billingplan"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <BillingPopup />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/billing"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <BillingPage />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/integration"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <IntegrationPage />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/bookings"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <BookingsMenu />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/pages"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <PagesMenu />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/analytics"
           element={
+            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <AnalyticsMenu />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
       </Routes>
+      </AuthProvider>
     </Router>
+
   );
 }
 

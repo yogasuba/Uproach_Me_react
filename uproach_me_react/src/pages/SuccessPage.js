@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Lottie from "lottie-react";
+import { useAuth } from "../context/AuthContext";
+
+
 
 export default function SuccessPage() {
   useEffect(() => {
@@ -13,6 +16,8 @@ export default function SuccessPage() {
   const [animationData, setAnimationData] = useState(null);
   const [profilePic, setProfilePic] = useState("/SVGRepo_iconCarrier.svg");
   const [profilename, setProfilename] = useState("User");
+  const { completeSignup } = useAuth();
+
 
   useEffect(() => {
     // Load animation JSON from the public folder
@@ -54,10 +59,11 @@ export default function SuccessPage() {
     fetchUserProfile();
   }, []);
 
-  const handleSubmitSuccessPage = () => {
-    // Define what should happen on "Get Started" click
-    navigate("/dashboard"); // Navigate to a dashboard or another page
+  const handleSubmitSuccessPage = async () => {
+    await completeSignup(); // Ensure `user` is updated
+    navigate("/dashboard");
   };
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white relative overflow-hidden">
