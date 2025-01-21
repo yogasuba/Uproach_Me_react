@@ -1,6 +1,7 @@
 import React, { useState, useEffect,useRef } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import Picker from "@emoji-mart/react";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -16,6 +17,8 @@ const OneOnOnePage = () => {
   const [text, setText] = useState(""); // State to store textarea value
   const textareaRef = useRef(null); // Ref to manipulate the textarea
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const today = new Date();
@@ -51,7 +54,9 @@ const OneOnOnePage = () => {
     }, 0);
     setShowEmojiPicker(false);
   };
-
+  const handleLinkClick = () => {
+    navigate("/pages"); 
+  };
   return (
     <div className="h-screen flex flex-col md:flex-row">
       {/* Left Section (Scrollable) */}
@@ -387,7 +392,7 @@ const OneOnOnePage = () => {
                 {/* Create Link Button */}
                 <div className="mt-8 flex justify-center">
                     <button
-                    onClick={() => alert("Link Created!")} // Replace with your final step logic
+                    onClick={handleLinkClick} // Replace with your final step logic
                     className="w-[407px] px-6 py-3 text-white font-medium bg-[rgb(97,57,255)] rounded-[32px] hover:bg-customPurple"
                     >
                     Create Link

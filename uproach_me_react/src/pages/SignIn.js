@@ -23,46 +23,56 @@ export default function SigninPage() {
     setShowPassword(!showPassword);
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async () => { 
     setLoading(true); // Start loading
     const auth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
 
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
 
-      // Get Firebase ID Token
-      const idToken = await user.getIdToken();
-      // Send the token to your backend API
-      const response = await axios.post(
-        'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
-        { idToken },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+        // Get Firebase ID Token
+        const idToken = await user.getIdToken();
+
+        // Send the token to your backend API
+        const response = await axios.post(
+            'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
+            { idToken },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            const { token, uid, isOnboardingComplete } = response.data;
+
+            // Store the token, uid, and profile URL in localStorage
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('userId', uid);
+            localStorage.setItem('profileUrl', user.photoURL); // Store profile URL
+
+            toast.success('Successfully signed in with Google');
+
+            // Redirect based on onboarding completion status
+            if (isOnboardingComplete) {
+                navigate('/dashboard');
+            } else {
+                navigate('/welcome');
+            }
+        } else {
+            toast.error('Failed to sign in with Google');
         }
-      );
-
-      if (response.status === 200) {
-        const { token, uid } = response.data;
-
-        // Store the token and uid in localStorage
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userId', uid);
-        toast.success('Successfully signed in with Google');
-        navigate('/dashboard');
-      } else {
-        toast.error('Failed to sign in with Google');
-      }
     } catch (error) {
-      console.error('Google Sign-In error:', error);
-      toast.error('Google sign-in failed. Please try again.');
+        console.error('Google Sign-In error:', error);
+        toast.error('Google sign-in failed. Please try again.');
     } finally {
-      setLoading(false); // Stop loading
+        setLoading(false); // Stop loading
     }
-  };
+};
+
 
   const handleEmailSignin = async (e) => {
     e.preventDefault();

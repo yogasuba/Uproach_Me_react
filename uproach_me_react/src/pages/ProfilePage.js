@@ -538,7 +538,7 @@ function formatUpdatedAt(dateString) {
                         Profile URL
                     </label>
                     <div className="flex items-center text-[14px]">
-                        <span className="text-gray-500">Uproach.me.in/</span>
+                        <span className="text-gray-500">Uproach.me/</span>
                         {isEditing ? (
                             <input
                                 type="text"
@@ -866,37 +866,31 @@ function formatUpdatedAt(dateString) {
             <hr className="border-gray-300 mt-2" />
           </div>
 
-
-
-
           {/* Password */}
-{/* Password */}
-<div className="flex justify-between items-center">
-  <div>
-    <label className="block text-sm text-gray-500 mb-1">Password</label>
-    {isEditingPassword ? (
-      <input
-        type="password"
-        className="border border-gray-300 rounded px-2 py-1 text-sm"
-        value={editablePassword}
-        onChange={(e) => setEditablePassword(e.target.value)}
-      />
-    ) : (
-      <p className="text-gray-900 text-sm font-medium">{"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}</p>
-    )}
-  </div>
-  <div className="text-indigo-600 text-sm font-semibold">
-    {isEditingPassword ? (
-      <div className="flex space-x-4">
-        <button onClick={handleCancelPasswordClick}>Cancel</button>
-      </div>
-    ) : (
-      <button onClick={handleEditPasswordClick}>Change</button>
-    )}
-  </div>
-</div>
-
-
+          <div className="flex justify-between items-center">
+            <div>
+              <label className="block text-sm text-gray-500 mb-1">Password</label>
+              {isEditingPassword ? (
+                <input
+                  type="password"
+                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                  value={editablePassword}
+                  onChange={(e) => setEditablePassword(e.target.value)}
+                />
+              ) : (
+                <p className="text-gray-900 text-sm font-medium">{"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}</p>
+              )}
+            </div>
+            <div className="text-indigo-600 text-sm font-semibold">
+              {isEditingPassword ? (
+                <div className="flex space-x-4">
+                  <button onClick={handleCancelPasswordClick}>Cancel</button>
+                </div>
+              ) : (
+                <button onClick={handleEditPasswordClick}>Change</button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

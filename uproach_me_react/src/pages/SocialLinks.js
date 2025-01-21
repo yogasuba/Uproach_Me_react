@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ICONS } from "../constants";
 import axios from "axios";
 
+
 // Social Input Component for better scalability
 const SocialInput = ({ imgSrc, bgColor, placeholder, label, value, onChange }) => {
   return (
@@ -100,6 +101,7 @@ const SocialLinksPage = () => {
 
       if (response.status === 200) {
         console.log(response.data.message); // Log success message
+        
         navigate("/success"); // Redirect to success page
       } else {
         console.error("Error:", response.data.message || "Failed to submit social media links");

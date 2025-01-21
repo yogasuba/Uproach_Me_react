@@ -63,6 +63,7 @@ export default function SuccessPage() {
 
   const handleSubmitSuccessPage = async () => {
     await completeSignup(); // Ensure `user` is updated
+
     navigate("/dashboard");
   };
 

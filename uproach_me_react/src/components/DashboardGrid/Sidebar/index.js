@@ -169,7 +169,7 @@ export default function Sidebar() {
                   <div>
                     <div className="font-bold text-[14px] text-gray-800">@{user.username}</div>
                     <div className="text-[12px] text-gray-500">
-                      Uproach me.in/{user.username}
+                      Uproach.me/{user.username}
                     </div>
                   </div>
                 </div>

@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cropper from "react-easy-crop";
-import getCroppedImg from '../lib/getCroppedImg';
+import getCroppedImg from "../lib/getCroppedImg";
 import { IMAGES } from "../constants";
+
 
 const ProfileDetails = () => {
   useEffect(() => {
-    document.title = 'ProfileDetails'; // Set your desired page title here
+    document.title = "ProfileDetails"; // Set your desired page title here
   }, []);
 
   const navigate = useNavigate();
@@ -17,7 +18,12 @@ const ProfileDetails = () => {
   const [bioLength, setBioLength] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [profilePic, setProfilePic] = useState("/SVGRepo_iconCarrier.svg");
+
+  // Initialize the profile picture with Google photo URL from localStorage
+  const [profilePic, setProfilePic] = useState(
+    localStorage.getItem("profileUrl") || "/SVGRepo_iconCarrier.svg"
+  );
+
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -32,7 +38,8 @@ const ProfileDetails = () => {
   const handleNext = async () => {
     setIsSubmitting(true);
 
-    const profilePicToSave = profilePic === "/SVGRepo_iconCarrier.svg" ? null : profilePic;
+    const profilePicToSave =
+      profilePic === "/SVGRepo_iconCarrier.svg" ? null : profilePic;
     const uid = localStorage.getItem("userId");
     const authToken = localStorage.getItem("authToken");
 
@@ -99,7 +106,7 @@ const ProfileDetails = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white ">
+    <div className="min-h-screen flex flex-col bg-white">
       {/* Back Button */}
       <div className="pt-6 sm:px-6">
         <button
@@ -112,7 +119,7 @@ const ProfileDetails = () => {
 
       {/* Progress Bar */}
       <div className="relative pt-2 px-4 mb-6">
-        <div className="h-1 bg-gray-200 w-[250px] mx-auto rounded-full mt-[-18px] ">
+        <div className="h-1 bg-gray-200 w-[250px] mx-auto rounded-full mt-[-18px]">
           <div className="h-1 bg-purple-500 w-1/2 sm:mt-10 xxl:mt-0 rounded-full"></div>
         </div>
       </div>
@@ -231,7 +238,7 @@ const ProfileDetails = () => {
                 onClick={handleCropComplete}
                 className="px-4 py-2 bg-purple-500 text-white rounded-md"
               >
-                Save
+                Crop & Save
               </button>
             </div>
           </div>

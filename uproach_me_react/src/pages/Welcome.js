@@ -106,6 +106,7 @@ const WelcomePage = () => {
 
   const isButtonDisabled =
     username.trim() === "" || isSubmitting || isAvailable === false;
+    
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -141,14 +142,14 @@ const WelcomePage = () => {
             </label>
             <div className="relative w-full mx-auto">
               <span className="absolute inset-y-0 xxl:left-[-29px] sm:left-0 pl-3 flex items-center text-[#686A74] text-[14px]">
-                Uproach.me.ai/
+                Uproach.me/
               </span>
               <input
                 type="text"
                 placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className={`block pl-[118px] pr-10 py-2 xxl:w-[418px] sm:w-[276px] h-[48px] xxl:ml-[-31px] ${
+                className={`block pl-[118px] pr-10 py-2 xxl:w-[418px] sm:w-[276px] h-[48px] xxl:ml-[-51px] ${
                   isAvailable === false
                     ? "border-red-500 bg-red-100"
                     : isAvailable === true
