@@ -16,14 +16,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (credentials) => {
-    // Perform login logic
-    const loggedInUser = { id: 1, name: "User" }; // Example user object
-    setUser(loggedInUser);
-    localStorage.setItem("user", JSON.stringify(loggedInUser)); // Persist user
-    setFromSignup(false);
-    navigate("/dashboard");
-  };
+const login = async (credentials) => {
+  const loggedInUser = { id: 1, name: "User" }; // Example user object
+  setUser(loggedInUser);
+  localStorage.setItem("user", JSON.stringify(loggedInUser));
+  setFromSignup(false);
+  navigate("/dashboard"); // Ensure this happens after the above
+};
 
   const logout = () => {
     setUser(null);

@@ -70,7 +70,8 @@ export default function SigninPage() {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const idToken = await userCredential.user.getIdToken();
+      const user = userCredential.user
+      const idToken = await user.getIdToken();
 
       const response = await axios.post('https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin', 
         { idToken },
