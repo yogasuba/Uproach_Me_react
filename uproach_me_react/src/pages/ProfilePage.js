@@ -1,11 +1,9 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useCallback } from "react";
 import { HexColorPicker } from 'react-colorful';
 import {ICONS, IMAGES} from "../constants";
 import axios from "axios";
 import { toast } from 'react-hot-toast';
-
-
-
+import { getAuth, updatePassword } from "firebase/auth";
 
 export default function ProfilePage() {
   useEffect(() => {
@@ -14,7 +12,7 @@ export default function ProfilePage() {
 
   const [profileData, setProfileData] = useState({
     profileUrl: "", // Profile URL from API
-    lastUpdate: "Loading...",
+    updatedAt: "",
     profileName: "",
     username: "",
     bio: "",
@@ -28,7 +26,6 @@ export default function ProfilePage() {
     twitter: "",
     linkedin: "",
   });
-    // Handle input change
     const handleChange = (e, key) => {
       setSocialMedia({ ...socialMedia, [key]: e.target.value });
     };
@@ -56,11 +53,11 @@ export default function ProfilePage() {
 
         );
 
-        const { username, profileName, profileURL, bio } = response.data;
+        const { username, profileName, profileURL, bio ,updatedAt} = response.data;
 
         setProfileData({
           profilePic: profileURL || "/SVGRepo_iconCarrier.svg",
-          lastUpdate: "Updated recently",
+          updatedAt,
           profileName,
           username,
           bio,
@@ -79,28 +76,95 @@ export default function ProfilePage() {
   const [selectedMethod, setSelectedMethod] = useState("bank");
   const [isEditing, setIsEditing] = useState(false);
   const [newProfilePic, setNewProfilePic] = useState(profileData.profilePic);
-  const [newProfileUrl, setNewProfileUrl] = useState(profileData.username);
-  const [newProfileName, setNewProfileName] = useState(profileData.profileName);
-  const [newBio, setNewBio] = useState(profileData.bio);
+  const [isAvailable, setIsAvailable] = useState(null);
+  const [error, setError] = useState("");
+  const [newProfileName, setNewProfileName] = useState("");
+  const [newProfileUrl, setNewProfileUrl] = useState("");
+  const [newBio, setNewBio] = useState("");
 
+  const checkUsernameAvailability = useCallback(async () => {
+    try {
+        const token = localStorage.getItem("authToken");
+        const uid = localStorage.getItem("userId");
 
+        if (!token || !uid) {
+            toast.error("Authentication details missing. Please log in again.");
+            return;
+        }
+
+        const availabilityResponse = await axios.get(
+            "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/checkUsernameAvailability",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params: { username: newProfileUrl },
+            }
+        );
+
+        console.log("Availability API Response:", availabilityResponse.data);
+
+        if (availabilityResponse.data?.available) {
+            setIsAvailable(true);
+            setError("");
+        } else {
+            setIsAvailable(false);
+            setError(`Username "${newProfileUrl}" is not available.`);
+        }
+    } catch (error) {
+        console.error("Error checking username availability:", error);
+        setError("Failed to check username availability. Please try again later.");
+    }
+}, [newProfileUrl]);
+
+// Handler for username input changes
+const handleUsernameChange = (e) => {
+    setNewProfileUrl(e.target.value);
+    setIsAvailable(null); // Reset availability status
+    setError(""); // Clear error message
+};
+
+// Add the function to format the date
+function formatUpdatedAt(dateString) {
+  const options = { day: '2-digit', month: 'short' };
+  const date = new Date(dateString);
+  return `Updated on ${date.toLocaleDateString('en-GB', options)}`;
+}
+
+  useEffect(() => {
+    if (newProfileUrl) {
+      checkUsernameAvailability();
+    }
+  }, [newProfileUrl, checkUsernameAvailability]);
+  
   const handleEditPhotoClick = () => {
     setIsEditing(true);
     setNewProfilePic(profileData.profilePic);
     setNewProfileName(profileData.profileName);
     setNewProfileUrl(profileData.username);
     setNewBio(profileData.bio);
+
   };
 
+  const handleCancelPasswordClick = () => {
+    setEditablePassword("");
+    setIsEditingPassword(false);
+  };
 
-    const handleCancelClick = () => {
-      setIsEditing(false);
-      setNewProfilePic(profileData.profilePic);
-      setNewProfileName(profileData.profileName);
-      setNewProfileUrl(profileData.username);
-      setNewBio(profileData.bio);
-    };
-  
+  const handleEditPasswordClick = () => {
+    setIsEditingPassword(true);
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setNewProfilePic(profileData.profilePic);
+    setNewProfileName(profileData.profileName);
+    setNewProfileUrl(profileData.username);
+    setNewBio(profileData.bio);
+    setError(""); // Clear the error message
+    setIsAvailable(null); // Reset availability state
+
+  };
     const handleFileChange = (e) => {
       if (e.target.files && e.target.files[0]) {
         const fileReader = new FileReader();
@@ -111,68 +175,88 @@ export default function ProfilePage() {
       }
     };
   
- const handleSaveChanges = async () => {
-    try {
-        const uid = localStorage.getItem("userId");
-        const authToken = localStorage.getItem("authToken");
-
-        if (!uid) {
-            console.error("User ID not found in localStorage.");
-            toast.error("User ID is missing. Please log in again.");
-            return;
-        }
-
-        // Flags to check if changes are made
-        let profileUpdated = false;
-        let socialMediaUpdated = false;
-        let contactInfoUpdated = false;
-
-        // Update Profile Picture if it has been edited
-        if (isEditing) {
-            if (!newProfilePic) {
-                console.error("Profile URL is empty.");
-                toast.error("Profile picture cannot be empty.");
-                return;
-            }
-
-            const profileResponse = await axios.put(
-                "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-url",
-                {
-                    uid, // Required in the profile API
-                    profileURL: newProfilePic, // This is only for the profile API
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                }
-            );
-
-            if (profileResponse.status === 200) {
-                profileUpdated = true;
-                setProfileData((prev) => ({
-                    ...prev,
-                    profilePic: newProfilePic,
-                    lastUpdate: "Updated just now",
-                }));
-                toast.success("Profile picture updated successfully!"); // Immediate feedback
-            }
-        }
-
-        // Update Social Media Links if they have been modified
-        if (socialMedia && Object.keys(socialMedia).length > 0) {
-            console.log("Payload for social media API:", socialMedia); // Debugging line
-
+    const handleSaveChanges = async () => {
+      try {
+          const uid = localStorage.getItem("userId");
+          const authToken = localStorage.getItem("authToken");
+  
+          if (!uid) {
+              console.error("User ID not found in localStorage.");
+              toast.error("User ID is missing. Please log in again.");
+              return;
+          }
+  
+          let updates = []; // Collect all updated fields
+  
+          // Update Profile Picture
+          if (isEditing) {
+              if (!newProfilePic) {
+                  console.error("Profile URL is empty.");
+                  toast.error("Profile picture cannot be empty.");
+                  return;
+              }
+  
+              const profileResponse = await axios.put(
+                  "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-url",
+                  {
+                      uid,
+                      profileURL: newProfilePic,
+                  },
+                  {
+                      headers: {
+                          Authorization: `Bearer ${authToken}`,
+                      },
+                  }
+              );
+  
+              if (profileResponse.status === 200) {
+                  updates.push("profile picture");
+                  setProfileData((prev) => ({
+                      ...prev,
+                      profilePic: newProfilePic,
+                      updatedAt: profileData.updatedAt,
+                  }));
+              }
+          }
+  
+          // Update Social Media Links
+          if (socialMedia && Object.keys(socialMedia).length > 0) {
+              const socialMediaPayload = Object.entries(socialMedia)
+                  .filter(([_, value]) => value.trim() !== "")
+                  .map(([key, value]) => ({ platform: key, url: value }));
+  
+              if (socialMediaPayload.length > 0) {
+                  const socialMediaResponse = await axios.put(
+                      `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
+                      { socialMedia: socialMediaPayload },
+                      {
+                          headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${authToken}`,
+                          },
+                      }
+                  );
+  
+                  if (socialMediaResponse.status === 200) {
+                      updates.push("social media links");
+                  }
+              }
+          }
+  
+          if (editablePassword) {
             try {
-                // Construct the payload as an array of objects
-                const socialMediaPayload = Object.entries(socialMedia)
-                    .filter(([_, value]) => value.trim() !== "")
-                    .map(([key, value]) => ({ platform: key, url: value }));
-
-                if (socialMediaPayload.length > 0) {
-                    const socialMediaResponse = await axios.put(
-                        `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
-                        { socialMedia: socialMediaPayload },
+                const auth = getAuth();
+                const user = auth.currentUser;
+        
+                if (user) {
+                    // Update password in Firebase
+                    await updatePassword(user, editablePassword);
+        
+                    // Update password in your backend
+                    const payload = { password: editablePassword };
+                    const contactResponse = await axios.put(
+                        `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/updatePhoneNumberAndPassword/${uid}`,
+                        payload,
                         {
                             headers: {
                                 "Content-Type": "application/json",
@@ -180,82 +264,97 @@ export default function ProfilePage() {
                             },
                         }
                     );
-
-                    if (socialMediaResponse.status === 200) {
-                        socialMediaUpdated = true;
-                        toast.success("Social media links updated successfully!"); // Immediate feedback
+        
+                    if (contactResponse.status === 200) {
+                        updates.push("password");
+        
+                        // Clear the field and exit editing mode
+                        setEditablePassword("");
+                        setIsEditing(false); // Hide the input and show "Change" button
                     }
+                } else {
+                    toast.error("No user is signed in. Please log in again.");
                 }
-            } catch (socialMediaError) {
-                console.error("Error updating social media links:", socialMediaError.response || socialMediaError);
-                toast.error(
-                    socialMediaError.response?.data?.message || "An error occurred while updating social media links."
-                );
+            } catch (error) {
+                if (error.code === "auth/requires-recent-login") {
+                    toast.error("Please reauthenticate to update your password.");
+                } else {
+                    toast.error("Failed to update the password. Please try again.");
+                }
             }
         }
-
-        // Update Phone Number and Password
-        if (editableMobile || editablePassword) {
-            const payload = {};
-            if (editableMobile) payload.phoneNumber = editableMobile;
-            if (editablePassword) payload.password = editablePassword;
-
-            try {
-                const authToken = localStorage.getItem("authToken");
-                if (!authToken) {
-                    console.error("Authorization token is missing.");
-                    toast.error("Authorization token is missing. Please log in again.");
-                    return;
-                }
-                const contactResponse = await axios.put(
-                    `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/updatePhoneNumberAndPassword`,
-                    {
-                        params: { uid }, // Pass UID as query parameter
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${authToken}`, // Pass token for authentication
-
-                        },
-                    }
-                );
-
-                if (contactResponse.status === 200) {
-                    contactInfoUpdated = true;
-                    // Update local state for contact data
-                    if (editableMobile) {
-                        setContactData((prev) => ({ ...prev, mobile: editableMobile }));
-                    }
-                    setEditablePassword(""); // Clear password input after saving
-                    toast.success("Contact information updated successfully!"); // Immediate feedback
-                }
-            } catch (contactError) {
-                console.error("Error updating phone number or password:", contactError.response || contactError);
-                toast.error(
-                    contactError.response?.data?.message || "An error occurred while updating contact information."
-                );
-            }
-        }
-
-        // Final Success Message
-        if (!profileUpdated && !socialMediaUpdated && !contactInfoUpdated) {
-            toast.info("No changes were made.");
-        }
-    } catch (error) {
-        console.error("Error updating profile:", error);
-        toast.error(error.response?.data?.message || "Failed to save profile changes.");
-    } finally {
-        setIsEditing(false);
-    }
-};
-
-    
-
-    
+         
+          // Update Username
+          if (isEditing && newProfileUrl !== profileData.username) {
+              const usernameResponse = await axios.put(
+                  "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/username",
+                  {
+                      uid,
+                      username: newProfileUrl,
+                  },
+                  {
+                      headers: {
+                          Authorization: `Bearer ${authToken}`,
+                          "Content-Type": "application/json",
+                      },
+                  }
+              );
+  
+              if (usernameResponse.status === 200) {
+                  updates.push("username");
+                  setProfileData((prev) => ({
+                      ...prev,
+                      username: newProfileUrl,
+                  }));
+              }
+          }
+  
+          // Update Profile Name and Bio
+          if (
+              isEditing &&
+              (newProfileName !== profileData.profileName || newBio !== profileData.bio)
+          ) {
+              const profileDetailsResponse = await axios.put(
+                  "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-details",
+                  {
+                      uid,
+                      profileName: newProfileName,
+                      bio: newBio,
+                  },
+                  {
+                      headers: {
+                          Authorization: `Bearer ${authToken}`,
+                      },
+                  }
+              );
+  
+              if (profileDetailsResponse.status === 200) {
+                  updates.push("profile name and bio");
+                  setProfileData((prev) => ({
+                      ...prev,
+                      profileName: newProfileName,
+                      bio: newBio,
+                  }));
+              }
+          }
+  
+          // Handle Combined Success Message
+          if (updates.length > 0) {
+              toast.success(`${updates.join(", ")} updated successfully!`);
+          } else {
+              toast.info("No changes were made.");
+          }
+      } catch (error) {
+          console.error("Error saving changes:", error);
+      } finally {
+          setIsEditing(false);
+      }
+  };
+  
+        
     // State variables for password
     const [isEditingPassword, setIsEditingPassword] = useState(false);
     const [editablePassword, setEditablePassword] = useState("");
-    const [isEditingMobile, setIsEditingMobile] = useState(false);
-    const [editableMobile, setEditableMobile] = useState(profileData.mobile);
     const [contactData, setContactData] = useState({ email: "", mobile: "" });
     
     useEffect(() => {
@@ -274,8 +373,8 @@ export default function ProfilePage() {
             }
           );
     
-          const { email, phoneNumber } = response.data;
-          setContactData({ email, mobile: phoneNumber });
+          const { email } = response.data;
+          setContactData({ email });
           console.log("Fetched Data:", response.data);
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -375,126 +474,132 @@ export default function ProfilePage() {
       </div>
 
       {activeTab === "profile" && (
-        <>
-        {/* Profile Section */}
+    <>
         <div>
-          {/* Profile Picture Section */}
-          <div className="flex items-center justify-between mb-6 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px]">
-            {/* Profile Picture */}
-            <div className="flex items-center space-x-6">
-              <div className="relative">
-                <img
-                  src={isEditing ? newProfilePic : profileData.profilePic}
-                  alt="Profile"
-                  className="xxl:w-[103px] xxl:h-[103px] sm:w-[74px] h-[74px] rounded-full object-cover"
-                  onError={(e) => (e.target.src = "/SVGRepo_iconCarrier.svg")} // Fallback
-                />
-                {isEditing && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                    />
-                    <span className="text-white font-bold">Change</span>
-                  </div>
-                )}
-                <button className="absolute bottom-0 right-0 bg-white rounded-[7px] xxl:w-[44px] xxl:h-[44px] sm:w-[24px] sm:h-[24px]">
-                  <img
-                    src="/icons/Qr-code.svg"
-                    alt="QR Code"
-                    className="w-[33px] h-[33px] cursor-pointer ml-[6px]"
-                    onClick={() => alert("QR Code clicked!")}
-                  />
-                </button>
-              </div>
-              <div>
-                <h2 className="xxl:text-[28px] sm:text-[20px] font-bold text-gray-800">
-                  Profile Photo
-                </h2>
-                <p className="text-gray-500 text-sm">{profileData.lastUpdate}</p>
-              </div>
-            </div>
-
-            {/* Edit Photo Button */}
-            <div className="text-[#6139FF] xxl:text-[14px] sm:text-[7px] font-semibold">
-              {isEditing ? (
-                <div className="flex space-x-4">
-                  <button onClick={handleCancelClick}>Cancel</button>
+            <div className="flex items-center justify-between mb-6 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px]">
+                <div className="flex items-center space-x-6">
+                    <div className="relative">
+                        <img
+                            src={isEditing ? newProfilePic : profileData.profilePic}
+                            alt="Profile"
+                            className="xxl:w-[103px] xxl:h-[103px] sm:w-[74px] h-[74px] rounded-full object-cover"
+                            onError={(e) => (e.target.src = "/SVGRepo_iconCarrier.svg")}
+                        />
+                        {isEditing && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={handleFileChange} 
+                                    className="absolute inset-0 opacity-0 cursor-pointer" 
+                                />
+                                <img 
+                                    src="icons/camera-white-icon.svg"
+                                    alt="Edit" 
+                                    className="w-6 h-6 text-white" // Adjust size as needed
+                                />
+                            </div>
+                        )}
+                        
+                        <button className="absolute bottom-0 right-0 bg-white rounded-[7px] xxl:w-[44px] xxl:h-[44px] sm:w-[24px] sm:h-[24px]">
+                            <img
+                                src="/icons/Qr-code.svg"
+                                alt="QR Code"
+                                className="w-[33px] h-[33px] cursor-pointer ml-[6px]"
+                                onClick={() => alert("QR Code clicked!")}
+                            />
+                        </button>
+                    </div>
+                    <div>
+                        <h2 className="xxl:text-[28px] sm:text-[20px] font-bold text-gray-800">
+                            Profile Photo
+                        </h2>
+                        <p className="text-gray-500 text-sm"> {formatUpdatedAt(profileData.updatedAt)}</p>
+                    </div>
                 </div>
-              ) : (
-                <button onClick={handleEditPhotoClick}>Edit profile</button>
-              )}
+
+                <div className="text-[#6139FF] xxl:text-[14px] sm:text-[7px] font-semibold">
+                    {isEditing ? (
+                        <div className="flex space-x-4">
+                            <button onClick={handleCancelClick}>Cancel</button>
+                        </div>
+                    ) : (
+                        <button onClick={handleEditPhotoClick}>Edit profile</button>
+                    )}
+                </div>
             </div>
-          </div>
 
-      {/* Information Section */}
-      <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
-        Information
-      </h2>
-      <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
-        {/* Profile URL */}
-        <div className="mb-6">
-          <label className="block text-[12px] text-gray-700 font-medium mb-2">
-            Profile URL
-          </label>
-          <div className="flex items-center text-[14px]">
-            <span className="text-gray-500">Uproach.me.in/</span>
-            {isEditing ? (
-              <input
-                type="text"
-                value={newProfileUrl}
-                onChange={(e) => setNewProfileUrl(e.target.value)}
-                className="ml-1 text-gray-700 border rounded-md p-1"
-              />
-            ) : (
-              <span className="ml-1 text-gray-700">{profileData.username}</span>
-            )}
-            <img
-              src="/icons/green_tick.svg"
-              alt="QR Code"
-              className="ml-auto cursor-pointer"
-              onClick={() => alert("success")}
-            />
-          </div>
-        </div>
+            <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
+                Information
+            </h2>
+            <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
+                <div className="mb-6">
+                    <label className="block text-[12px] text-gray-700 font-medium mb-2">
+                        Profile URL
+                    </label>
+                    <div className="flex items-center text-[14px]">
+                        <span className="text-gray-500">Uproach.me.in/</span>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={newProfileUrl}
+                                onChange={handleUsernameChange}
+                                onBlur={checkUsernameAvailability} // Check availability when user leaves the input field
+                                className={`ml-1 text-gray-700 border rounded-md p-1 ${error ? "border-red-500" : "border-gray-300"}`}
+                            />
+                        ) : (
+                            <span className="ml-1 text-gray-700">{profileData.username}</span>
+                        )}
+                        {isAvailable ? (
+                            <img
+                                src="/icons/green_tick.svg"
+                                alt="Available"
+                                className="ml-auto"
+                            />
+                        ) : error ? (
+                            <img 
+                                src="/icons/red-x-icon.svg"
+                                alt="Not Available"
+                                className="ml-auto w-[15px] h-[15px]"
+                            />
+                        ) : null}
+                    </div>
+                    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                </div>
 
-        <hr className="border-gray-300 mb-3" />
+                <hr className="border-gray-300 mb-3" />
 
-        {/* Profile Name */}
-        <div className="mb-6">
-          <label className="block text-[12px] text-gray-700 font-medium mb-2">
-            Profile Name
-          </label>
-          {isEditing ? (
-            <input
-              type="text"
-              value={newProfileName}
-              onChange={(e) => setNewProfileName(e.target.value)}
-              className="text-[14px] text-gray-700 border rounded-md p-1"
-            />
-          ) : (
-            <div className="text-[14px] text-gray-700">{profileData.profileName}</div>
-          )}
-        </div>
+                <div className="mb-6">
+                    <label className="block text-[12px] text-gray-700 font-medium mb-2">
+                        Profile Name
+                    </label>
+                    {isEditing ? (
+                        <input
+                            type="text"
+                            value={newProfileName}
+                            onChange={(e) => setNewProfileName(e.target.value)}
+                            className="text-[14px] text-gray-700 border rounded-md p-1"
+                        />
+                    ) : (
+                        <div className="text-[14px] text-gray-700">{profileData.profileName}</div>
+                    )}
+                </div>
 
-        <hr className="border-gray-300 mb-3" />
+                <hr className="border-gray-300 mb-3" />
 
-        {/* Bio */}
-        <div>
-          <label className="block text-[12px] text-gray-700 font-medium mb-2">
-            Bio
-          </label>
-          {isEditing ? (
-            <textarea
-              value={newBio}
-              onChange={(e) => setNewBio(e.target.value)}
-              className="text-[14px] text-gray-700 border rounded-md p-1 w-full"
-            />
-          ) : (
-            <div className="text-[14px] text-gray-700">{profileData.bio}</div>
-          )}
+                <div>
+                    <label className="block text-[12px] text-gray-700 font-medium mb-2">
+                        Bio
+                    </label>
+                    {isEditing ? (
+                        <textarea
+                            value={newBio}
+                            onChange={(e) => setNewBio(e.target.value)}
+                            className="text-[14px] text-gray-700 border rounded-md p-1 w-full"
+                        />
+                    ) : (
+                        <div className="text-[14px] text-gray-700">{profileData.bio}</div>
+                    )}
         </div>
           </div>
 
@@ -761,53 +866,37 @@ export default function ProfilePage() {
             <hr className="border-gray-300 mt-2" />
           </div>
 
-          {/* Mobile Number */}
-          <div className="flex justify-between items-center">
-            <div>
-              <label className="block text-sm text-gray-500 mb-1">Mobile Number</label>
-              {isEditingMobile ? (
-                <input
-                  type="text"
-                  className="border border-gray-300 rounded px-2 py-1 text-sm"
-                  value={editableMobile}
-                  onChange={(e) => setEditableMobile(e.target.value)}
-                />
-              ) : (
-                <p className="text-gray-900 text-sm font-medium">{contactData.mobile}</p>
-              )}
-            </div>
-            <button
-              className="text-indigo-600 text-sm font-semibold hover:underline"
-              onClick={() => setIsEditingMobile(!isEditingMobile)}
-            >
-              {isEditingMobile ? "Cancel" : "Change"}
-            </button>
-          </div>
-          <hr className="border-gray-300 mt-2" />
+
+
 
           {/* Password */}
-          <div className="flex justify-between items-center">
-            <div>
-              <label className="block text-sm text-gray-500 mb-1">Password</label>
-              {isEditingPassword ? (
-                <input
-                  type="password"
-                  className="border border-gray-300 rounded px-2 py-1 text-sm"
-                  value={editablePassword}
-                  onChange={(e) => setEditablePassword(e.target.value)}
-                />
-              ) : (
-                <p className="text-gray-900 text-sm font-medium">{"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}</p>
-              )}
-            </div>
-            <button
-              className="text-indigo-600 text-sm font-semibold hover:underline"
-              onClick={() => setIsEditingPassword(!isEditingPassword)}
-            >
-              {isEditingPassword ? "Cancel" : "Change"}
-            </button>
-          </div>
-          <hr className="border-gray-300 mt-2" />
+{/* Password */}
+<div className="flex justify-between items-center">
+  <div>
+    <label className="block text-sm text-gray-500 mb-1">Password</label>
+    {isEditingPassword ? (
+      <input
+        type="password"
+        className="border border-gray-300 rounded px-2 py-1 text-sm"
+        value={editablePassword}
+        onChange={(e) => setEditablePassword(e.target.value)}
+      />
+    ) : (
+      <p className="text-gray-900 text-sm font-medium">{"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}</p>
+    )}
+  </div>
+  <div className="text-indigo-600 text-sm font-semibold">
+    {isEditingPassword ? (
+      <div className="flex space-x-4">
+        <button onClick={handleCancelPasswordClick}>Cancel</button>
+      </div>
+    ) : (
+      <button onClick={handleEditPasswordClick}>Change</button>
+    )}
+  </div>
+</div>
+
+
         </div>
       </div>
     </div>
