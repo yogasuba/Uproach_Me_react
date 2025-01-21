@@ -113,7 +113,7 @@ export default function SignupPage() {
         }, 500); // Adjust delay if needed
       }
     } catch (err) {
-      setLoading(false); // Ensure loading state is reset on failure
+      setLoading(false); // Optionally set loading back to false
       if (err.response && err.response.status === 400) {
         toast.error('The email address is already in use by another account.');
       } else {

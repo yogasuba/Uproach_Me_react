@@ -77,6 +77,7 @@ export default function SigninPage() {
   const handleEmailSignin = async (e) => {
     e.preventDefault();
     const auth = getAuth(firebaseApp);
+    setLoading(true); // Set loading to true before making the request
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -101,10 +102,13 @@ export default function SigninPage() {
         localStorage.setItem('userId', uid);
 
         toast.success('User login successfully');
-        navigate('/dashboard');
+        setTimeout(() => {
+          setLoading(false); // Optionally set loading back to false
+          navigate('/dashboard');
+        }, 500); // Adjust delay if needed
       } 
     } catch (err) {
-      // Handle Firebase Authentication errors
+      setLoading(false); // Optionally set loading back to false
       if (err.code || (err.response && err.response.status === 400)) {
         toast.error('Invalid login credentials. Please check your email and password.');
       } else if (err.code === 'auth/too-many-requests') {
