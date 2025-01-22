@@ -166,26 +166,27 @@ const ProfileDetails = () => {
                 placeholder="Profile name"
                 value={profilename}
                 onChange={(e) => setProfileName(e.target.value)}
-                className="xxl:w-[418px] sm:w-[276px] h-[48px] py-2 px-4 rounded-md text-[14px] bg-gray-100"
+                className="xxl:w-[418px]  sm:w-[276px] h-[48px] py-2 px-4 rounded-md text-[14px] bg-gray-100"
               />
             </div>
-
             <div className="relative mb-4">
               <textarea
                 rows="3"
-                maxLength="80"
+                maxLength="2500"
                 placeholder="Bio (optional)"
                 value={bio}
                 onChange={(e) => {
                   setBio(e.target.value);
                   setBioLength(e.target.value.length);
                 }}
-                className="xxl:w-[418px] sm:w-[276px] py-2 px-4 rounded-md text-[14px] bg-gray-100"
+                className="xxl:w-[418px] h-[164px] sm:w-[276px] py-2 px-4 rounded-md text-[14px] bg-gray-100 overflow-y-auto scrollbar-hide"
+                style={{ resize: "none" }}
               />
               <p className="absolute bottom-2 right-1 xxl:mr-10 sm:mr-10 text-[12px] text-gray-500">
-                {bioLength}/80
+                {bioLength}/2500
               </p>
             </div>
+
           </div>
 
           {/* Next Button */}

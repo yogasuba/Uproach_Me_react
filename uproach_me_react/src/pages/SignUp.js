@@ -47,7 +47,7 @@ export default function SignupPage() {
         );
 
         if (response.status === 200) {
-            const { token, uid, isOnboardingComplete } = response.data;
+            const { token, uid, isOnboarded } = response.data;
 
             // Store the token, uid, and profile URL in localStorage
             localStorage.setItem('authToken', token);
@@ -57,22 +57,22 @@ export default function SignupPage() {
             toast.success('Successfully signed in with Google');
 
             // Redirect based on onboarding completion status
-            if (isOnboardingComplete) {
-                navigate('/dashboard');
-            } else {
-                navigate('/welcome');
-            }
-        } else {
-            toast.error('Failed to sign in with Google');
-        }
-    } catch (error) {
-        console.error('Google Sign-In error:', error);
-        toast.error('Google sign-in failed. Please try again.');
-    } finally {
-        setLoading(false); // Stop loading
-    }
+            // Redirect based on onboarding completion status
+            if (isOnboarded) {
+              navigate('/dashboard');
+          } else {
+              navigate('/welcome');
+          }
+      } else {
+          toast.error('Failed to sign in with Google');
+      }
+  } catch (error) {
+      console.error('Google Sign-In error:', error);
+      toast.error('Google sign-in failed. Please try again.');
+  } finally {
+      setLoading(false); // Stop loading
+  }
 };
-
 
 
   const handleSubmit = async (e) => {

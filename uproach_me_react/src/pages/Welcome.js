@@ -159,7 +159,7 @@ const WelcomePage = () => {
               />
 
               {isAvailable === true && (
-                <span className="absolute inset-y-0 xxl:right-[-66px] sm:right-0 pr-3 flex items-center text-green-500">
+                <span className="absolute inset-y-0 xxl:right-[-46px] sm:right-0 pr-3 flex items-center text-green-500">
                   <img
                     src={IMAGES.TICK}
                     alt="Available"
@@ -179,7 +179,7 @@ const WelcomePage = () => {
             <button
               onClick={handleContinue}
               disabled={isButtonDisabled}
-              className={` mt-[181px] xxl:w-[418px] sm:w-[276px] h-[48px] py-2 px-4 rounded-full font-semibold text-[14px] xxl:ml-[-22px] sm:ml-0 ${
+              className={` mt-[181px] xxl:w-[418px] sm:w-[276px] h-[48px] py-2 px-4 rounded-full font-semibold text-[14px] xxl:ml-[-47px] sm:ml-0 ${
                 isButtonDisabled
                   ? "bg-[rgb(227,229,232)] cursor-not-allowed text-[#1e1f24]"
                   : "bg-[rgb(97,57,255)] hover:bg-customPurple text-white"
@@ -189,7 +189,7 @@ const WelcomePage = () => {
             </button>
           </div>
 
-          <p className="mt-3 text-xs text-gray-500 xxl:ml-[63px] sm:ml-0">
+          <p className="mt-3 text-xs text-gray-500">
             Already have an account?{" "}
             <a href="/" className="text-purple-600 hover:underline font-bold">
               Sign in
