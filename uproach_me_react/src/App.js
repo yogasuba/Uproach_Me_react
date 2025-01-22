@@ -27,9 +27,10 @@ import {
   BookingsMenu,
   PagesMenu,
   AnalyticsMenu,
+  OneOnOnePage,
+  GroupPage,
 } from "./pages";
 import CreateEventTypeModal from "./components/DashboardGrid/CreateEventTypeModal";
-import OneOnOnePage from "./pages/OneOnOnePage";
 import DashboardLayout from './layouts/DashboardLayout';
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
         <Route path="/recent-purchases" element={<AllRecentPurchases />} />
         <Route path="/create-event-modal" element={<CreateEventTypeModal />} />
         <Route path="/createevent/oneonone" element={<OneOnOnePage />} />
+        <Route path="/createevent/group" element={<GroupPage />} />
         <Route
           path="/dashboard"
           element={

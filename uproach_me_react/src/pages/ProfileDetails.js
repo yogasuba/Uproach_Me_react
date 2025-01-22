@@ -7,6 +7,7 @@ import getCroppedImg from "../lib/getCroppedImg";
 import { IMAGES } from "../constants";
 
 
+
 const ProfileDetails = () => {
   useEffect(() => {
     document.title = "ProfileDetails"; // Set your desired page title here

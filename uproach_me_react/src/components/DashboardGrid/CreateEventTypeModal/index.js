@@ -33,8 +33,9 @@ const CreateEventTypeModal = ({ onClose }) => {
             <div className="flex items-center space-x-4">
               <img src={ICONS.ONE_ON_ONE} alt="One-on-One" className="w-10 h-10" />
               <div>
-                <h3 className="font-bold text-gray-800">One host with one invitee</h3>
-                <p className="text-gray-500 text-sm">
+                <h3 className="text-[11px] font-semibold">ONE-ON-ONE</h3>
+                <h3 className="font-bold text-gray-800 text-[16px]">One host with one invitee</h3>
+                <p className="text-[#686A74] text-sm">
                   Good for: coffee chats, 1:1 interviews, etc.
                 </p>
               </div>
@@ -45,13 +46,14 @@ const CreateEventTypeModal = ({ onClose }) => {
           {/* Group */}
           <div
             className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-100"
-            onClick={() => console.log("Group selected")}
+            onClick={() => navigate("/createevent/group")}
           >
             <div className="flex items-center space-x-4">
               <img src={ICONS.GROUP} alt="Group" className="w-10 h-10" />
               <div>
-                <h3 className="font-bold text-gray-800">One host with group of invitees</h3>
-                <p className="text-gray-500 text-sm">
+              <h3 className="text-[11px] font-semibold">GROUP</h3>
+                <h3 className="font-bold text-gray-800 text-[16px]">One host with group of invitees</h3>
+                <p className="text-[#686A74] text-sm">
                   Good for: webinars, online classes, etc.
                 </p>
               </div>
@@ -67,8 +69,9 @@ const CreateEventTypeModal = ({ onClose }) => {
             <div className="flex items-center space-x-4">
               <img src={ICONS.COLLECTIVE} alt="Collective" className="w-10 h-10" />
               <div>
-                <h3 className="font-bold text-gray-800">More than one host with one invitee</h3>
-                <p className="text-gray-500 text-sm">
+              <h3 className="text-[11px] font-semibold">COLLECTIVE</h3>
+                <h3 className="font-bold text-gray-800 text-[16px]">More than one host with one invitee</h3>
+                <p className="text-[#686A74] text-sm">
                   Good for: panel interviews, group sales calls, etc.
                 </p>
               </div>
@@ -84,8 +87,9 @@ const CreateEventTypeModal = ({ onClose }) => {
             <div className="flex items-center space-x-4">
               <img src={ICONS.ROUND_ROBIN} alt="Round Robin" className="w-10 h-10" />
               <div>
-                <h3 className="font-bold text-gray-800">One rotating host with one invitee</h3>
-                <p className="text-gray-500 text-sm">
+              <h3 className="text-[11px] font-semibold">ROUND ROBIN</h3>
+                <h3 className="font-bold text-gray-800 text-[16px]">One rotating host with one invitee</h3>
+                <p className="text-[#686A74] text-sm">
                   Good for: distributing incoming sales leads.
                 </p>
               </div>

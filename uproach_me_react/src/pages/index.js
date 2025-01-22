@@ -20,6 +20,8 @@ import IntegrationPage from "./IntegrationPage";
 import BookingsMenu from "./BookingsMenu";
 import PagesMenu from "./PagesMenu";
 import AnalyticsMenu from "./AnalyticsMenu";
+import OneOnOnePage from "./OneOnOnePage";
+import GroupPage from "./GroupPage";
 export{BookingPage,
 DashboardPage,
 EventDetailPage,
@@ -42,4 +44,6 @@ IntegrationPage,
 BookingsMenu,
 PagesMenu,
 AnalyticsMenu,
+OneOnOnePage,
+GroupPage,
 };

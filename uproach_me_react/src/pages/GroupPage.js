@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const OneOnOnePage = () => {
+const GroupPage = () => {
   const [duration, setDuration] = useState("");
   const [isHidden, setIsHidden] = useState(false);
   const [weekDays, setWeekDays] = useState([]);
@@ -17,6 +17,9 @@ const OneOnOnePage = () => {
   const [text, setText] = useState(""); // State to store textarea value
   const textareaRef = useRef(null); // Ref to manipulate the textarea
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [firstSessionDate, setFirstSessionDate] = useState(""); // For the date input
+  const [firstSessionTime, setFirstSessionTime] = useState(""); // For the time input
+  const [totalSessions, setTotalSessions] = useState(0); // For the total sessions input
   const navigate = useNavigate();
 
 
@@ -211,49 +214,83 @@ const OneOnOnePage = () => {
             </>
           )}
 
-          {step === 2 && (
-            <>
-              <div className="mb-6">
-                <label className="block text-gray-700 text-[14px] font-medium mb-2">
-                  How long are you meeting for?
-                </label>
-                <select
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  className="custom-inputfeild w-full text-[14px] text-[#80828D] p-[12px] border border-[#CCCDD6] rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
-                >
-                  <option value="" disabled>
-                    Duration
-                  </option>
-                  <option value="15">15 minutes</option>
-                  <option value="30">30 minutes</option>
-                  <option value="45">45 minutes</option>
-                  <option value="60">60 minutes</option>
-                </select>
-              </div>
+        {step === 2 && (
+        <>
+            <div className="mb-6">
+            <label className="block text-gray-700 text-[14px] font-medium mb-2">
+                First session
+            </label>
+            <div className="flex space-x-2">
+                <input
+                type="date"
+                value={firstSessionDate}
+                onChange={(e) => setFirstSessionDate(e.target.value)}
+                className="custom-inputfeild w-full text-[14px] text-[#80828D] p-[12px] border border-[#CCCDD6] rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+                <input
+                type="time"
+                value={firstSessionTime}
+                onChange={(e) => setFirstSessionTime(e.target.value)}
+                className="custom-inputfeild w-full text-[14px] text-[#80828D] p-[12px] border border-[#CCCDD6] rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+            </div>
+            </div>
 
-              <div className="mb-6">
-                <label className="block text-gray-700 text-[14px] font-medium mb-2">
-                  Repeats Every
-                </label>
-                <div className="flex space-x-2 mb-[10rem]">
-                  {weekDays.map((date, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedDayIndex(index)}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-medium transition-colors ${
-                        selectedDayIndex === index
-                          ? "bg-orange-500 text-white"
-                          : "bg-gray-200 text-gray-800"
-                      }`}
-                    >
-                      {date.split(" ")[0]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+            <div className="mb-6">
+            <label className="block text-gray-700 text-[14px] font-medium mb-2">
+                How long are you meeting for?
+            </label>
+            <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                className="custom-inputfeild w-full text-[14px] text-[#80828D] p-[12px] border border-[#CCCDD6] rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+                <option value="" disabled>
+                Duration
+                </option>
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="45">45 minutes</option>
+                <option value="60">60 minutes</option>
+            </select>
+            </div>
+
+            <div className="mb-6">
+            <label className="block text-gray-700 text-[14px] font-medium mb-2">
+                Total Sessions
+            </label>
+            <input
+                type="number"
+                value={totalSessions}
+                onChange={(e) => setTotalSessions(e.target.value)}
+                className="custom-inputfeild w-full text-[14px] text-[#80828D] p-[12px] border border-[#CCCDD6] rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                min="0"
+            />
+            </div>
+
+            <div className="mb-6">
+            <label className="block text-gray-700 text-[14px] font-medium mb-2">
+                Repeats Every
+            </label>
+            <div className="flex space-x-2 mb-[10rem]">
+                {weekDays.map((date, index) => (
+                <button
+                    key={index}
+                    onClick={() => setSelectedDayIndex(index)}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-medium transition-colors ${
+                    selectedDayIndex === index
+                        ? "bg-orange-500 text-white"
+                        : "bg-gray-200 text-gray-800"
+                    }`}
+                >
+                    {date.split(" ")[0]}
+                </button>
+                ))}
+            </div>
+            </div>
+        </>
+        )}
+
 
           {step === 3 && (
             <>
@@ -423,7 +460,6 @@ const OneOnOnePage = () => {
                     </button>
                 </div>
             )}
-
         </div>
       </div>
 
@@ -486,4 +522,4 @@ const OneOnOnePage = () => {
   );
 };
 
-export default OneOnOnePage;
+export default GroupPage;
