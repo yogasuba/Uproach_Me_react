@@ -29,6 +29,7 @@ import {
   AnalyticsMenu,
   OneOnOnePage,
   GroupPage,
+  AvailabilityPage,
 } from "./pages";
 import CreateEventTypeModal from "./components/DashboardGrid/CreateEventTypeModal";
 import DashboardLayout from './layouts/DashboardLayout';
@@ -161,6 +162,16 @@ function App() {
             <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <AnalyticsMenu />
+            </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/availability"
+          element={
+            <ProtectedRoute>
+            <DashboardLayout showHeader={false}>
+              <AvailabilityPage />
             </DashboardLayout>
             </ProtectedRoute>
           }

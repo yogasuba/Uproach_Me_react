@@ -123,145 +123,152 @@ const BookingPage = () => {
   });
 
   return (
-    <div className="p-6 font-sans bg-gray-100 h-screenmin-">
-      {/* Header */}
-      <h1 className="text-2xl font-bold mb-6">Booking</h1>
+      <div className="p-6 font-sans bg-gray-100 min-h-screen">
+        {/* Header */}
+        <h1 className="text-2xl font-bold mb-6">Booking</h1>
 
-      {/* Tabs */}
-      <div className="flex mb-6 border-b border-gray-200">
-        <button
-          className={`pb-2  ${
-            activeTab === "upcoming"
-              ? "text-[#6139FF] border-b-2 border-[#6139FF] font-semibold"
-              : "text-gray-600"
-          }`}
-          onClick={() => setActiveTab("upcoming")}
-        >
-          Upcoming
-        </button>
-        <button
-          className={`pb-2 ml-[22px] ${
-            activeTab === "completed"
-              ? "text-[#6139FF] border-b-2 border-[#6139FF] font-semibold"
-              : "text-gray-600 "
-          }`}
-          onClick={() => setActiveTab("completed")}
-        >
-          Completed
-        </button>
-      </div>
-
-      {/* Controls */}
-      <div className="flex items-center justify-between mb-6">
-        {/* Call Type Buttons */}
-        <div className="flex gap-4">
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-4 mb-6 border-b border-gray-200">
           <button
-            className={`text-[14px] px-[14px] py-[8px] rounded-[70px]  ${
-              activeCallType === "1:1"
-                ? "bg-[#6139FF] hover:bg-customPurple text-white"
-                : "bg-white text-[#686A74] border border-[#E0E0E0]"
+            className={`pb-2 ${
+              activeTab === "upcoming"
+                ? "text-[#6139FF] border-b-2 border-[#6139FF] font-semibold"
+                : "text-gray-600"
             }`}
-            onClick={() => setActiveCallType("1:1")}
+            onClick={() => setActiveTab("upcoming")}
           >
-            1:1 Call
+            Upcoming
           </button>
           <button
-            className={`text-[14px] px-[14px] py-[8px] rounded-[70px]  ${
-              activeCallType === "Group"
-                ? "bg-[#6139FF] hover:bg-customPurple text-white"
-                : "bg-white text-[#686A74] border border-[#E0E0E0]"
+            className={`pb-2 ${
+              activeTab === "completed"
+                ? "text-[#6139FF] border-b-2 border-[#6139FF] font-semibold"
+                : "text-gray-600"
             }`}
-            onClick={() => setActiveCallType("Group")}
+            onClick={() => setActiveTab("completed")}
           >
-            Group Call
+            Completed
           </button>
         </div>
-        {/* Right-side Controls */}
-        <div className="flex items-center gap-4">
-          {/* Search */}
-        <div className="relative">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
-            {/* Replace this with your custom search icon */}
-            <img src={ICONS.SEARCH} alt="Search Icon" className="h-5 w-5" />
-            </span>
-            <input
-            type="text"
-            placeholder="Search Here"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border border-[#E0E0E0] rounded-[70px] w-[359px] h-[41px] pl-10 pr-[14px] py-[8px] focus:outline-none focus:ring-1 focus:ring-[#E0E0E0]"
-            />
-        </div>
 
-        {/* Filter */}
-        <button className="flex items-center gap-2 text-[14px] bg-white border border-[#E0E0E0] px-[14px] py-[8px] rounded-[70px] text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#E0E0E0]">
-            {/* Add your filter icon here */}
-            <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        {/* Controls */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          {/* Call Type Buttons */}
+          <div className="flex gap-4">
+            <button
+              className={`text-sm px-4 py-2 rounded-full ${
+                activeCallType === "1:1"
+                  ? "bg-[#6139FF] hover:bg-customPurple text-white"
+                  : "bg-white text-[#686A74] border border-[#E0E0E0]"
+              }`}
+              onClick={() => setActiveCallType("1:1")}
             >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V17a1 1 0 01-.553.894l-4 2A1 1 0 019 19v-5.586L3.293 6.707A1 1 0 013 6V4z"
-            />
-            </svg>
-            Filter
-        </button>
-          {/* Export */}
-          <button className=" text-[14px] bg-[#6139FF] px-[14px] py-[8px] rounded-[70px] text-white hover:bg-customPurple">
-            Export
-          </button>
-        </div>
-      </div>
+              1:1 Call
+            </button>
+            <button
+              className={`text-sm px-4 py-2 rounded-full ${
+                activeCallType === "Group"
+                  ? "bg-[#6139FF] hover:bg-customPurple text-white"
+                  : "bg-white text-[#686A74] border border-[#E0E0E0]"
+              }`}
+              onClick={() => setActiveCallType("Group")}
+            >
+              Group Call
+            </button>
+          </div>
 
-      {/* Booking List */}
-      <div className="bg-white rounded-md shadow p-4">
-        <h3 className="text-lg font-semibold mb-4 capitalize border-b pb-2">
-          {activeTab}
-        </h3>
-        {filteredBookings.map((booking) => (
-          <div
-            key={booking.id}
-            className="flex items-center justify-between p-4 mb-4  rounded-lg shadow-sm border border-gray-200"
-          >
-            {/* Booking Info */}
-            <div className="flex items-center gap-4">
-                <div className="border border-grey bg-[#F7F7F7] w-[45px] h-[45px] rounded-[10px] flex items-center">
-              <img src={ICONS.BOOKING} alt="calendar" className="w-[24px] h-[24px] ml-[9px]" /></div>
-              <div className="flex items-center gap-4 border-r pr-4 border-gray-300">
-                <div>
-                  <p className="text-gray-800 font-semibold text-[14px]">
-                    {booking.date}
-                  </p>
-                  <p className="text-gray-600 text-[12px]">
-                    {booking.time} • {booking.duration}
-                  </p>
+          {/* Right-side Controls */}
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Search */}
+            <div className="relative w-full sm:w-auto">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <img src={ICONS.SEARCH} alt="Search Icon" className="h-5 w-5" />
+              </span>
+              <input
+                type="text"
+                placeholder="Search Here"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border border-[#E0E0E0] rounded-full w-full sm:w-[300px] h-10 pl-10 pr-4 py-2 focus:outline-none focus:ring-1 focus:ring-[#E0E0E0]"
+              />
+            </div>
+
+            {/* Filter */}
+            <button className="flex items-center gap-2 text-sm bg-white border border-[#E0E0E0] px-4 py-2 rounded-full text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#E0E0E0]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V17a1 1 0 01-.553.894l-4 2A1 1 0 019 19v-5.586L3.293 6.707A1 1 0 013 6V4z"
+                />
+              </svg>
+              Filter
+            </button>
+
+            {/* Export */}
+            <button className="text-sm bg-[#6139FF] px-4 py-2 rounded-full text-white hover:bg-customPurple">
+              Export
+            </button>
+          </div>
+        </div>
+
+        {/* Booking List */}
+        <div className="bg-white rounded-md shadow p-4">
+          <h3 className="text-lg font-semibold mb-4 capitalize border-b pb-2">
+            {activeTab}
+          </h3>
+          {filteredBookings.map((booking) => (
+            <div
+              key={booking.id}
+              className="flex flex-wrap items-center justify-between p-4 mb-4 rounded-lg shadow-sm border border-gray-200"
+            >
+              {/* Booking Info */}
+              <div className="flex items-center gap-4">
+                <div className="border bg-[#F7F7F7] w-12 h-12 rounded-lg flex items-center justify-center">
+                  <img
+                    src={ICONS.BOOKING}
+                    alt="calendar"
+                    className="w-6 h-6"
+                  />
+                </div>
+                <div className="flex items-center gap-4 border-r pr-4 border-gray-300">
+                  <div>
+                    <p className="text-gray-800 font-semibold text-sm">
+                      {booking.date}
+                    </p>
+                    <p className="text-gray-600 text-xs">
+                      {booking.time} • {booking.duration}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* Booking Title */}
-            <p className="text-gray-800 font-medium flex-1 text-start ml-[29px]">
-              {booking.title}
-            </p>
-            {/* Status */}
-            <div className="text-gray-600 flex gap-4 items-center text-[14px]">
-              <span>{booking.participant}</span>
-              <span className="  bg-[#EDFBF4] rounded-[8px] text-[14px] px-[8px] py-[3px] text-[#1D874C] font-semibold">
-                {booking.status}
-              </span>
-            </div>
-            <button onClick={() => toggleMenu(booking.id)}>
-              <img
-                src="/icons/verticaldotted.svg"
-                alt="More Options"
-                className="w-[20px] h-[20px] ml-[25px]"
-              />
-            </button>
+
+              {/* Booking Title */}
+              <p className="text-gray-800 font-medium flex-1 text-start ml-8 sm:ml-4">
+                {booking.title}
+              </p>
+
+              {/* Status */}
+              <div className="text-gray-600 flex gap-4 items-center text-sm">
+                <span>{booking.participant}</span>
+                <span className="bg-[#EDFBF4] rounded-md text-sm px-2 py-1 text-[#1D874C] font-semibold">
+                  {booking.status}
+                </span>
+              </div>
+              <button onClick={() => toggleMenu(booking.id)}>
+                <img
+                  src="/icons/verticaldotted.svg"
+                  alt="More Options"
+                  className="w-5 h-5 ml-6"
+                />
+              </button>
             {/* Dropdown Menu */}
             {menuOpenId === booking.id && (
               <div className="absolute right-[114px]  bg-white shadow-lg rounded-md text-sm z-10">
@@ -313,7 +320,7 @@ const BookingPage = () => {
               </div>
             )}
             {cancelModalOpen && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
                 <div className="bg-white rounded-lg shadow-lg xxl:w-[400px] sm:w-[313px] p-6 relative">
                   {/* Modal Header */}
                   <div className="flex justify-between items-center mb-4">
@@ -345,7 +352,7 @@ const BookingPage = () => {
             )}
 
             {rescheduleModalOpen && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
                 <div className="bg-white rounded-lg shadow-lg xxl:w-[456px] sm:w-[335px] p-6 relative">
                   {/* Progress Bar */}
                   <div className="flex gap-1 mb-4">

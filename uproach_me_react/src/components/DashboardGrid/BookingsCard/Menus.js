@@ -379,7 +379,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
       
   return (
     <div className="container flex flex-col sm:flex-row gap-4" >
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50  ">
+    <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50  ">
       <div className="bg-white rounded-lg shadow-lg xxxl:w-[1252.311px] xxxl:h-[722.089px] xxl:w-[1087px] xxl:h-[550px] flex relative">
         {/* Left Section */}
         <div className="xxl:w-2/3 xxl:h-[550px] xxl:p-6 relative overflow-y-auto md:h-[57rem] sm:h-[47rem] sm:p-4 sm:w-[23rem] md:w-full">

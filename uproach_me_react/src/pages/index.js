@@ -22,6 +22,7 @@ import PagesMenu from "./PagesMenu";
 import AnalyticsMenu from "./AnalyticsMenu";
 import OneOnOnePage from "./OneOnOnePage";
 import GroupPage from "./GroupPage";
+import AvailabilityPage from "./AvailabilityMenu";
 export{BookingPage,
 DashboardPage,
 EventDetailPage,
@@ -46,4 +47,5 @@ PagesMenu,
 AnalyticsMenu,
 OneOnOnePage,
 GroupPage,
+AvailabilityPage,
 };

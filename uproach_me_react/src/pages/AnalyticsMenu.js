@@ -134,13 +134,12 @@ const AnalyticsPage = () => {
 
       {/* Stats Section */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Stats This Period */}
         <div className="col-span-1 lg:col-span-3 bg-white p-6 rounded-lg shadow">
           <h2 className="text-lg font-semibold text-gray-800">Stats This Period</h2>
           <p className="text-sm text-gray-500 mb-6">
             {currentStats.startDate} - {currentStats.endDate} · {currentStats.location}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4">
             {currentStats.stats.map((stat) => (
               <div
                 key={stat.title}
