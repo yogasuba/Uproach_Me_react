@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { FiFilter } from "react-icons/fi"; // Importing the filter icon
 
 const AnalyticsPage = () => {
   // Initial target value and dummy data
   const [target, setTarget] = useState(1000);
   const [stats, setStats] = useState("7 Days"); // Current stats period
+  const [activeMenu, setActiveMenu] = useState("Event"); // Track the active menu
 
   const dummyData = {
     statsPeriods: {
@@ -75,9 +77,9 @@ const AnalyticsPage = () => {
       { name: "Q&A call", count: 124 },
     ],
     usersWithMostEvents: [
-      { name: "John Wilson", count: 534 },
-      { name: "Jennifer Reyes", count: 845 },
-      { name: "Mateo Ruiz", count: 934 },
+      { name: "John Wilson", count: 534, image: "https://via.placeholder.com/40" },
+      { name: "Jennifer Reyes", count: 845, image: "https://via.placeholder.com/40" },
+      { name: "Mateo Ruiz", count: 934, image: "https://via.placeholder.com/40" },
     ],
   };
 
@@ -93,28 +95,37 @@ const AnalyticsPage = () => {
             <button
               key={button}
               onClick={() => setStats(button)}
-              className={`px-4 py-2 text-sm font-medium rounded-md ${
+              className={`px-4 py-2 text-sm font-medium rounded-[36px] border border-[#E0E0E0] ${
                 stats === button
-                  ? "text-white bg-purple-600"
-                  : "text-gray-600 bg-gray-100"
+                  ? "text-white bg-[rgb(97,57,255)]"
+                  : "text-gray-600 bg-white"
               }`}
             >
               {button}
             </button>
           ))}
+          {/* Filter Button with Icon */}
+          <button
+            className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-[36px] hover:bg-gray-200 border border-[#E0E0E0]"
+            onClick={() => alert("Filter clicked!")}
+          >
+            <FiFilter className="mr-2 text-gray-500" />
+            Filter
+          </button>
         </div>
       </div>
 
       {/* Tabs */}
       <div className="flex space-x-8 border-b border-gray-200 mb-6 overflow-x-auto">
-        {["Event", "Link in bio", "Sell products"].map((tab, index) => (
+        {["Event", "Link in bio", "Sell products"].map((tab) => (
           <button
-            key={index}
-            className={`pb-2 text-sm font-medium ${
-              index === 0
-                ? "text-purple-600 border-b-2 border-purple-600"
+            key={tab}
+            onClick={() => setActiveMenu(tab)} // Update active menu on click
+            className={`pb-2 text-sm font-medium whitespace-nowrap ${
+              activeMenu === tab
+                ? "text-[rgb(97,57,255)] border-b-2 border-[rgb(97,57,255)]"
                 : "text-gray-500"
-            } whitespace-nowrap`}
+            }`}
           >
             {tab}
           </button>
@@ -141,49 +152,49 @@ const AnalyticsPage = () => {
             ))}
           </div>
         </div>
-{/* Popular Events */}
-<div className="bg-white p-6 rounded-lg shadow">
-  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
-    <h2 className="text-lg font-semibold text-gray-800">Popular Events</h2>
-    <div className="flex items-center space-x-2">
-      <span className="text-sm text-gray-500">Set Target</span>
-      <input
-        type="number"
-        value={target}
-        onChange={(e) => setTarget(Number(e.target.value))}
-        className="w-16 h-8 text-sm text-gray-600 border border-gray-300 rounded-lg text-center"
-      />
-    </div>
-  </div>
-  <div className="flex justify-between text-gray-500 text-sm font-medium mb-2">
-    <span>Event name</span>
-    <span>Event</span>
-  </div>
-  <div className="space-y-4">
-    {dummyData.popularEvents.map((event) => (
-      <div
-        key={event.name}
-        className="relative flex items-center justify-between bg-purple-50 px-4 py-2 rounded-md"
-      >
-        <div
-          className="absolute top-0 left-0 h-full bg-purple-200 rounded-md"
-          style={{
-            width: `${
-              target > 0 ? Math.min((event.count / target) * 100, 100) : 0
-            }%`,
-          }}
-        ></div>
-        <span className="relative z-10 text-sm font-medium text-gray-700">
-          {event.name}
-        </span>
-        <span className="relative z-10 text-sm font-medium text-gray-700">
-          {event.count}
-        </span>
-      </div>
-    ))}
-  </div>
-  <button className="mt-4 text-sm text-purple-600">View All Content</button>
-</div>
+        {/* Popular Events */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
+            <h2 className="text-lg font-semibold text-gray-800">Popular Events</h2>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-500">Set Target</span>
+              <input
+                type="number"
+                value={target}
+                onChange={(e) => setTarget(Number(e.target.value))}
+                className="w-16 h-8 text-sm text-gray-600 border border-gray-300 rounded-lg text-center"
+              />
+            </div>
+          </div>
+          <div className="flex justify-between text-gray-500 text-sm font-medium mb-2">
+            <span>Event name</span>
+            <span>Event</span>
+          </div>
+          <div className="space-y-4">
+            {dummyData.popularEvents.map((event) => (
+              <div
+                key={event.name}
+                className="relative flex items-center justify-between bg-purple-50 px-4 py-2 rounded-md"
+              >
+                <div
+                  className="absolute top-0 left-0 h-full bg-purple-200 rounded-md"
+                  style={{
+                    width: `${
+                      target > 0 ? Math.min((event.count / target) * 100, 100) : 0
+                    }%`,
+                  }}
+                ></div>
+                <span className="relative z-10 text-sm font-medium text-gray-700">
+                  {event.name}
+                </span>
+                <span className="relative z-10 text-sm font-medium text-gray-700">
+                  {event.count}
+                </span>
+              </div>
+            ))}
+          </div>
+          <button className="mt-4 text-sm text-purple-600">View All Content</button>
+        </div>
 
         {/* Popular Days of the Week */}
         <div className="bg-white p-6 rounded-lg shadow">
@@ -219,18 +230,23 @@ const AnalyticsPage = () => {
 
         {/* Users With The Most Events */}
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          <h2 className="text-[18px] font-semibold text-gray-800 mb-4">
             Users With The Most Events
           </h2>
           <ul className="space-y-4">
             {dummyData.usersWithMostEvents.map((user) => (
-              <li key={user.name} className="flex justify-between">
-                <span className="text-sm text-gray-600">{user.name}</span>
+              <li key={user.name} className="flex items-center space-x-4">
+                <img
+                  src={user.image}
+                  alt={user.name}
+                  className="w-10 h-10 rounded-full"
+                />
+                <span className="text-sm text-gray-600 flex-1">{user.name}</span>
                 <span className="text-sm text-gray-600">{user.count}</span>
               </li>
             ))}
           </ul>
-          <button className="mt-4 text-sm text-purple-600">View All Content</button>
+          <button className="mt-20 text-sm text-purple-600">View All Content</button>
         </div>
       </div>
     </div>
