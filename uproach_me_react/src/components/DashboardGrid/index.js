@@ -26,126 +26,125 @@ const DashboardGrid = () => {
        <div className="grid gap-6 lg:grid-cols-3 sm:grid-cols-1">
          
        <div className="lg:col-span-3 flex xl:space-x-4 xxl:space-x-10 sm:space-x-3 sm:overflow-x-auto xxl:overflow-visible sm:flex-nowrap ">
-        {/* Create Event Card */}
-        <button
-          className="bg-secondary text-secondary-foreground xxl:w-[356px] xxl:h-[115px] sm:w-[316px] p-6 rounded-[8px] flex items-center justify-between sm:relative"
-          style={{
-            background: "linear-gradient(0deg, #D8CCFC 0%, #D8CCFC 100%), #E7EBF7",
-          }}
-          onClick={() => handleOpenModal("createEvent")}
-        >
-          <div>
-            <h3 className="custom-cards-events xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px] xxxl:w-[156px]">
-              Create event
-            </h3>
-            <button className="bg-white text-[14px] p-2 rounded-[70px] shadow-sm w-[74px]">
-              Set Up
-            </button>
-          </div>
-          <img
-            src="/icons/create-event.svg"
-            alt="Create Event"
-            className="sm:absolute sm:transform sm:scale-105 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-21px] sm:right-[12px] sm:bottom-[8px] xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
-          />
-        </button>
-
-        {/* Link in Bio Card */}
-        <button
-          className="bg-[rgba(236,183,218,1)] text-secondary-foreground p-6 rounded-[8px] xxl:w-[356px] xxl:h-[115px] xl:w-[323px] sm:w-[316px] flex items-center justify-between relative"
-          onClick={() => alert("Link in Bio clicked!")} // Replace with your navigation logic
-        >
-          <div>
-            <h3 className="custom-cards-events text-[#7D215E] xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px]">
-              Link in Bio
-            </h3>
-            <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px]">
-              Set Up
-            </button>
-          </div>
-          <img
-            src="/icons/link-in-bio.svg"
-            alt="Link in Bio"
-            className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-[10px] sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
-          />
-        </button>
-
-        {/* Sell Products Card */}
-        <button
-          className="bg-[rgba(168,224,250,1)] text-secondary-foreground p-6 rounded-[8px] xxl:w-[356px] xxl:h-[115px] xl:w-[323px] sm:w-[316px] flex items-center justify-between relative"
-          onClick={() => alert("Sell Products clicked!")} // Replace with your navigation logic
-        >
-          <div>
-            <h3 className="custom-cards-events text-[#096590] xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px]">
-              Sell Products
-            </h3>
-            <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px]">
-              Set Up
-            </button>
-          </div>
-          <img
-            src="/icons/sell-products.svg"
-            alt="Sell Products"
-            className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-0 sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
-          />
-        </button>
-      </div>
-
-      {/* Conditionally Render Modals */}
-      {activeModal === "createEvent" && (
-        <CreateEventTypeModal onClose={handleCloseModal} />
-      )}
-
-
-      {/* Templates You May Like - Button Grid */}
-      <div className="lg:col-span-3 grid grid-cols-1">
-        <div className="relative bg-white xxxl:w-full xxl:w-full sm:w-[303px] rounded-lg inline-flex items-center justify-between px-4 py-2 shadow">
-          {/* Left Side: Icon and Heading */}
-          <div className="inline-flex items-center">
-            <img 
-              src="/icons/addtemplate-icon.svg" 
-              alt="Document Icon" 
-              className="w-[22px] h-[22px] mr-2" 
+       <button
+            className="bg-secondary text-secondary-foreground xxl:w-[356px] xxl:h-[115px] sm:w-[316px] p-6 rounded-[8px] flex items-center justify-between sm:relative"
+            style={{
+              background: "linear-gradient(0deg, #D8CCFC 0%, #D8CCFC 100%), #E7EBF7",
+            }}
+            onClick={() => handleOpenModal("createEvent")}
+          >
+            <div className="xxl:text-[16px] xxxl:text-[22px] mb-[11px] sm:w-[242px] xxl:w-[127px] xxxl:w-[156px]">
+              <h3 className="custom-cards-events mb-[11px] sm:ml-[-158px] xxl:ml-0 xxxl:ml-0">
+                Create event
+              </h3>
+              <button className="bg-white text-[14px] p-2 rounded-[70px] shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
+                Set Up
+              </button>
+            </div>
+            <img
+              src="/icons/create-event.svg"
+              alt="Create Event"
+              className="sm:absolute sm:transform sm:scale-105 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-21px] sm:right-[12px] sm:bottom-[8px] xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
             />
-            <h2 className="xxxl:text-[18px] xxl:text-[14px] font-semibold">Templates You May Like</h2>
-          </div>
+          </button>
 
-          {/* Right Side: Hide and Arrow */}
-          <div className="flex items-center cursor-pointer space-x-1 text-sm font-medium text-gray-500">
-            <span>Hide</span>
-            <img 
-              src="/icons/chevron-up.svg" 
-              alt="Upward Arrow" 
-              className="w-4 h-4" 
+          {/* Link in Bio Card */}
+          <button
+            className="bg-[rgba(236,183,218,1)] text-secondary-foreground p-6 rounded-[8px] xxl:w-[356px] xxl:h-[115px] xl:w-[323px] sm:w-[316px] flex items-center justify-between relative"
+            onClick={() => alert("Link in Bio clicked!")}
+          >
+            <div className="sm:w-[242px] xxl:w-[127px]">
+              <h3 className="custom-cards-events text-[#7D215E] xxl:text-[16px] xxxl:text-[22px] mb-[11px]  sm:ml-[-158px] xxl:ml-0 xxxl:ml-0">
+                Link in Bio
+              </h3>
+              <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
+                Set Up
+              </button>
+            </div>
+            <img
+              src="/icons/link-in-bio.svg"
+              alt="Link in Bio"
+              className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-[10px] sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
             />
-          </div>
+          </button>
+
+          {/* Sell Products Card */}
+          <button
+            className="bg-[rgba(168,224,250,1)] text-secondary-foreground p-6 rounded-[8px] xxl:w-[356px] xxl:h-[115px] xl:w-[323px] sm:w-[316px] flex items-center justify-between relative"
+            onClick={() => alert("Sell Products clicked!")}
+          >
+            <div className="sm:w-[242px] xxl:w-[127px]">
+              <h3 className="custom-cards-events text-[#096590] xxl:text-[16px] xxxl:text-[22px] mb-[11px]  sm:ml-[-158px] xxl:ml-0 xxxl:ml-0 ">
+                Sell Products
+              </h3>
+              <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
+                Set Up
+              </button>
+            </div>
+            <img
+              src="/icons/sell-products.svg"
+              alt="Sell Products"
+              className="sm:absolute sm:transform sm:scale-100 xxl:scale-110 xxl:right-[12px] xxl:bottom-[-18px] sm:right-0 sm:bottom-0 xxxl:w-[134px] xxxl:h-[150px] xxl:w-[135px] xxl:h-[150px] object-contain"
+            />
+          </button>
         </div>
 
+        {/* Conditionally Render Modals */}
+        {activeModal === "createEvent" && (
+          <CreateEventTypeModal onClose={handleCloseModal} />
+        )}
 
-        {/* Card Grid */}
-        <div className="mt-4 w-full">
-        {/* First Row */}
-        <div className="grid xxxl:gap-4 xxl:gap-4 sm:gap-8 sm:grid-cols-1 sm:w-[295px] xxl:w-full lg:grid-cols-3 ">
-            {/* Card Row */}
-            <div className="flex items-center xxxl:p-4 xxl:p-4 sm:p-0 rounded-lg ">
-            <div className="xxxl:w-14 xxxl:h-14 xxl:w-10 xxl:h-10 sm:w-8 sm:h-8 flex items-center justify-center bg-gray-100 rounded-[12px] mr-4 sm:ml-[17px] xxl:ml-0"
-                style={{
+        {/* Templates You May Like - Button Grid */}
+        <div className="lg:col-span-3 grid grid-cols-1">
+          <div className="relative bg-white xxxl:w-full xxl:w-full sm:w-[303px] rounded-lg inline-flex items-center justify-between px-4 py-2 shadow">
+            <div className="inline-flex items-center">
+              <img
+                src="/icons/addtemplate-icon.svg"
+                alt="Document Icon"
+                className="w-[22px] h-[22px] mr-2"
+              />
+              <h2 className="xxxl:text-[18px] xxl:text-[14px] font-semibold">
+                Templates You May Like
+              </h2>
+            </div>
+
+            <div className="flex items-center cursor-pointer space-x-1 text-sm font-medium text-gray-500">
+              <span>Hide</span>
+              <img
+                src="/icons/chevron-up.svg"
+                alt="Upward Arrow"
+                className="w-4 h-4"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 w-full">
+            <div className="grid xxxl:gap-4 xxl:gap-4 sm:gap-8 sm:grid-cols-1 sm:w-[295px] xxl:w-full lg:grid-cols-3">
+              <div className="flex items-center xxxl:p-4 xxl:p-4 sm:p-0 rounded-lg">
+                <div
+                  className="xxxl:w-14 xxxl:h-14 xxl:w-10 xxl:h-10 sm:w-8 sm:h-8 flex items-center justify-center bg-gray-100 rounded-[12px] mr-4 sm:ml-[17px] xxl:ml-0"
+                  style={{
                     background: "linear-gradient(155deg, #36D1DC 2.31%, #5B86E5 94.57%)",
-                  }}>
-
-            <img
-                src="/icons/workout-icon.svg"
-                alt="Sell a Workout"
-                className="xxxl:w-[32px] xxxl:h-[32px] xxl:w-[21px] xxl:h-[21px] sm:w-[21px] sm:h-[21px]"
-            />
-            </div>
-            {/* Text Content */}
-            <div className="flex-1 ">
-                <h3 className="font-semibold xxxl:text-[18px] xxl:text-sm xxxl:mb-2 xxl:mb-0">Sell a Workout</h3>
-                <p className="xxxl:text-[14px] xxl:text-xs text-gray-500 mr-[-80px]">Monetize exercise </p>
-            </div>
-            {/* SET UP Button */}
-            <span className="custom-setup xxxl:text-[14px] xxl:text-[12px]">SET UP</span>
-            </div>
+                  }}
+                >
+                  <img
+                    src="/icons/workout-icon.svg"
+                    alt="Sell a Workout"
+                    className="xxxl:w-[32px] xxxl:h-[32px] xxl:w-[21px] xxl:h-[21px] sm:w-[21px] sm:h-[21px]"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold xxxl:text-[18px] xxl:text-sm xxxl:mb-2 xxl:mb-0">
+                    Sell a Workout
+                  </h3>
+                  <p className="xxxl:text-[14px] xxl:text-xs text-gray-500 mr-[-80px]">
+                    Monetize exercise
+                  </p>
+                </div>
+                <span className="custom-setup xxxl:text-[14px] xxl:text-[12px]">
+                  SET UP
+                </span>
+              </div>
 
             <div className="flex items-center p-4 rounded-lg">
             <div className="xxxl:w-14 xxxl:h-14 xxl:w-10 xxl:h-10 sm:w-8 sm:h-8 flex items-center justify-center bg-gray-100 rounded-[12px] mr-4"
