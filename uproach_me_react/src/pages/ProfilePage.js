@@ -120,40 +120,45 @@ export default function ProfilePage() {
 
   const checkUsernameAvailability = useCallback(async () => {
     try {
-      const token = localStorage.getItem("authToken");
-      const uid = localStorage.getItem("userId");
+        const token = localStorage.getItem("authToken");
+        const uid = localStorage.getItem("userId");
 
-      if (!token || !uid) {
-        toast.error("Authentication details missing. Please log in again.");
-        return;
-      }
-
-      const availabilityResponse = await axios.get(
-        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/checkUsernameAvailability",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: { username: newProfileUrl },
+        if (!token || !uid) {
+            toast.error("Authentication details missing. Please log in again.");
+            return;
         }
-      );
 
-      console.log("Availability API Response:", availabilityResponse.data);
+        const availabilityResponse = await axios.get(
+            "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/checkUsernameAvailability",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params: { username: newProfileUrl },
+            }
+        );
 
-      if (availabilityResponse.data?.available) {
-        setIsAvailable(true);
-        setError("");
-      } else {
-        setIsAvailable(false);
-        setError(`Username "${newProfileUrl}" is not available.`);
-      }
+        console.log("Availability API Response:", availabilityResponse.data);
+
+        const { username, available } = availabilityResponse.data;
+
+        // If the username is not available but belongs to the current user
+        if (!available && username === profileData.username) {
+            setIsAvailable(true);
+            setError("");
+        } else if (available) {
+            setIsAvailable(true);
+            setError("");
+        } else {
+            setIsAvailable(false);
+            setError(`Username "${newProfileUrl}" is not available.`);
+        }
     } catch (error) {
-      console.error("Error checking username availability:", error);
-      setError(
-        "Failed to check username availability. Please try again later."
-      );
+        console.error("Error checking username availability:", error);
+        setError("Failed to check username availability. Please try again later.");
     }
-  }, [newProfileUrl]);
+}, [newProfileUrl, profileData.username]);
+
 
   // Handler for username input changes
   const handleUsernameChange = (e) => {
@@ -574,46 +579,48 @@ export default function ProfilePage() {
 
               <h2 className="text-lg font-semibold mt-8 mb-4 xxl:ml-[149px] xxxl:ml-[237px]">
                 Information
-              </h2>
-              <div className="bg-white p-8 xxl:w-[677px] sm:w-[298px] xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
+            </h2>
+            <div className="bg-white p-8 xxl:w-[677px] sm:w-full xxl:ml-[149px] xxxl:ml-[237px] rounded-md">
                 <div className="mb-6">
-                  <label className="block text-[12px] text-gray-700 font-medium mb-2">
-                    Profile URL
-                  </label>
-                  <div className="flex items-center text-[14px]">
-                    <span className="text-gray-500">Uproach.me/</span>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={newProfileUrl}
-                        onChange={handleUsernameChange}
-                        onBlur={checkUsernameAvailability} // Check availability when user leaves the input field
-                        className={`ml-1 text-gray-700 border rounded-md p-1 ${
-                          error ? "border-red-500" : "border-gray-300"
-                        }`}
-                      />
-                    ) : (
-                      <span className="ml-1 text-gray-700">
-                        {profileData.username}
-                      </span>
+                    <label className="block text-[12px] text-gray-700 font-medium mb-2">
+                        Profile URL
+                    </label>
+                    <div className="flex items-center text-[14px]">
+                        <span className="text-gray-500">Uproach.me/</span>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={newProfileUrl}
+                                onChange={handleUsernameChange}
+                                onBlur={checkUsernameAvailability} // Check availability when user leaves the input field
+                                className={`ml-1 text-gray-700 border rounded-md p-1 w-full ${
+                                    error ? "border-red-500" : "border-gray-300"
+                                }`}
+                            />
+                        ) : (
+                            <span className="ml-1 text-gray-700">
+                                {profileData.username}
+                            </span>
+                        )}
+                        {isEditing && ( // Only show icons when editing
+                            isAvailable ? (
+                                <img
+                                    src="/icons/green_tick.svg"
+                                    alt="Available"
+                                    className="ml-[-26px]"
+                                />
+                            ) : error ? (
+                                <img
+                                    src="/icons/red-x-icon.svg"
+                                    alt="Not Available"
+                                    className="ml-[-26px] w-[15px] h-[15px]"
+                                />
+                            ) : null
+                        )}
+                    </div>
+                    {isEditing && error && (
+                        <p className="text-red-500 text-sm mt-1">{error}</p>
                     )}
-                    {isAvailable ? (
-                      <img
-                        src="/icons/green_tick.svg"
-                        alt="Available"
-                        className="ml-auto"
-                      />
-                    ) : error ? (
-                      <img
-                        src="/icons/red-x-icon.svg"
-                        alt="Not Available"
-                        className="ml-auto w-[15px] h-[15px]"
-                      />
-                    ) : null}
-                  </div>
-                  {error && (
-                    <p className="text-red-500 text-sm mt-1">{error}</p>
-                  )}
                 </div>
 
                 <hr className="border-gray-300 mb-3" />
@@ -627,7 +634,7 @@ export default function ProfilePage() {
                       type="text"
                       value={newProfileName}
                       onChange={(e) => setNewProfileName(e.target.value)}
-                      className="text-[14px] text-gray-700 border rounded-md p-1"
+                      className="text-[14px] text-gray-700 border rounded-md p-1 w-full"
                     />
                   ) : (
                     <div className="text-[14px] text-gray-700">
@@ -645,6 +652,7 @@ export default function ProfilePage() {
                   {isEditing ? (
                     <textarea
                       value={newBio}
+                      rows={10}
                       onChange={(e) => setNewBio(e.target.value)}
                       className="text-[14px] text-gray-700 border rounded-md p-1 w-full"
                     />
