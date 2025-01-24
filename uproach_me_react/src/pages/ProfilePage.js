@@ -487,8 +487,8 @@ export default function ProfilePage() {
           <button
             className={`pb-2 px-4 font-medium ${
               activeTab === "profile"
-                ? "text-purple-600 border-b-2 border-purple-600"
-                : "text-gray-500 hover:text-purple-600"
+                ? "text-[rgb(97,57,255)] border-b-2 border-[rgb(97,57,255)]"
+                : "text-gray-500 hover:text-[rgb(97,57,255)]"
             }`}
             onClick={() => setActiveTab("profile")}
           >
@@ -497,8 +497,8 @@ export default function ProfilePage() {
           <button
             className={`pb-2 px-4 font-medium ${
               activeTab === "account"
-                ? "text-purple-600 border-b-2 border-purple-600"
-                : "text-gray-500 hover:text-purple-600"
+                ? "text-[rgb(97,57,255)] border-b-2 border-[rgb(97,57,255)]"
+                : "text-gray-500 hover:text-[rgb(97,57,255)]"
             }`}
             onClick={() => setActiveTab("account")}
           >
@@ -507,8 +507,8 @@ export default function ProfilePage() {
           <button
             className={`pb-2 px-4 font-medium ${
               activeTab === "payout-settings"
-                ? "text-purple-600 border-b-2 border-purple-600"
-                : "text-gray-500 hover:text-purple-600"
+                ? "text-[rgb(97,57,255)] border-b-2 border-[rgb(97,57,255)]"
+                : "text-gray-500 hover:text-[rgb(97,57,255)]"
             }`}
             onClick={() => setActiveTab("payout-settings")}
           >

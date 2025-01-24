@@ -83,12 +83,12 @@ const PagesMenu = () => {
       <h1 className="text-2xl font-bold mb-6">Pages</h1>
 
       {/* Tabs */}
-      <div className="flex mb-6 border-b border-gray-200">
+      <div className="flex border-b border-gray-200  mb-8 overflow-x-auto">
         <button
-          className={`pb-2  ${
+          className={`pb-2 px-4 font-medium  ${
             activeTab === "event"
-              ? "text-[#6139FF] border-b-2 border-[#6139FF] font-semibold"
-              : "text-gray-600"
+                ? "text-[rgb(97,57,255)] border-b-2 border-[rgb(97,57,255)]"
+                : "text-gray-500 hover:text-[rgb(97,57,255)]"
           }`}
           onClick={() => setActiveTab("event")}
         >
@@ -97,8 +97,8 @@ const PagesMenu = () => {
         <button
           className={`pb-2 ml-[22px] ${
             activeTab === "link_in_bio"
-              ? "text-[#6139FF] border-b-2 border-[#6139FF] font-semibold"
-              : "text-gray-600 "
+                ? "text-[rgb(97,57,255)] border-b-2 border-[rgb(97,57,255)]"
+                : "text-gray-500 hover:text-[rgb(97,57,255)]"
           }`}
           onClick={() => setActiveTab("link in bio")}
         >
@@ -107,8 +107,8 @@ const PagesMenu = () => {
         <button
           className={`pb-2 ml-[22px] ${
             activeTab === "sell_product"
-              ? "text-[#6139FF] border-b-2 border-[#6139FF] font-semibold"
-              : "text-gray-600 "
+                ? "text-[rgb(97,57,255)] border-b-2 border-[rgb(97,57,255)]"
+                : "text-gray-500 hover:text-[rgb(97,57,255)]"
           }`}
           onClick={() => setActiveTab("Sell Product")}
         >
