@@ -47,7 +47,7 @@ function App() {
         }}
       />
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/login" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
@@ -67,7 +67,7 @@ function App() {
         <Route path="/createevent/oneonone" element={<OneOnOnePage />} />
         <Route path="/createevent/group" element={<GroupPage />} />
         <Route
-          path="/dashboard"
+          path="/"
           element={
             <ProtectedRoute>
             <DashboardLayout showHeader={true}>
