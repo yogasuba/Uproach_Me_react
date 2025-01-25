@@ -125,7 +125,7 @@ export default function SigninPage() {
           <h2 className="text-lg font-semibold">Loading... Please wait</h2>
         </div>
       )}
-      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6 lg:p-12">
+      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6">
         <div className="max-w-md xxl:ml-[3.5rem] sm:ml-[12px]">
           <img src={ICONS.LOGO} alt="Uproach Me Logo" width={130} height={50} className="mb-4" />
           <h1 className="custom-heading mb-3 tracking-tight sm:text-xl xxl:text-3xl">Login to Uproach Me</h1>

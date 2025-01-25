@@ -20,7 +20,7 @@ import IntegrationPage from "./IntegrationPage";
 import BookingsMenu from "./BookingsMenu";
 import PagesMenu from "./PagesMenu";
 import AnalyticsMenu from "./AnalyticsMenu";
-import OneOnOnePage from "./OneOnOnePage";
+import OneOnOnePage from "./OneonOnePage";
 import GroupPage from "./GroupPage";
 import AvailabilityPage from "./AvailabilityMenu";
 export{BookingPage,

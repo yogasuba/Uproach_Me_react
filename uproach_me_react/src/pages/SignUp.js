@@ -133,7 +133,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6 lg:p-12">
+      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6 lg:p-3">
         <div className="max-w-md xxl:ml-[3.5rem] sm:ml-[12px]">
           <img src={ICONS.LOGO} alt="Uproach Me Logo" width={130} height={50} className="mb-4" />
           <h1 className="custom-heading mb-3 tracking-tight sm:text-xl xxl:text-3xl">Sign up to Uproach Me</h1>
