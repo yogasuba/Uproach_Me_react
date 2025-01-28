@@ -89,73 +89,91 @@ function App() {
         <Route
           path="/faq"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <FaqPage />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/feedback"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <FeedbackPage />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/billingplan"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <BillingPopup />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/billing"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <BillingPage />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/integration"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <IntegrationPage />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/bookings"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <BookingsMenu />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/pages"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <PagesMenu />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/analytics"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <AnalyticsMenu />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/availability"
           element={
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <AvailabilityPage />
             </DashboardLayout>
+            </ProtectRoute>
           }
         />
       </Routes>
