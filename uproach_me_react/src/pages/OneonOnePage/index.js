@@ -6,10 +6,11 @@ import OneOnOneStep3 from "./OneOnOneStep3";
 import OneOnOneStep4 from "./OneOnOneStep4";
 
 const OneOnOnePage = () => {
-  const [step, setStep] = useState(1);
-  const [weekDays, setWeekDays] = useState([]);
-  const [selectedDayIndex, setSelectedDayIndex] = useState(null);
-  const navigate = useNavigate();
+    const [weekDays, setWeekDays] = useState([]);
+    const [selectedDays, setSelectedDays] = useState([]); // Updated for multiple selections
+    const [meetingType, setMeetingType] = useState("");
+    const [step, setStep] = useState(1);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const today = new Date();
@@ -37,12 +38,18 @@ const OneOnOnePage = () => {
           <OneOnOneStep2
             setStep={setStep}
             weekDays={weekDays}
-            selectedDayIndex={selectedDayIndex}
-            setSelectedDayIndex={setSelectedDayIndex}
+            selectedDays={selectedDays} // Pass selectedDays array
+            setSelectedDays={setSelectedDays} // Pass setter for selectedDays
           />
         );
       case 3:
-        return <OneOnOneStep3 setStep={setStep} />;
+        return (
+        <OneOnOneStep3
+          setStep={setStep}
+          meetingType={meetingType}
+          setMeetingType={setMeetingType} // Make sure to pass this function
+        />
+      );
       case 4:
         return <OneOnOneStep4 setStep={setStep} navigate={navigate} />;
       default:
@@ -103,12 +110,12 @@ const OneOnOnePage = () => {
           <div className="flex overflow-x-auto scrollbar-hide space-x-3 items-center mb-6">
             {weekDays.map((date, index) => {
               const [day, dayNumber, month] = date.split(" ");
-              const isSelected = selectedDayIndex === index;
+              const isSelected = selectedDays === index;
 
               return (
                 <div
                   key={index}
-                  onClick={() => setSelectedDayIndex(index)}
+                  onClick={() => setSelectedDays(index)}
                   className={`flex-shrink-0 text-center pt-[7px] w-[51px] h-[38.014px] rounded-lg cursor-pointer ${
                     isSelected
                       ? "bg-blue-100 text-blue-700 border border-blue-500"

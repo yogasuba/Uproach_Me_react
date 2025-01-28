@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast'; // Import Toaster
 import { AllContent, AllCountries, AllVisitorSources, AllRecentPurchases } from "./components";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectRoute from "./components/ProtectedRoute";
 import {
   SignUp,
   SignIn,
@@ -47,7 +47,7 @@ function App() {
         }}
       />
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/login" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
@@ -67,113 +67,95 @@ function App() {
         <Route path="/createevent/oneonone" element={<OneOnOnePage />} />
         <Route path="/createevent/group" element={<GroupPage />} />
         <Route
-          path="/dashboard"
+          path="/"
           element={
-            
-            <DashboardLayout showHeader={true}>
-              <DashboardPage />
-            </DashboardLayout>
-          
+            <ProtectRoute>
+              <DashboardLayout>
+                <DashboardPage />
+              </DashboardLayout>
+            </ProtectRoute>
           }
         />
         <Route
           path="/profile"
           element={
-            <ProtectedRoute>
+            <ProtectRoute>
             <DashboardLayout showHeader={false}>
               <ProfilePage />
             </DashboardLayout>
-            </ProtectedRoute>
+            </ProtectRoute>
           }
         />
         <Route
           path="/faq"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <FaqPage />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/feedback"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <FeedbackPage />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/billingplan"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <BillingPopup />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/billing"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <BillingPage />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/integration"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <IntegrationPage />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/bookings"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <BookingsMenu />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/pages"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <PagesMenu />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/analytics"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <AnalyticsMenu />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
         <Route
           path="/availability"
           element={
-            <ProtectedRoute>
             <DashboardLayout showHeader={false}>
               <AvailabilityPage />
             </DashboardLayout>
-            </ProtectedRoute>
           }
         />
       </Routes>

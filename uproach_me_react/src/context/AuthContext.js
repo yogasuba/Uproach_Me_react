@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Add a loading state
   const [fromSignup, setFromSignup] = useState(false);
   const navigate = useNavigate();
 
@@ -14,20 +15,22 @@ export const AuthProvider = ({ children }) => {
     if (storedUser) {
       setUser(storedUser);
     }
+    setLoading(false); // Mark loading as complete
   }, []);
 
-const login = async (credentials) => {
-  const loggedInUser = { id: 1, name: "User" }; // Example user object
-  setUser(loggedInUser);
-  localStorage.setItem("user", JSON.stringify(loggedInUser));
-  setFromSignup(false);
-  navigate("/dashboard"); // Ensure this happens after the above
-};
+  const login = async (credentials) => {
+    // Perform login logic (use API call here)
+    const loggedInUser = { id: 1, name: "User" }; // Example user object
+    setUser(loggedInUser);
+    localStorage.setItem("user", JSON.stringify(loggedInUser)); // Persist user
+    setFromSignup(false);
+    navigate("/");
+  };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user"); // Clear persisted user
-    navigate("/");
+    navigate("/login");
   };
 
   const completeSignup = () => {
@@ -35,12 +38,12 @@ const login = async (credentials) => {
     setUser(signedUpUser);
     localStorage.setItem("user", JSON.stringify(signedUpUser)); // Persist user
     setFromSignup(true);
-    navigate("/dashboard");
+    navigate("/");
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, fromSignup, login, logout, completeSignup }}
+      value={{ user, loading, fromSignup, login, logout, completeSignup }}
     >
       {children}
     </AuthContext.Provider>

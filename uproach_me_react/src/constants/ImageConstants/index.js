@@ -17,6 +17,9 @@ import bank from "../../assets/image/bank.png";
 import stripe from "../../assets/image/stripe.svg";
 import paypal from "../../assets/image/paypal.svg";
 import strip_icon from "../../assets/image/strip_icon.svg"
+import calendar_tick from "../../assets/image/calendar_tick.svg"
+import re_30 from "../../assets/image/re-30.svg"
+import cancel_symbol from "../../assets/image/cancel-symbol.svg"
 export const IMAGES = {
     ARROW_LEFT : leftarrow,
     ARROW_RIGHT : rightarrow,
@@ -37,4 +40,7 @@ export const IMAGES = {
     STRIPE :stripe,
     PAYPAL : paypal,
     STRIPE_ICON : strip_icon,
+    CALENDAR_TICK : calendar_tick,
+    RE_30 : re_30,
+    CANCEL_SYMBOL : cancel_symbol
 };

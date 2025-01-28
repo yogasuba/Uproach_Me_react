@@ -11,7 +11,7 @@ export default function Sidebar() {
 
   // Navigation links
   const navLinks = [
-    { to: "/dashboard", icon: ICONS.DASHBOARD, label: "Dashboard" },
+    { to: "/", icon: ICONS.DASHBOARD, label: "Dashboard" },
     { to: "/bookings", icon:ICONS.BOOKING, label: "Booking" },
     { to: "/pages", icon:ICONS.SERVICES, label: "Pages" },
     { to: "/analytics", icon:ICONS.ANALYTICS, label: "Analytics" },
@@ -286,7 +286,7 @@ export default function Sidebar() {
                 // Clear token from local storage
                 localStorage.removeItem("authToken");
                 // Redirect to sign-in page
-                window.location.href = "/";
+                window.location.href = "/login";
               }}
             >
                 <img

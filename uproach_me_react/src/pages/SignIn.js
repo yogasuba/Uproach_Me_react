@@ -59,7 +59,7 @@ export default function SigninPage() {
             // Redirect based on onboarding completion status
             // Redirect based on onboarding completion status
             if (isOnboarded) {
-              navigate('/dashboard');
+              navigate('/');
           } else {
               navigate('/welcome');
           }
@@ -105,7 +105,7 @@ export default function SigninPage() {
         toast.success('User login successfully');
         setTimeout(() => {
           setLoading(false); // Optionally set loading back to false
-          navigate('/dashboard');
+          navigate('/');
         }, 500); // Adjust delay if needed
       } 
     } catch (err) {

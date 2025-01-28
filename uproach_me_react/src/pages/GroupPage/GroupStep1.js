@@ -129,7 +129,7 @@ const GroupStep1 = ({ setStep }) => {
                     <button
                         onClick={() => {
                             if (step === 1) {
-                                navigate('/'); // Navigate to the dashboard for step 1
+                                navigate('/login'); // Navigate to the dashboard for step 1
                             } else {
                                 setStep(step - 1); // Go to the previous step for other steps
                             }

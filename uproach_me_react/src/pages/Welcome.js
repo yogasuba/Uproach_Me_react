@@ -191,7 +191,7 @@ const WelcomePage = () => {
 
           <p className="mt-3 text-xs text-gray-500">
             Already have an account?{" "}
-            <a href="/" className="text-purple-600 hover:underline font-bold">
+            <a href="/login" className="text-purple-600 hover:underline font-bold">
               Sign in
             </a>
           </p>
