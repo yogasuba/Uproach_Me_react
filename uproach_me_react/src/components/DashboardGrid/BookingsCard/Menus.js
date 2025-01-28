@@ -212,7 +212,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
                     }
                   `}
                 </style>
-                <ReactQuill
+                {/* <ReactQuill
                   theme="snow"
                   value={message}
                   onChange={setMessage}
@@ -225,7 +225,7 @@ const EventDetailsPopup = ({ isOpen, onClose, selectedTab }) => {
                       ["link"], // Insert links
                     ],
                   }}
-                />
+                /> */}
   
                 {/* Emoji Picker Button */}
                 <div className="absolute top-[53px] xxl:mr-[305px] xxxl:mr-[428px] right-2">

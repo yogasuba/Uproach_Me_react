@@ -1,4 +1,5 @@
 import React from "react";
+import Calendar from "../components/Availability/Calendar";
 
 const AvailabilityPage = () => {
   return (
@@ -27,8 +28,9 @@ const AvailabilityPage = () => {
 
       {/* Calendar Section */}
       <div className="bg-white rounded-lg shadow p-4">
-        <CalendarHeader />
-        <CalendarGrid />
+        {/* <CalendarHeader />
+        <CalendarGrid /> */}
+        <Calendar/>
       </div>
     </div>
   );
