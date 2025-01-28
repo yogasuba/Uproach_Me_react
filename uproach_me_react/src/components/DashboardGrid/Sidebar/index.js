@@ -286,7 +286,7 @@ export default function Sidebar() {
                 // Clear token from local storage
                 localStorage.removeItem("authToken");
                 // Redirect to sign-in page
-                window.location.href = "/login";
+                window.location.href = "/";
               }}
             >
                 <img
