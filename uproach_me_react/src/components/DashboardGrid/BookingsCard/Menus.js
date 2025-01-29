@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "quill/dist/quill.snow.css"; // Import Quill styles
-import ReactQuill from "react-quill"; // Rich text editor
 import EmojiPicker from "@emoji-mart/react"; // Correct default import for Emoji picker
 import data from "@emoji-mart/data";
 

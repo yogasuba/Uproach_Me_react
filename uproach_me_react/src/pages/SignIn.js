@@ -17,6 +17,8 @@ export default function SigninPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const authToken = localStorage.getItem("authToken"); // Check if user is already authenticated
+
 
 
   const togglePasswordVisibility = () => {
@@ -75,49 +77,53 @@ export default function SigninPage() {
 };
 
 
-  const handleEmailSignin = async (e) => {
-    e.preventDefault();
-    const auth = getAuth(firebaseApp);
-    setLoading(true); // Set loading to true before making the request
+useEffect(() => {
+  if (authToken) {
+    navigate("/"); // Redirect logged-in users to the dashboard
+  }
+}, [authToken, navigate]);
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user
-      const idToken = await user.getIdToken();
+const handleEmailSignin = async (e) => {
+  e.preventDefault();
+  const auth = getAuth();
+  
+  setLoading(true); // Show loading state before authentication
 
-      const response = await axios.post('https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin', 
-        { idToken },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    const idToken = await user.getIdToken();
 
+    const response = await axios.post(
+      "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin",
+      { idToken },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
-      if (response.status === 200) {
-        const { token, uid } = response.data;
+    if (response.status === 200) {
+      const { token, uid } = response.data;
 
-        // Store the token and uid in localStorage
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userId', uid);
+      // Store the token and user ID in localStorage
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", uid);
 
-        toast.success('User login successfully');
-        setTimeout(() => {
-          setLoading(false); // Optionally set loading back to false
-          navigate('/');
-        }, 500); // Adjust delay if needed
-      } 
-    } catch (err) {
-      setLoading(false); // Optionally set loading back to false
-      if (err.code || (err.response && err.response.status === 400)) {
-        toast.error('Invalid login credentials. Please check your email and password.');
-      } else if (err.code === 'auth/too-many-requests') {
-        toast.error('Too many login attempts. Please try again later.');
-      } 
+      toast.success("User logged in successfully");
+
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/"); // Redirect to the dashboard after successful login
+      }, 500);
     }
-  };
+  } catch (err) {
+    setLoading(false);
 
+    if (err.code === "auth/too-many-requests") {
+      toast.error("Too many login attempts. Please try again later.");
+    } else {
+      toast.error("Invalid login credentials. Please check your email and password.");
+    }
+  }
+};
   return (
     <div className="min-h-screen flex">
       {loading && (

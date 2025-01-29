@@ -2,8 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast'; // Import Toaster
 import { AllContent, AllCountries, AllVisitorSources, AllRecentPurchases } from "./components";
-import { AuthProvider } from "./context/AuthContext";
-import ProtectRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the protected route
+
+
 import {
   SignUp,
   SignIn,
@@ -29,7 +30,8 @@ import {
   AnalyticsMenu,
   OneOnOnePage,
   GroupPage,
-  AvailabilityPage,
+  CalendarPage,
+  Availability,
 } from "./pages";
 import CreateEventTypeModal from "./components/DashboardGrid/CreateEventTypeModal";
 import DashboardLayout from './layouts/DashboardLayout';
@@ -38,7 +40,7 @@ function App() {
   return (
 
     <Router>
-    <AuthProvider>
+
       <Toaster
         position="top-center" 
         reverseOrder={false}  
@@ -66,118 +68,22 @@ function App() {
         <Route path="/create-event-modal" element={<CreateEventTypeModal />} />
         <Route path="/createevent/oneonone" element={<OneOnOnePage />} />
         <Route path="/createevent/group" element={<GroupPage />} />
-        <Route
-          path="/"
-          element={
-            <ProtectRoute>
-              <DashboardLayout>
-                <DashboardPage />
-              </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <ProfilePage />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/faq"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <FaqPage />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/feedback"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <FeedbackPage />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/billingplan"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <BillingPopup />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/billing"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <BillingPage />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/integration"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <IntegrationPage />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/bookings"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <BookingsMenu />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/pages"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <PagesMenu />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/analytics"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <AnalyticsMenu />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
-        <Route
-          path="/availability"
-          element={
-            <ProtectRoute>
-            <DashboardLayout showHeader={false}>
-              <AvailabilityPage />
-            </DashboardLayout>
-            </ProtectRoute>
-          }
-        />
+        <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<DashboardLayout><DashboardPage /></DashboardLayout>} />
+            <Route path="/profile" element={<DashboardLayout showHeader={false}><ProfilePage /></DashboardLayout>} />
+            <Route path="/faq" element={<DashboardLayout showHeader={false}><FaqPage /></DashboardLayout>} />
+            <Route path="/feedback" element={<DashboardLayout showHeader={false}><FeedbackPage /></DashboardLayout>} />
+            <Route path="/billing" element={<DashboardLayout showHeader={false}><BillingPage /></DashboardLayout>} />
+            <Route path="/billingplan" element={<DashboardLayout showHeader={false}><BillingPopup /></DashboardLayout>}/>
+            <Route path="/integration" element={<DashboardLayout showHeader={false}><IntegrationPage /></DashboardLayout>} />
+            <Route path="/bookings" element={<DashboardLayout showHeader={false}><BookingsMenu /></DashboardLayout>} />
+            <Route path="/pages" element={<DashboardLayout showHeader={false}><PagesMenu /></DashboardLayout>} />
+            <Route path="/analytics" element={<DashboardLayout showHeader={false}><AnalyticsMenu /></DashboardLayout>} />
+            <Route path="/calendar" element={<DashboardLayout showHeader={false}><CalendarPage /></DashboardLayout>} />
+            <Route path="/availability" element={<DashboardLayout showHeader={false}><Availability /></DashboardLayout>} />
+        </Route>
       </Routes>
-      </AuthProvider>
+
     </Router>
 
   );

@@ -16,6 +16,7 @@ export default function Sidebar() {
     { to: "/pages", icon:ICONS.SERVICES, label: "Pages" },
     { to: "/analytics", icon:ICONS.ANALYTICS, label: "Analytics" },
     { to: "/teams", icon:ICONS.USERS, label: "Teams" },
+    { to: "/calendar", icon:ICONS.BOOKING, label: "Calendar" },
     { to: "/availability", icon:ICONS.AVAILABILITY, label: "Availability" },
   ];
 
@@ -118,7 +119,7 @@ export default function Sidebar() {
         <hr className="my-6 border-muted" />
 
         {/* Try Pro Button */}
-        <div className="mt-[149px] space-y-4 relative mb-2 ">
+        <div className="mt-[110px] space-y-4 relative mb-2 ">
           <button className="bg-[rgba(234,234,241,1)] text-black p-4 rounded-full w-[169px] h-[43px] text-[16px] flex items-center justify-center space-x-2">
             <img src="/icons/zap.svg" alt="Pro Icon" className="w-[20px] h-[20px]" />
             <span>Try Pro for free</span>

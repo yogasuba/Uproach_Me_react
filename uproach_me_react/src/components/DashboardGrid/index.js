@@ -185,8 +185,8 @@ const DashboardGrid = () => {
             </div>
         </div>
 
-{/* Horizontal Line */}
-<hr className="my-6 border-t border-gray-300 w-[312px]" />
+      {/* Horizontal Line */}
+      <hr className="my-6 border-t border-gray-300 w-full" />
 
 {/* Second Row */}
 <div className="grid xxxl:gap-4 xxl:gap-4 sm:gap-8 sm:grid-cols-1 sm:w-[295px] xxl:w-full lg:grid-cols-3">

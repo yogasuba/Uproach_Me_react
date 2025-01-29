@@ -35,6 +35,8 @@ import group from "../../assets/icons/group.svg"
 import collective from "../../assets/icons/collective.svg"
 import round_robin from "../../assets/icons/round_robin.svg"
 import right_arrow from "../../assets/icons/right_arrow.svg"
+import plus_circle from "../../assets/icons/plus-circle.svg"
+import x from "../../assets/icons/x.svg"
 export const ICONS = {
     LOGO : logo,
     APPLE_ICON : appleicon,
@@ -72,5 +74,7 @@ export const ICONS = {
     GROUP : group,
     COLLECTIVE : collective,
     ROUND_ROBIN : round_robin,
-    RIGHT_ARROW : right_arrow
+    RIGHT_ARROW : right_arrow,
+    PLUS_CIRCLE : plus_circle,
+    X :x
 }

@@ -1,22 +1,10 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+const ProtectedRoute = () => {
+  const authToken = localStorage.getItem("authToken"); // Check for auth token
 
-  // Show a loading spinner or placeholder while checking authentication
-  if (loading) {
-    return <div>Loading...</div>; // Replace with a loader component if desired
-  }
-
-  // Redirect to login if user is not authenticated
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Render the protected component if user is authenticated
-  return children;
+  return authToken ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
-export default ProtectRoute;
+export default ProtectedRoute;

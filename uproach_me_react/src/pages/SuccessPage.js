@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Lottie from "lottie-react";
-import { useAuth } from "../context/AuthContext";
 
 
 
@@ -16,7 +15,6 @@ export default function SuccessPage() {
   const [animationData, setAnimationData] = useState(null);
   const [profilePic, setProfilePic] = useState("/SVGRepo_iconCarrier.svg");
   const [profilename, setProfilename] = useState("User");
-  const { completeSignup } = useAuth();
 
 
   useEffect(() => {
@@ -62,8 +60,6 @@ export default function SuccessPage() {
   }, []);
 
   const handleSubmitSuccessPage = async () => {
-    await completeSignup(); // Ensure `user` is updated
-
     navigate("/");
   };
 
