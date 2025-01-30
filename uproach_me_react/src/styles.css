@@ -1,0 +1,17 @@
+.custom-calendar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .custom-calendar-container .rmdp-wrapper {
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+  
+  .custom-calendar-container .rmdp-week {
+    justify-content: center !important;
+  }
+  

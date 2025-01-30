@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import { ICONS } from '../constants';
-import DatePicker from "react-multi-date-picker";
-import "react-multi-date-picker/styles/layouts/mobile.css";
+import { Calendar } from "react-multi-date-picker";
+import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
+import DateObject from "react-date-object";
+import "../styles.css"
+import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 
 
@@ -28,6 +32,22 @@ const generateTimeSlots = (start, end, interval) => {
 
 const timeOptions = generateTimeSlots(7 * 60 + 45, 22 * 60, 15);
 
+dayjs.extend(isSameOrBefore);
+
+const generateDateRange = (start, end) => {
+  const startDate = dayjs(start);
+  const endDate = dayjs(end);
+  const dates = [];
+
+  let currentDate = startDate;
+  while (currentDate.isSameOrBefore(endDate)) {
+    dates.push(currentDate.format("DD MMMM YYYY"));
+    currentDate = currentDate.add(1, "day");
+  }
+
+  return dates;
+};
+
 const TimeDropdown = ({ selectedTime, onChange, placeholder }) => (
   <Select
     options={timeOptions}
@@ -38,23 +58,25 @@ const TimeDropdown = ({ selectedTime, onChange, placeholder }) => (
   />
 );
 const UnavailableDatesPicker = ({ isOpen, onClose, onSave }) => {
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [values, setValues] = useState([new DateObject()]);
 
   return isOpen ? (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg p-6 w-[400px] shadow-lg">
+      <div className="bg-white rounded-lg p-6 w-[305px] shadow-lg">
         <h2 className="text-lg font-semibold mb-3">Select date(s) you are unavailable on</h2>
-
-        <DatePicker
-          multiple
-          value={selectedDates}
-          onChange={setSelectedDates}
-          className="w-full"
+        <div>
+        <Calendar 
+          value={values} 
+          onChange={setValues} 
+          range 
+          rangeHover 
+          className="custom-calendar-container"
         />
+        </div>
 
         <div className="flex justify-between mt-4">
-          <button onClick={onClose} className="px-4 py-2 border rounded-md">Cancel</button>
-          <button onClick={() => onSave(selectedDates)} className="px-4 py-2 bg-black text-white rounded-md">Block dates</button>
+          <button onClick={onClose} className="px-10 py-2 border text-[14px] rounded-full bg-[#F3F4F6]">Cancel</button>
+          <button onClick={() => onSave(values)} className="px-7 py-2 bg-black text-white text-[14px] rounded-full">Block dates</button>
         </div>
       </div>
     </div>
@@ -115,19 +137,20 @@ const Availability = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl flex flex-col lg:flex-row">
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h1 class="text-2xl font-bold mb-6">Availability</h1>
+      <div className="bg-white p-6 rounded-lg shadow-md w-full flex flex-col lg:flex-row">
         <div className="w-full lg:w-2/3">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-[18px] font-semibold">Default</h2>
-            <button className="px-6 py-2 bg-purple-600 text-white text-[14px] rounded-full hover:bg-purple-700 lg:mr-[22px] mr-0">
+            <button className="px-6 py-2 bg-[rgb(97,57,255)] text-white text-[14px] rounded-full hover:bg-customPurple lg:mr-[26px] mr-0">
               Save Changes
             </button>
           </div>
 
           {Object.keys(availability).map((day) => (
             <div key={day} className="mb-6">
-              <div className="flex flex-wrap items-start space-x-3">
+              <div className="flex flex-wrap items-start space-x-2">
                 <input
                   type="checkbox"
                   checked={availability[day].enabled}
@@ -171,21 +194,44 @@ const Availability = () => {
           ))}
         </div>
 
-        <div className="w-full lg:w-[40%] h-[160px] border border-[#F2F2F2] p-4 rounded-lg mt-6 lg:mt-0">
-          <h3 className="text-[16px] font-semibold mb-2">Block dates</h3>
-          <p className="text-gray-500 text-[14px]">Add Dates When You Will Be Unavailable To Take Calls</p>
-          <button onClick={() => setIsModalOpen(true)} className="text-[14px] w-full mt-3 px-4 py-2 bg-[#F4F4F6] rounded-full">
+        <div className="w-full lg:w-[47%] border border-[#F2F2F2] p-4 rounded-lg mt-6 lg:mt-0" style={{ minHeight: '183px', maxHeight: blockedDates.length > 0 ? `${160 + blockedDates.length * 40}px` : '160px', overflow: 'hidden' }}>
+        <h2 className="text-[16px] font-semibold mb-2">Set Availability</h2>
+        <p className="text-gray-500 text-[14px] mb-4">Add Dates When You Will Be Unavailable To Take Calls</p>
+        <button onClick={() => setIsModalOpen(true)} className="text-[14px] w-full mt-3 px-4 py-2 bg-[#F4F4F6] rounded-full">
           Add unavailable dates
         </button>
-        <UnavailableDatesPicker 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          onSave={(dates) => {
-            setBlockedDates(dates);
-            setIsModalOpen(false);
-          }}
-        />
+
+        <UnavailableDatesPicker
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSave={(selectedDates) => {
+              const [start, end] = selectedDates;
+              const newDates = generateDateRange(start, end);
+              setBlockedDates((prevDates) => [...prevDates, ...newDates]);
+              setIsModalOpen(false);
+            }}
+          />
+
+        <div className="mt-4">
+            {blockedDates.length > 0 ? (
+              <ul>
+                {blockedDates.map((date, index) => (
+                  <li key={index} className="flex justify-between items-center py-2 border-b text-[14px]">
+                    <span>{date}</span>
+                    <span className="text-gray-500">Unavailable</span>
+                    <button onClick={() => setBlockedDates(blockedDates.filter((_, i) => i !== index))}>
+                      <img src={ICONS.TRASH} alt="Delete" className="w-4 h-4" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 text-[14px]">No blocked dates added</p>
+            )}
         </div>
+    </div>
+
+
       </div>
     </div>
   );
