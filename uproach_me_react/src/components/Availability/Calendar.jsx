@@ -9,22 +9,22 @@ export default function Calendar() {
     const [currentTime, setCurrentTime] = useState(new Date())
 
     useEffect(() => {
-        // Scroll to the current time on mount
-        const currentMinute = currentTime.getHours() * 60 + currentTime.getMinutes()
-        container.current.scrollTop =
-            ((container.current.scrollHeight - containerNav.current.offsetHeight - containerOffset.current.offsetHeight) *
-                currentMinute) /
-            1440
+        const currentMinute = currentTime.getHours() * 60 + currentTime.getMinutes();
+        if (container.current) {
+            container.current.scrollTop =
+                ((container.current.scrollHeight - containerNav.current.offsetHeight - containerOffset.current.offsetHeight) *
+                    currentMinute) /
+                1440;
+        }
 
-        // Update the current time every minute
         const interval = setInterval(() => {
-            setCurrentTime(new Date())
-        }, 60000)
+            setCurrentTime(new Date());
+        }, 60000);
 
-        return () => clearInterval(interval)
-    }, [])
+        return () => clearInterval(interval);
+    }, [currentTime]);
 
-    const hours = Array.from({ length: 24 }, (_, i) => i)
+    const hours = Array.from({ length: 24 }, (_, i) => i);
     const days = [
         { short: 'M', long: 'Mon', date: 10 },
         { short: 'T', long: 'Tue', date: 11 },
@@ -33,11 +33,10 @@ export default function Calendar() {
         { short: 'F', long: 'Fri', date: 14 },
         { short: 'S', long: 'Sat', date: 15 },
         { short: 'S', long: 'Sun', date: 16 }
-    ]
+    ];
 
-    // Calculate the needle position
-    const totalMinutes = currentTime.getHours() * 60 + currentTime.getMinutes()
-    const needlePosition = `calc(${(totalMinutes / 1440) * 100}% - 7px)`
+    const totalMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+    const needlePosition = `calc(${(totalMinutes / 1440) * 100}% - 7px)`;
 
     return (
         <div className="flex h-screen flex-col overflow-scroll overflow-x-hidden overflow-y-hidden">
@@ -75,7 +74,6 @@ export default function Calendar() {
                         </div>
                     </div>
                     <div className="relative flex flex-auto">
-                        {/* SVG Needle */}
                         <div
                             className="absolute left-[50px] z-20 w-[138px] h-[14px]"
                             style={{ top: needlePosition }}
@@ -91,7 +89,6 @@ export default function Calendar() {
                         </div>
                         <div className="sticky left-0 z-10 w-14 flex-none bg-white ring-1 ring-gray-200" />
                         <div className="grid flex-auto grid-cols-1 grid-rows-1">
-                            {/* Hours */}
                             <div
                                 className="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-200"
                                 style={{ gridTemplateRows: 'repeat(24, minmax(6rem, 1fr))' }}
@@ -113,16 +110,12 @@ export default function Calendar() {
                                     </div>
                                 ))}
                             </div>
-
-                            {/* Events */}
                             <ol
                                 className="col-start-1 col-end-2 row-start-1 grid grid-cols-1 sm:grid-cols-7 sm:pr-8"
                                 style={{ gridTemplateRows: '1.75rem repeat(288, minmax(0, 1fr)) auto' }}
                             >
-                                {/* Example Event */}
                                 <li className="relative mt-px flex sm:col-start-3" style={{ gridRow: '74 / span 12' }}>
-                                    <a
-                                        href="#"
+                                    <button
                                         className="group absolute inset-1 flex flex-row overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs/5 hover:bg-blue-100"
                                     >
                                         <div className="w-1 bg-blue-700"></div>
@@ -132,7 +125,7 @@ export default function Calendar() {
                                                 <time dateTime="2022-01-12T06:00">6:00 AM</time>
                                             </p>
                                         </div>
-                                    </a>
+                                    </button>
                                 </li>
                             </ol>
                         </div>
