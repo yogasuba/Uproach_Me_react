@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import {ICONS } from '../../constants';
 
 const OneOnOneStep3 = ({ setStep, meetingType, setMeetingType }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const mediaOptions = [
+    { value: "google-meet", label: "G Meet", icon: ICONS.GOOGLE_MEET },
+    { value: "zoom-meet", label: "Zoom", icon: ICONS.ZOOM_MEET },
+    { value: "in-person", label: "In Person", icon: ICONS.INPERSON },
+    { value: "phone-call", label: "Phone Call", icon: ICONS.CALL },
+  ];
+
   const updateLocation = async () => {
     const uid = localStorage.getItem("userId");
     const token = localStorage.getItem("authToken");
@@ -12,7 +22,7 @@ const OneOnOneStep3 = ({ setStep, meetingType, setMeetingType }) => {
     const requestBody = {
       uid,
       eventId,
-      location: meetingType, // Use the meetingType selected by the user
+      location: meetingType,
     };
 
     try {
@@ -35,23 +45,39 @@ const OneOnOneStep3 = ({ setStep, meetingType, setMeetingType }) => {
       <p className="text-[14px] text-gray-600 text-center mb-6">
         Decide whether you would like to meet in person or a web conference.
       </p>
-      <div className="mb-6">
+      
+      <div className="relative mb-6">
         <label className="block text-gray-700 text-[14px] font-medium mb-2">
           How do you want to meet?
         </label>
-        <select
-          value={meetingType}
-          onChange={(e) => setMeetingType(e.target.value)}
-          className="custom-inputfeild w-full mb-[10rem] text-[14px] text-[#80828D] p-[12px] border border-[#CCCDD6] rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
-        >
-          <option value="" disabled>
-            Choose how you'll meet
-          </option>
-          <option value="google-meet">Google Meet</option>
-          <option value="zoom-meet">Zoom Meet</option>
-          <option value="zoom-meet">Face to Face</option>
-        </select>
+        <div className="relative mb-[15rem]">
+          <button 
+            className="w-full text-[14px] text-[#80828D] p-[12px] border border-[#CCCDD6] rounded-lg bg-white flex items-center justify-between"
+            onClick={() => setShowDropdown(!showDropdown)}
+          >
+            {mediaOptions.find(option => option.value === meetingType)?.label || "Select an option"}
+            <img src={ICONS.DROPDOWN} alt="Dropdown arrow" className="w-4 h-4 ml-2" />
+          </button>
+          {showDropdown && (
+            <div className="absolute w-full bg-white border border-gray-300 rounded-lg mt-2 z-10 shadow-md">
+              {mediaOptions.map((option) => (
+                <div
+                  key={option.value}
+                  className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer "
+                  onClick={() => {
+                    setMeetingType(option.value);
+                    setShowDropdown(false);
+                  }}
+                >
+                  <img src={option.icon} alt={option.label} className="w-[18px] h-[18px] mr-2" />
+                  <span>{option.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
       <div className="flex justify-between mt-6">
         <button
           onClick={() => setStep(2)}

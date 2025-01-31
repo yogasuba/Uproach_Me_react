@@ -37,6 +37,12 @@ import round_robin from "../../assets/icons/round_robin.svg"
 import right_arrow from "../../assets/icons/right_arrow.svg"
 import plus_circle from "../../assets/icons/plus-circle.svg"
 import x from "../../assets/icons/x.svg"
+import x_symbol from "../../assets/icons/x-symbol.svg"
+import dropdown from "../../assets/icons/dropdown.svg"
+import google_meet from "../../assets/icons/google_meet.svg"
+import zoom_meet from "../../assets/icons/zoom_meet.svg"
+import inperson from "../../assets/icons/inperson.svg"
+import call from "../../assets/icons/call.svg"
 export const ICONS = {
     LOGO : logo,
     APPLE_ICON : appleicon,
@@ -76,5 +82,11 @@ export const ICONS = {
     ROUND_ROBIN : round_robin,
     RIGHT_ARROW : right_arrow,
     PLUS_CIRCLE : plus_circle,
-    X :x
+    X :x,
+    X_SYMBOL : x_symbol,
+    DROPDOWN :dropdown,
+    GOOGLE_MEET : google_meet,
+    ZOOM_MEET : zoom_meet,
+    INPERSON : inperson,
+    CALL : call,
 }
