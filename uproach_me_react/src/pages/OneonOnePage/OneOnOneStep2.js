@@ -219,7 +219,7 @@ const OneOnOneStep2 = ({ setStep, weekDays, selectedDays, setSelectedDays }) => 
 
       <div className="mb-6">
       <h2 className="text-gray-700 text-sm font-medium mb-3 flex items-center ml-2">
-      <img src={ICONS.AVAILABILITY}  alt="calender" />Availability
+      <img src={ICONS.AVAILABILITY}  alt="calender" className="mr-4"/>Availability
       </h2>
       {weekDayKeys.map((day, index) => (
         <div key={day} className="mb-3">
@@ -300,8 +300,8 @@ const OneOnOneStep2 = ({ setStep, weekDays, selectedDays, setSelectedDays }) => 
         </div>
       ))}
     </div>
-            {/* Horizontal Line */}
-            <hr className="my-3 border-muted" />
+    {/* Horizontal Line */}
+    <hr className="my-3 border-muted" />
     <div className="mt-6 flex items-center space-x-4">
         <div>
           <h2 className="text-gray-700 text-sm font-medium mb-1">
