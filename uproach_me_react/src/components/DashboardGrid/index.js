@@ -23,7 +23,7 @@ const DashboardGrid = () => {
   };
     return (
      <div className="bg-[#F5F5F5] p-6 pb-[244px] min-h-screen flex flex-col ">
-       <div className="grid gap-6 lg:grid-cols-3 sm:grid-cols-1">
+       <div className="grid gap-6 grid-cols-1">
          
        <div className="lg:col-span-3 flex xl:space-x-4 xxl:space-x-10 sm:space-x-3 sm:overflow-x-auto xxl:overflow-visible sm:flex-nowrap ">
        <button
@@ -119,7 +119,7 @@ const DashboardGrid = () => {
           </div>
 
           <div className="mt-4 w-full">
-            <div className="grid xxxl:gap-4 xxl:gap-4 sm:gap-8 sm:grid-cols-1 sm:w-[295px] xxl:w-full lg:grid-cols-3">
+            <div className="grid xxxl:gap-4 xxl:gap-4 sm:gap-8 sm:grid-cols-1 sm:w-[295px] xxl:w-full xxl:grid-cols-3">
               <div className="flex items-center xxxl:p-4 xxl:p-4 sm:p-0 rounded-lg">
                 <div
                   className="xxxl:w-14 xxxl:h-14 xxl:w-10 xxl:h-10 sm:w-8 sm:h-8 flex items-center justify-center bg-gray-100 rounded-[12px] mr-4 sm:ml-[17px] xxl:ml-0"
@@ -189,7 +189,7 @@ const DashboardGrid = () => {
       <hr className="my-6 border-t border-gray-300 w-full" />
 
 {/* Second Row */}
-<div className="grid xxxl:gap-4 xxl:gap-4 sm:gap-8 sm:grid-cols-1 sm:w-[295px] xxl:w-full lg:grid-cols-3">
+<div className="grid xxxl:gap-4 xxl:gap-4 sm:gap-8 sm:grid-cols-1 sm:w-[295px] xxl:w-full xxl:grid-cols-3">
     <div className="flex items-center xxxl:p-4 xxl:p-4 sm:p-0 rounded-lg">
     <div className="xxxl:w-14 xxxl:h-14 xxl:w-10 xxl:h-10 sm:w-8 sm:h-8 flex items-center justify-center bg-gray-100 rounded-[12px] mr-4 sm:ml-[17px] xxl:ml-0"
             style={{
@@ -249,14 +249,14 @@ const DashboardGrid = () => {
 
    
 {/* Activity and Bookings */}
-<div className="lg:col-span-2 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[743px] xxl:h-[465px] xxl:w-[637px] sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0">
+<div className="xl:col-span-2 xxl:col-span-1 lg:col-span-3 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[743px] xxl:h-[465px] xxl:w-[637px] sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0">
 <ActivityCard />
 
 <div className="bg-muted mt-4 rounded"></div>
 </div>
 
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[465px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[465px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
 <BookingsCard />
 
   {/* Content */}
@@ -264,7 +264,7 @@ const DashboardGrid = () => {
 </div>
 
 {/* Revenue and Recent Purchase */}
-<div className="bg-[#F9EDD7] p-6 rounded-lg xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] relative overflow-hidden sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0 ">
+<div className="lg:col-span-3 xl:col-span-2 xxl:col-span-1  bg-[#F9EDD7] p-6 rounded-lg xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] relative overflow-hidden sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0 ">
   {/* Gradient border at the top */}
   <div className="absolute top-0 left-0 w-full h-[4px]"
   style={{background : "linear-gradient(90deg, #1B7B72 0%, #536FD5 33.5%, #F87FF2 62.5%, #F15558 100%)"}}></div>
@@ -295,27 +295,27 @@ const DashboardGrid = () => {
   </div>
 </div>
 
-<div className="bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1  xxl:col-span-1 bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
 <RevenueCard />
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-2 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
 <RecentPurchase />
 
   {/* Content */}
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
   <ContentCard />
 
   {/* Placeholder content */}
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
   <CountriesCard />
 
   {/* Placeholder content */}
@@ -323,7 +323,7 @@ const DashboardGrid = () => {
 </div>
 
 
-<div className="bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[549px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-2 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[549px] md:ml-[3px] ml-0">
 <VisitorSources />
 
   {/* Content */}

@@ -79,66 +79,66 @@ export default function Sidebar() {
     fetchUserData();
   }, []);
   return (
-    <aside className="lg:flex lg:flex-col bg-card xxxl:p-4 xxl:p-4 sm:p-0 lg:w-60 lg:min-h-screen lg:relative">
-      {/* Sidebar for Desktop */}
-      <div className="hidden lg:block">
-        {/* Sidebar Header */}
-        <div className="flex items-center justify-between ">
-          <div className="font-helvetica custom-headingdashboard">UPROACH ME</div>
-          <div
-            className="relative bg-gray-100 rounded-full p-2"
-            style={{ backgroundColor: "rgba(246, 246, 249, 1)" }}
-          >
-            <img
-              src="/icons/bell-icon.svg"
-              alt="Notifications"
-              className="w-[20px] h-[20px]"
-            />
-            <span className="absolute top-0.5 right-0.5 bg-red-500 w-[7px] h-[7px] rounded-full border border-white" />
-          </div>
-        </div>
-
-        {/* Horizontal Line */}
-        <hr className="my-3 border-muted" />
-
-        {/* Navigation Links */}
-        <nav className="">
-          {navLinks.map((link, index) => (
-            <Link
-              key={index}
-              to={link.to}
-              className="flex items-center hover:bg-gray-100 px-2 py-2 rounded-md space-x-3 custom-sidbars"
-            >
-              <img src={link.icon} alt={link.label} className="w-[20px] h-[20px]" />
-              <span>{link.label}</span>
-            </Link>
-          ))}
-        </nav>
-
-        {/* Horizontal Line */}
-        <hr className="my-6 border-muted" />
-
-        {/* Try Pro Button */}
-        <div className="mt-[110px] space-y-4 relative mb-2 ">
-          <button className="bg-[rgba(234,234,241,1)] text-black p-4 rounded-full w-[169px] h-[43px] text-[16px] flex items-center justify-center space-x-2">
-            <img src="/icons/zap.svg" alt="Pro Icon" className="w-[20px] h-[20px]" />
-            <span>Try Pro for free</span>
-          </button>
-        </div>
+<aside className="xxxl:p-4 xxl:p-4 sm:p-0">
+  {/* Sidebar for Desktop */}
+  <div className="hidden xxl:block">
+    {/* Sidebar Header */}
+    <div className="flex items-center justify-between ">
+      <div className="font-helvetica custom-headingdashboard">UPROACH ME</div>
+      <div
+        className="relative bg-gray-100 rounded-full p-2"
+        style={{ backgroundColor: "rgba(246, 246, 249, 1)" }}
+      >
+        <img
+          src="/icons/bell-icon.svg"
+          alt="Notifications"
+          className="w-[20px] h-[20px]"
+        />
+        <span className="absolute top-0.5 right-0.5 bg-red-500 w-[7px] h-[7px] rounded-full border border-white" />
       </div>
+    </div>
 
-      {/* Bottom Navigation for Mobile */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 bg-white shadow-md flex justify-around items-center h-16 z-50">
-        {navLinks.map((link, index) => (
-          <Link key={index} to={link.to} className="flex flex-col items-center">
-            <img src={link.icon} alt={link.label} className="w-6 h-6" />
-            <span className="text-xs">{link.label}</span>
-          </Link>
-        ))}
-      </div>
+    {/* Horizontal Line */}
+    <hr className="my-3 border-muted" />
+
+    {/* Navigation Links */}
+    <nav>
+      {navLinks.map((link, index) => (
+        <Link
+          key={index}
+          to={link.to}
+          className="flex items-center hover:bg-gray-100 px-2 py-2 rounded-md space-x-3 custom-sidbars"
+        >
+          <img src={link.icon} alt={link.label} className="w-[20px] h-[20px]" />
+          <span>{link.label}</span>
+        </Link>
+      ))}
+    </nav>
+
+    {/* Horizontal Line */}
+    <hr className="my-6 border-muted" />
+
+    {/* Try Pro Button */}
+    <div className="mt-[110px] space-y-4 relative mb-2 ">
+      <button className="bg-[rgba(234,234,241,1)] text-black p-4 rounded-full w-[169px] h-[43px] text-[16px] flex items-center justify-center space-x-2">
+        <img src="/icons/zap.svg" alt="Pro Icon" className="w-[20px] h-[20px]" />
+        <span>Try Pro for free</span>
+      </button>
+    </div>
+  </div>
+
+  {/* Bottom Navigation for Mobile */}
+  <div className="xxl:hidden fixed bottom-0 inset-x-0 bg-white shadow-md flex justify-around items-center h-16 z-50">
+    {navLinks.map((link, index) => (
+      <Link key={index} to={link.to} className="flex flex-col items-center">
+        <img src={link.icon} alt={link.label} className="w-6 h-6" />
+        <span className="text-xs">{link.label}</span>
+      </Link>
+    ))}
+  </div>
 
       {/* Profile Dropdown */}
-      <div className="relative mt-4 lg:mt-auto lg:block hidden" ref={dropdownRef}>
+      <div className="relative mt-4 xxl:mt-auto xxl:block hidden" ref={dropdownRef}>
         <div
           className="flex items-center space-x-2 cursor-pointer"
           onClick={() => setDropdownOpen(!dropdownOpen)}
