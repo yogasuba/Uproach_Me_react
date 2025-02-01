@@ -249,7 +249,7 @@ const DashboardGrid = () => {
 
    
 {/* Activity and Bookings */}
-<div className="xl:col-span-2 xxl:col-span-1 lg:col-span-3 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[743px] xxl:h-[465px] xxl:w-[637px] sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0">
+<div className="xl:col-span-2 xxl:col-span-2 lg:col-span-3 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[743px] xxl:h-[465px] xxl:w-[668px] sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0">
 <ActivityCard />
 
 <div className="bg-muted mt-4 rounded"></div>
@@ -295,7 +295,7 @@ const DashboardGrid = () => {
   </div>
 </div>
 
-<div className="lg:col-span-3 xl:col-span-1  xxl:col-span-1 bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1  xxl:col-span-1 bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[330px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
 <RevenueCard />
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
@@ -315,7 +315,7 @@ const DashboardGrid = () => {
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
-<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[330px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
   <CountriesCard />
 
   {/* Placeholder content */}
