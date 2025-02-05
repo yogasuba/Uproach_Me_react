@@ -64,7 +64,7 @@ const VisitorSources = () => {
     <div>
       <h3 className="text-lg font-semibold">Visitor Sources</h3>
       <div className="mt-2 xxl:space-y-2 xxxl:space-y-3">
-        {visitorData.slice(0, 5).map((source, index) => (
+        {visitorData.slice(0, 4).map((source, index) => (
           <div key={index}>
             <VisitorSourceItem {...source} />
             <hr className="border-t border-gray-200" />

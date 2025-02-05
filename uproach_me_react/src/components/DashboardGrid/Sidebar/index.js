@@ -86,7 +86,7 @@ export default function Sidebar() {
     <div className="flex items-center justify-between ">
       <div className="font-helvetica custom-headingdashboard">UPROACH ME</div>
       <div
-        className="relative bg-gray-100 rounded-full p-2"
+        className="relative bg-gray-100 rounded-full p-2 ml-5"
         style={{ backgroundColor: "rgba(246, 246, 249, 1)" }}
       >
         <img

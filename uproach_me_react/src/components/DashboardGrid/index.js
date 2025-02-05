@@ -37,7 +37,7 @@ const DashboardGrid = () => {
               <h3 className="custom-cards-events mb-[11px] sm:ml-[-158px] xxl:ml-0 xxxl:ml-0">
                 Create event
               </h3>
-              <button className="bg-white text-[14px] p-2 rounded-[70px] shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
+              <button className="bg-white text-[14px] p-2 rounded-[70px] text-[#25077D] font-semibold shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
                 Set Up
               </button>
             </div>
@@ -57,7 +57,7 @@ const DashboardGrid = () => {
               <h3 className="custom-cards-events text-[#7D215E] xxl:text-[16px] xxxl:text-[22px] mb-[11px]  sm:ml-[-158px] xxl:ml-0 xxxl:ml-0">
                 Link in Bio
               </h3>
-              <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
+              <button className="bg-white text-sm p-2 rounded-[70px] text-[#25077D] font-semibold shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
                 Set Up
               </button>
             </div>
@@ -73,11 +73,11 @@ const DashboardGrid = () => {
             className="bg-[rgba(168,224,250,1)] text-secondary-foreground p-6 rounded-[8px] xxl:w-[356px] xxl:h-[115px] xl:w-[323px] sm:w-[316px] flex items-center justify-between relative"
             onClick={() => alert("Sell Products clicked!")}
           >
-            <div className="sm:w-[242px] xxl:w-[127px]">
+            <div className="sm:w-[242px] xxl:w-[127px] xxxl:w-[156px]">
               <h3 className="custom-cards-events text-[#096590] xxl:text-[16px] xxxl:text-[22px] mb-[11px]  sm:ml-[-158px] xxl:ml-0 xxxl:ml-0 ">
                 Sell Products
               </h3>
-              <button className="bg-white text-sm p-2 rounded-[70px] shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
+              <button className="bg-white text-sm p-2 rounded-[70px] text-[#25077D] font-semibold shadow-sm w-[74px] sm:ml-[-166px] xxl:ml-0 xxxl:ml-0">
                 Set Up
               </button>
             </div>
@@ -249,7 +249,7 @@ const DashboardGrid = () => {
 
    
 {/* Activity and Bookings */}
-<div className="xl:col-span-2 xxl:col-span-2 lg:col-span-3 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[743px] xxl:h-[465px] xxl:w-[668px] sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0">
+<div className="xl:col-span-2 xxl:col-span-2 lg:col-span-3 bg-white p-6 rounded-lg xxxl:h-[476px] xxxl:w-[756px] xxl:h-[465px] xxl:w-[648px] sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0">
 <ActivityCard />
 
 <div className="bg-muted mt-4 rounded"></div>
@@ -264,7 +264,7 @@ const DashboardGrid = () => {
 </div>
 
 {/* Revenue and Recent Purchase */}
-<div className="lg:col-span-3 xl:col-span-2 xxl:col-span-1  bg-[#F9EDD7] p-6 rounded-lg xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] relative overflow-hidden sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0 ">
+<div className="lg:col-span-3 xl:col-span-2 xxl:col-span-1  bg-[#F9EDD7] p-6 rounded-lg xxxl:w-[371px] xxxl:h-[454px] xxl:w-[316px] xxl:h-[430px] relative overflow-hidden sm:w-[303px] md:w-[343px] md:ml-[3px] ml-0 ">
   {/* Gradient border at the top */}
   <div className="absolute top-0 left-0 w-full h-[4px]"
   style={{background : "linear-gradient(90deg, #1B7B72 0%, #536FD5 33.5%, #F87FF2 62.5%, #F15558 100%)"}}></div>
@@ -295,27 +295,27 @@ const DashboardGrid = () => {
   </div>
 </div>
 
-<div className="lg:col-span-3 xl:col-span-1  xxl:col-span-1 bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[330px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1  xxl:col-span-1 bg-white p-6 rounded-lg  xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
 <RevenueCard />
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
 
-<div className="lg:col-span-3 xl:col-span-2 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-2  xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[454px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
 <RecentPurchase />
 
   {/* Content */}
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
-<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[371px] xxxl:h-[476px] xxl:w-[316px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
   <ContentCard />
 
   {/* Placeholder content */}
   <div className="bg-muted h-[250px] mt-4 rounded"></div>
 </div>
 
-<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[330px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
+<div className="lg:col-span-3 xl:col-span-1 xxl:col-span-1 bg-white p-6 rounded-lg relative xxxl:w-[356px] xxxl:h-[476px] xxl:w-[305px] xxl:h-[430px] sm:w-[303px] md:w-[343px] sm:h-[479px] md:ml-[3px] ml-0">
   <CountriesCard />
 
   {/* Placeholder content */}
