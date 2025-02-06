@@ -1,60 +1,47 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import Picker from "@emoji-mart/react";
+import emojiData from "@emoji-mart/data";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const OneOnOneStep1 = ({ setStep }) => {
     const [duration, setDuration] = useState("");
-    const [isHidden, setIsHidden] = useState(false);
-    const [text, setText] = useState(""); // State to store textarea value
-    const textareaRef = useRef(null); // Ref to manipulate the textarea
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [step] = useState(1);
-    const [title, setTitle] = useState(""); // State for title
+
+    const [isHidden, setIsHidden] = useState(false);
+    const [text, setText] = useState(""); 
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [title, setTitle] = useState(""); 
     const navigate = useNavigate();
 
-    // Function to insert emojis
-    const insertEmoji = (emoji) => {
-        const textarea = textareaRef.current;
-        const start = textarea.selectionStart;
-        const beforeText = textarea.value.substring(0, start);
-        const afterText = textarea.value.substring(start);
-
-        setText(beforeText + emoji.native + afterText);
-
-        // Reset cursor position after emoji insertion
-        setTimeout(() => {
-            textarea.selectionStart = textarea.selectionEnd = start + emoji.native.length;
-            textarea.focus();
-        }, 0);
+    const handleEmojiSelect = (emoji) => {
+        setText((prev) => prev + emoji.native);
         setShowEmojiPicker(false);
     };
 
     const handleSubmit = async () => {
         try {
-            // Retrieve uid and eventId from localStorage
             const token = localStorage.getItem("authToken");
             const uid = localStorage.getItem("userId");
             const eventId = localStorage.getItem("eventId");
 
-            // Ensure uid and eventId exist
             if (!uid || !eventId) {
                 alert("Missing user or event information. Please try again.");
                 return;
             }
 
-            // Create the payload
             const payload = {
                 uid,
                 eventId,
-                title, // From state
-                description: text, // From state
-                duration, // From state
-                hideFromProfile: isHidden, // From state
+                title,
+                description: text,
+                duration,
+                hideFromProfile: isHidden,
             };
 
-            // Make the API call
             const response = await axios.put(
                 `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/events/${eventId}/details`,
                 payload,
@@ -67,7 +54,7 @@ const OneOnOneStep1 = ({ setStep }) => {
             );
 
             console.log("Response:", response.data);
-            setStep(2); // Proceed to the next step
+            setStep(2);
         } catch (error) {
             console.error("Error updating event:", error);
             alert("Failed to update the event. Please try again.");
@@ -93,40 +80,35 @@ const OneOnOneStep1 = ({ setStep }) => {
                 />
             </div>
 
-            <div className="mb-6">
-                {/* Toolbar */}
-                <div className="flex items-center justify-between p-2 border border-[#CCCDD6] rounded-t-lg bg-gray-100">
-                    <div className="flex space-x-2 text-gray-600">
+                <ReactQuill
+                    value={text}
+                    onChange={setText}
+                    modules={{
+                        toolbar: [
+                            ["bold", "italic", "underline", "strike"],
+                            [{ list: "ordered" }, { list: "bullet" }],
+                            ["link", "emoji"],
+                        ],
+                    }}
+                    placeholder="Description..."
+                    className=" rounded-b-lg h-[82px] mb-[4rem]"
+                />
+                    <div className=" text-gray-600 relative">
                         <button
                             type="button"
-                            className="p-1 hover:text-black"
+                            className="p-1 hover:text-black sm:absolute sm:transform sm:scale-105 xxl:scale-110 xxl:right-[44px] xxl:bottom-[112px] sm:right-[30px] sm:bottom-[113px] object-contain "
                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         >
                             <BsEmojiSmile />
                         </button>
+                
                     </div>
-                </div>
-
-                {/* Emoji Picker */}
-                {showEmojiPicker && (
-                    <div className="absolute z-10 p-2 border border-gray-300 bg-white rounded-lg">
-                        <Picker
-                            onEmojiSelect={insertEmoji}
-                            theme="light" // Change to "dark" if needed
-                        />
+                    {showEmojiPicker && (
+                    <div className=" top-[16.71rem] p-2 border border-gray-300 bg-white">
+                        <Picker data={emojiData} onEmojiSelect={handleEmojiSelect} />
                     </div>
                 )}
 
-                {/* Textarea */}
-                <textarea
-                    ref={textareaRef}
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Description..."
-                    rows={4}
-                    className="w-full text-[14px] p-[10px] border border-[#CCCDD6] rounded-b-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
-                ></textarea>
-            </div>
 
             <div className="mb-6">
                 <label className="block text-gray-700 text-[14px] font-medium mb-2">
@@ -173,7 +155,7 @@ const OneOnOneStep1 = ({ setStep }) => {
             </div>
 
             <div className="flex justify-between mt-6">
-                <button
+            <button
                     onClick={() => {
                         if (step === 1) {
                             navigate('/login'); // Navigate to the dashboard for step 1

@@ -90,22 +90,22 @@ const OneOnOnePage = () => {
       </div>
 
       <div className="hidden xxl:flex xxxl:flex w-full xxl:w-2/3 bg-blue-50 items-center justify-center">
-  <div
-    className="border rounded-lg p-5 bg-white"
-    style={{ width: '254px', height: '210.803px' }}
-  >
-    {/* Profile Section */}
-    <div className="flex items-center mb-6">
-      <img
-        src="https://via.placeholder.com/50"
-        alt="Profile"
-        className="w-10 h-10 rounded-full mr-4"
-      />
-      <div>
-        <h3 className="text-[12px] font-semibold text-gray-800">Book Session</h3>
-        <p className="text-[10px] text-gray-500">Select Date & Time</p>
-      </div>
-    </div>
+        <div
+          className="border rounded-lg p-5 bg-white"
+          style={{ width: '254px', height: '210.803px' }}
+        >
+          {/* Profile Section */}
+          <div className="flex items-center mb-6">
+            <img
+              src="https://via.placeholder.com/50"
+              alt="Profile"
+              className="w-10 h-10 rounded-full mr-4"
+            />
+            <div>
+              <h3 className="text-[12px] font-semibold text-gray-800">Book Session</h3>
+              <p className="text-[10px] text-gray-500">Select Date & Time</p>
+            </div>
+          </div>
 
     {/* Weekdays Section */}
     <div className="flex overflow-x-auto scrollbar-hide space-x-3 items-center mb-6">

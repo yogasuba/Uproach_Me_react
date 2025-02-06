@@ -148,3 +148,16 @@ letter-spacing: -0.36px;
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+.ql-toolbar {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  justify-content: space-between;
+  background: #f8f9fa;
+  border-radius: 6px 6px 0 0;
+}
+
+.ql-toolbar .ql-formats {
+  margin-right: 10px !important;
+}
