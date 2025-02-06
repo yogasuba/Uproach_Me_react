@@ -146,7 +146,7 @@ const OneOnOneStep2 = ({ setStep, response }) => {
 
     try {
       const res = await axios.put(
-        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/events/availability/roundrobin",
+        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/events/availability/OneOnOne",
         requestBody,
         {
           headers: {
