@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {  useParams } from "react-router-dom"; // Using React Router for navigation
 import { ProfileHeader } from '../components/ProfileHeader';
-import { eventDetails } from "./EventDetailPage";
+import EventDetailPage from "./EventDetailPage";
 
 
 export default function ScheduledPage() {
@@ -9,10 +8,9 @@ export default function ScheduledPage() {
     document.title = 'Scheduled'; // Set your desired page title here
   }, []);
 
-  const { slug } = useParams();
 
   // Fetch event and stored information
-  const event = eventDetails[slug];
+  const event = EventDetailPage;
   const [storedDateInfo, setStoredDateInfo] = useState(null);
   const [storedTimeRange, setStoredTimeRange] = useState(null);
 

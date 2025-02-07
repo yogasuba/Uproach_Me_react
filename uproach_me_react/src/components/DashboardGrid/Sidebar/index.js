@@ -282,14 +282,14 @@ export default function Sidebar() {
 
               {/* Sign Out */}
               <div
-              className="flex items-center text-[14px] text-[#1C2434] px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer mb-2"
-              onClick={() => {
-                // Clear token from local storage
-                localStorage.removeItem("authToken");
-                // Redirect to sign-in page
-                window.location.href = "/login";
-              }}
-            >
+                className="flex items-center text-[14px] text-[#1C2434] px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer mb-2"
+                onClick={() => {
+                  // Clear all items from local storage
+                  localStorage.clear();
+                  // Redirect to sign-in page
+                  window.location.href = "/login";
+                }}
+              >
                 <img
                   src="/icons/log-out.svg"
                   alt="Sign Out"

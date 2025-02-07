@@ -1,13 +1,12 @@
 import { useState,useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { eventDetails } from "./EventDetailPage";
+import { useNavigate } from "react-router-dom";
+import EventDetailPage from "./EventDetailPage";
 
 export default function BookingPage() {
   useEffect(() => {
     document.title = 'Booking'; // Set your desired page title here
   }, []);
   const navigate = useNavigate();
-  const { slug } = useParams();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,18 +16,11 @@ export default function BookingPage() {
 
   const [isFormValid, setIsFormValid] = useState(false);
 
-  if (!slug) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <h2 className="text-xl font-bold">Invalid Event</h2>
-      </div>
-    );
-  }
 
   // Retrieve the values from localStorage
   const storedDateInfo = JSON.parse(localStorage.getItem("selectedDateInfo"));
   const storedTimeRange = localStorage.getItem("selectedTimeRange");
-  const event = eventDetails[slug];
+  const event = EventDetailPage;
 
   if (!event) {
     return (
@@ -172,7 +164,7 @@ export default function BookingPage() {
                     ? "bg-purple-600 text-white hover:bg-purple-500"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 } px-6 py-3 text-lg font-semibold w-full rounded-md`}
-                onClick={() => navigate(`/scheduled/${slug}`)}
+                onClick={() => navigate("/scheduled")}
               >
                 Confirm And Pay
               </button>

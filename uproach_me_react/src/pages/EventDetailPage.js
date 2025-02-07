@@ -1,67 +1,54 @@
 // src/pages/EventDetailPage.js
 import React, { useState, useEffect,useMemo,useCallback} from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ProfileHeader } from '../components/ProfileHeader';
+import axios from "axios";
 
-export const eventDetails = {
-    'quick-chat-on-design': {
-      title: 'Quick Chat On Design',
-      duration: '10 Min',
-      price: '',
-      type: 'Video Meeting',
-      description:
-        'This quick chat is perfect for brainstorming ideas, discussing a design challenge, or getting quick feedback on your current project.',
-    },
-    'career-guidance': {
-      title: 'Career Guidance',
-      duration: '10 Min',
-      price: '₹500',
-      type: 'Video Meeting',
-      description:
-        'Get personalized career advice from industry experts to help you navigate your professional journey.',
-    },
-    '1-1-mentorship': {
-      title: '1:1 Mentorship',
-      duration: '10 Min',
-      price: '₹500',
-      type: 'Video Meeting',
-      description:
-        'One-on-one mentorship to help you grow your career and get professional guidance tailored to your goals.',
-    },
-    'designer-s-resume-review': {
-      title: 'Designer’s Resume Review',
-      duration: '10 Min',
-      price: '₹500',
-      type: 'Video Meeting',
-      description:
-        'Get feedback on your resume from design professionals to enhance your chances of landing a job.',
-    },
-    'design-portfolio-review': {
-      title: 'Design Portfolio Review',
-      duration: '10 Min',
-      price: '₹500',
-      type: 'Video Meeting',
-      description:
-        'Receive constructive feedback on your design portfolio to help improve your work.',
-    },
-    'ui-design-kickstarter': {
-      title: 'UI Design Kickstarter',
-      duration: '10 Min',
-      price: '₹500',
-      type: 'Video Meeting',
-      description:
-        'Kickstart your UI design project with expert guidance and insights.',
-    },
-  };
-  
-
-export default function EventDetailPage() {
+const EventDetailPage = () => {
   useEffect(() => {
     document.title = 'Events'; // Set your desired page title here
   }, []);
 
+  const location = useLocation();
+  const eventId = location.state?.eventId; // Retrieve eventId from state
+  const [eventDetails, setEventDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!eventId) {
+      setError("Event ID is missing!");
+      setLoading(false);
+      return;
+    }
+
+    const fetchEventDetails = async () => {
+      const token = localStorage.getItem("authToken");
+      try {
+        const response = await axios.get(
+          `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/event/${eventId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data)
+        setEventDetails(response.data); 
+      } catch (err) {
+        setError("Failed to fetch event details. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEventDetails();
+  }, [eventId]);
+
+
   const navigate = useNavigate();
-  const { slug } = useParams();
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -145,7 +132,7 @@ export default function EventDetailPage() {
     localStorage.setItem("selectedTimeRange", selectedTimeRange);
   }, [selectedDateInfo, selectedTimeRange]);
 
-  const event = eventDetails[slug];
+  const event = eventDetails;
 
   if (!event) {
     return (
@@ -268,12 +255,12 @@ export default function EventDetailPage() {
           <div className="flex items-center space-x-4 mt-4">
             <div className="flex items-center text-gray-600 font-bold space-x-2 text-sm">
               <img src="/icons/clock.svg" alt="Clock Icon" width={20} height={20} />
-              <span>Duration 30 Min</span>
+              <span>{event.duration}</span>
             </div>
             <div className="h-6 w-px bg-gray-300" />
             <div className="flex items-center text-gray-600 font-bold space-x-2 text-sm">
               <img src="/icons/google-meet.svg" alt="Google Meet Icon" width={20} height={20} />
-              <span>Google Meet</span>
+              <span>{event.location}</span>
             </div>
           </div>
 
@@ -305,7 +292,7 @@ export default function EventDetailPage() {
               }`}
               onClick={() => {
                 if (selectedDate !== null && selectedTime !== null) {
-                  navigate(`/booking/${slug}`);
+                  navigate("/booking");
                 }
               }}
               disabled={selectedDate === null || selectedTime === null}
@@ -318,3 +305,4 @@ export default function EventDetailPage() {
     </div>
   );
 }
+export default EventDetailPage;

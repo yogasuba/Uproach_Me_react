@@ -58,9 +58,9 @@ function App() {
         <Route path="/sociallinks" element={<SocialLinks />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/events/:slug" element={<EventDetailPage />} />
-        <Route path="/booking/:slug" element={<BookingPage />} />
-        <Route path="/scheduled/:slug" element={<ScheduledPage />} />
+        <Route path="/events" element={<EventDetailPage />} />
+        <Route path="/booking" element={<BookingPage />} />
+        <Route path="/scheduled" element={<ScheduledPage />} />
         <Route path="/all-sources" element={<AllVisitorSources />} />
         <Route path="/countries" element={<AllCountries />} />
         <Route path="/content" element={<AllContent />} />
