@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { ProfileHeader } from '../components/ProfileHeader';
 import axios from "axios";
+import {ICONS } from '../constants';
+
 
 const EventDetailPage = () => {
   useEffect(() => {
@@ -15,39 +17,6 @@ const EventDetailPage = () => {
   const [eventDetails, setEventDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!eventId) {
-      setError("Event ID is missing!");
-      setLoading(false);
-      return;
-    }
-
-    const fetchEventDetails = async () => {
-      const token = localStorage.getItem("authToken");
-      try {
-        const response = await axios.get(
-          `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/event/${eventId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log(response.data)
-        setEventDetails(response.data); 
-      } catch (err) {
-        setError("Failed to fetch event details. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEventDetails();
-  }, [eventId]);
-
-
   const navigate = useNavigate();
 
   const [selectedDate, setSelectedDate] = useState(null);
@@ -55,6 +24,8 @@ const EventDetailPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [currentYear] = useState(new Date().getFullYear());
+  const [bookedSlots, setBookedSlots] = useState([]);
+
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
@@ -70,6 +41,14 @@ const EventDetailPage = () => {
     '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM',
     '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM'
   ];
+  const timeZones = [
+    { label: "(GMT+5:30) Chennai, Kolkata, Mumbai, New Delhi (IST)", value: "GMT+5:30" },
+    { label: "(GMT+0:00) London", value: "GMT+0:00" },
+    { label: "(GMT-5:00) New York", value: "GMT-5:00" },
+    { label: "(GMT+8:00) Singapore", value: "GMT+8:00" },
+    // Add more time zones as needed
+  ];
+  const [selectedTimeZone, setSelectedTimeZone] = useState(timeZones[0].value);
 
   const getNextSevenDays = (year, month) => {
     const daysArray = [];
@@ -127,36 +106,90 @@ const EventDetailPage = () => {
   
   const selectedTimeRange = getTimeRange(selectedTime);
   
+
   useEffect(() => {
-    localStorage.setItem("selectedDateInfo", JSON.stringify(selectedDateInfo));
-    localStorage.setItem("selectedTimeRange", selectedTimeRange);
-  }, [selectedDateInfo, selectedTimeRange]);
+    if (!eventId) {
+      setError("Event ID is missing!");
+      setLoading(false);
+      return;
+    }
 
-  const event = eventDetails;
+    const fetchEventDetails = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        const response = await axios.get(
+          `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/event/${eventId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setEventDetails(response.data.event);
+      } catch (err) {
+        setError("Failed to fetch event details. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!event) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <h1 className="text-3xl font-bold text-red-600">Event Not Found</h1>
-        <button
-          className="mt-4 bg-primary text-white px-4 py-2 rounded-md"
-          onClick={() => navigate("/home")}
-        >
-          Go Back to Profile
-        </button>
-      </div>
-    );
-  }
+    const fetchBookedSlots = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        const response = await axios.get(
+          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/getEventSlotsWithoutBookings",
+          {
+            eventId : eventId,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setBookedSlots(response.data.bookedSlots || []);
+      } catch (err) {
+        console.error("Failed to fetch booked slots.", err);
+      }
+    };
+
+    fetchEventDetails();
+    fetchBookedSlots();
+  }, [eventId]);
+
+  const handleBooking = async () => {
+    if (selectedDate !== null && selectedTime !== null) {
+      try {
+        const token = localStorage.getItem("authToken");
+        await axios.post(
+          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/createBooking",
+          {
+            eventId : eventId,
+            date: selectedDate,
+            time: times[selectedTime],
+            timeZone: selectedTimeZone,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        navigate("/booking-confirmation");
+      } catch (err) {
+        console.error("Booking failed", err);
+      }
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
+
+
 
   return (
-    <div className="xxl:min-h-screen sm:h-[1158px] flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <button className="flex items-center text-gray-800 font-bold p-2" onClick={() => navigate(-1)}>
         <img src="/icons/back-arrow.svg" alt="Back Arrow" width={16} height={16} />
         <span className="ml-2">Back</span>
       </button>
       <ProfileHeader />
 
-      <div className="flex-1 w-full mx-auto grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-1 pt-1">
+      <div className="flex-1 w-full mx-auto grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] gap-1 pt-1">
         <div className="bg-white p-6 shadow-md w-full sm:order-2 xl:order-1">
           <div className="flex items-center mb-4 cursor-pointer" onClick={toggleDropdown}>
             <h2 className="text-xl font-semibold">{months[selectedMonth]} {currentYear}</h2>
@@ -200,72 +233,106 @@ const EventDetailPage = () => {
 
           {selectedMonth === new Date().getMonth() ? (
             <>
-                {/* Time Zone and Time Selection */}
-                <div className="mb-4">
-                <strong className="text-m font-semibold mb-3">Time Zone:</strong>
-                <div className="text-sm text-gray-500 mt-2 mb-6 flex items-center">
-                    (GMT+5:30) Chennai, Kolkata, Mumbai, New Delhi (IST)
-                    <img src="/icons/chevron-down.svg" alt="Arrow Down Icon" width={24} height={24} className="ml-2" />
-                </div>
-                </div>
+              {/* Time Zone Selection */}
+              <div className="mb-6">
+              <div className="text-m font-semibold mb-1">Time Zone:</div>
+              <div className="relative inline-block text-sm text-gray-500 mt-2">
+                <select
+                  className=" text-gray-500 rounded leading-tight focus:outline-none sm:w-[266px] xxxl:w-full"
+                  onChange={(e) => setSelectedTimeZone(e.target.value)}
+                  value={selectedTimeZone}
+                >
+                  {timeZones.map((zone, index) => (
+                    <option key={index} value={zone.value}>
+                      {zone.label}
+                    </option>
+                  ))}
+                </select>
 
-                <h3 className="text-m font-semibold mb-2">Select Time Of Day</h3>
-                <div className="grid xl:grid-cols-6 sm:grid-cols-4 gap-2 mt-4">
+              </div>
+            </div>
+
+
+              {/* Time Selection */}
+              <h3 className="text-m font-semibold mb-2">Select Time Of Day</h3>
+              <div className="grid xl:grid-cols-6 sm:grid-cols-4 gap-2 mt-4">
                 {times.map((time, index) => (
-                    <button
+                  <button
                     key={index}
                     onClick={() => setSelectedTime(selectedTime === index ? null : index)}
+                    disabled={bookedSlots.includes(time)}
                     className={`border w-full xl:py-2 sm:py-2 rounded-md ${
-                        selectedTime === index
+                      selectedTime === index
                         ? "border-purple-500 bg-purple-100"
                         : "border-[1px solid rgba(0, 0, 0, 0.15)]"
-                    }`}
-                    >
+                    }`+(bookedSlots.includes(time) ? "cursor-not-allowed opacity-50" : "")}
+                  >
                     {time}
-                    </button>
+                  </button>
                 ))}
-                </div>
+              </div>
             </>
-            ) : (
+          ) : (
             <div className="text-center">
-                {/* Fallback Image and Description */}
-                <img
+              {/* Fallback Image and Description */}
+              <img
                 className="xl:ml-60 sm:ml-10"
                 src="https://tresmares.com/wp-content/uploads/2023/03/Searching-1.svg"
                 alt="Seguros de caza en Cantabria"
                 width={250}
                 height={250}
-                />
-                <p className="text-lg text-gray-500">Description</p>
+              />
+              <p className="text-lg text-gray-500">Description</p>
             </div>
-            )}
-
+          )}
           <div className="mt-10 text-sm text-gray-500 text-center">
             Powered by <a href="https://example.com" className="text-purple-600 font-bold hover:underline ml-1">Uproach.Me</a>
           </div>
         </div>
 
         <div className="bg-white p-6 shadow-md w-full sm:order-1 xl:order-2">
-          <h1 className="text-xl font-bold text-gray-800">{event.title}</h1>
-          {event.price && event.price !== "free" && (
+          <h1 className="text-xl font-bold text-gray-800">{eventDetails.title}</h1>
+          {eventDetails.pricing.amount && eventDetails?.pricing.amount !== "free" && (
             <div className="text-2xl font-bold text-gray-800 mt-4">
-              {event.price} <span className="text-gray-800 text-sm ml-2">Price</span>
+              ₹ {eventDetails.pricing.amount} <span className="text-gray-800 text-sm ml-1">Price</span>
             </div>
           )}
           <div className="flex items-center space-x-4 mt-4">
             <div className="flex items-center text-gray-600 font-bold space-x-2 text-sm">
               <img src="/icons/clock.svg" alt="Clock Icon" width={20} height={20} />
-              <span>{event.duration}</span>
+              <span>Duration {eventDetails.duration}min</span>
             </div>
             <div className="h-6 w-px bg-gray-300" />
-            <div className="flex items-center text-gray-600 font-bold space-x-2 text-sm">
-              <img src="/icons/google-meet.svg" alt="Google Meet Icon" width={20} height={20} />
-              <span>{event.location}</span>
-            </div>
-          </div>
+              <div className="flex items-center text-gray-600 font-bold space-x-2 text-sm">
+                {eventDetails.location === "google-meet" && (
+                  <>
+                    <img src={ICONS.GOOGLE_MEET} alt="Google Meet Icon" width={20} height={20} />
+                    <span>Google Meet</span>
+                  </>
+                )}
+                {eventDetails.location === "zoom-meet" && (
+                  <>
+                    <img src={ICONS.ZOOM_MEET} alt="Zoom Icon" width={20} height={20} />
+                    <span>Zoom Meet</span>
+                  </>
+                )}
+                {eventDetails.location === "in-person" && (
+                  <>
+                    <img src={ICONS.INPERSON} alt="Microsoft Teams Icon" width={20} height={20} />
+                    <span>In-Person</span>
+                  </>
+                )}
+                {eventDetails.location === "phone-call" && (
+                  <>
+                    <img src={ICONS.CALL} alt="In-Person Location Icon" width={20} height={20} />
+                    <span>Phone Call</span>
+                  </>
+                )}
+              </div>
+              </div>
 
           <h3 className="text-lg font-semibold mt-6">Description</h3>
-          <p className="text-gray-600 mt-2 leading-relaxed">{event.description}</p>
+          <p className="text-gray-600 mt-2 leading-relaxed">{eventDetails.description}</p>
           <div className="mt-6">
             {selectedDate !== null && selectedTime !== null && (
               <div className="flex items-center border-2 border-gray-200 p-4 rounded-md space-x-4">
@@ -277,7 +344,7 @@ const EventDetailPage = () => {
                 </div>
                 <div>
                   <p className="text-lg font-semibold">{selectedDateInfo.fullDate}</p>
-                  <p className="text-sm text-gray-600">{selectedTimeRange} (GMT +05:30)</p>
+                  <p className="text-sm text-gray-600">{selectedTimeRange} ({selectedTimeZone})</p>
                 </div>
               </div>
             )}
@@ -290,11 +357,7 @@ const EventDetailPage = () => {
                   ? "bg-purple-600 hover:bg-purple-500 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
-              onClick={() => {
-                if (selectedDate !== null && selectedTime !== null) {
-                  navigate("/booking");
-                }
-              }}
+              onClick={handleBooking}
               disabled={selectedDate === null || selectedTime === null}
             >
               Confirm Details

@@ -22,7 +22,14 @@ const OneOnOneStep1 = ({ setStep }) => {
         setShowEmojiPicker(false);
     };
 
+    function stripHtml(html) {
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        return div.textContent || div.innerText || "";
+      }
+
     const handleSubmit = async () => {
+        const plainDescription = stripHtml(text);
         try {
             const token = localStorage.getItem("authToken");
             const uid = localStorage.getItem("userId");
@@ -37,7 +44,7 @@ const OneOnOneStep1 = ({ setStep }) => {
                 uid,
                 eventId,
                 title,
-                description: text,
+                description: plainDescription,
                 duration,
                 hideFromProfile: isHidden,
             };
