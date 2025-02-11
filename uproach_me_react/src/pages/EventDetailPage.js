@@ -118,7 +118,7 @@ const EventDetailPage = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(
-          `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/event/${eventId}`,
+          `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/event/${eventId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -135,7 +135,7 @@ const EventDetailPage = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/getEventSlotsWithoutBookings",
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/getEventSlotsWithoutBookings",
           {
             eventId : eventId,
           },
@@ -158,7 +158,7 @@ const EventDetailPage = () => {
       try {
         const token = localStorage.getItem("authToken");
         await axios.post(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/createBooking",
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/createBooking",
           {
             eventId : eventId,
             date: selectedDate,

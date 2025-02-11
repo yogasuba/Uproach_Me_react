@@ -53,7 +53,7 @@ const ProfileDetails = () => {
 
     try {
       const response = await axios.put(
-        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-details",
+        "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/profile-details",
         {
           uid,
           profilePicture: profilePicToSave,

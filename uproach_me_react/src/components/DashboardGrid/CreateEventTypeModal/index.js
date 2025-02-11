@@ -25,7 +25,7 @@ const CreateEventTypeModal = ({ onClose }) => {
 
       // Make the POST request
       const response = await axios.post(
-        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/events/type",
+        "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/events/type",
         requestBody,
         {
           headers: {

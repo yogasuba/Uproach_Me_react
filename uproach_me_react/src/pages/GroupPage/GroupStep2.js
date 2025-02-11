@@ -58,7 +58,7 @@ const GroupStep2 = ({ setStep, weekDays }) => {
 
     try {
       const response = await axios.put(
-        "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/events/availability/Group",
+        "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/events/availability/Group",
         payload,
         {
             headers: {

@@ -3,7 +3,6 @@ import axios from "axios";
 import { ICONS } from "../constants";
 
 const IntegrationPage = () => {
-  // Track connection status for each integration
   const [connectionStatus, setConnectionStatus] = useState({
     "Google Calendar": false,
     Outlook: false,
@@ -11,16 +10,13 @@ const IntegrationPage = () => {
     Slack: false,
   });
 
-  // On mount, check if there is a flag in localStorage for Google Calendar connection
+  // Check localStorage on component mount
   useEffect(() => {
-    const googleConnected = localStorage.getItem("googleConnected");
-    if (googleConnected === "true") {
-      setConnectionStatus((prev) => ({
-        ...prev,
-        "Google Calendar": true,
-      }));
-    }
-    // If you have similar logic for other integrations, check and update here.
+    const googleConnected = localStorage.getItem("googleConnected") === "true";
+    setConnectionStatus((prev) => ({
+      ...prev,
+      "Google Calendar": googleConnected,
+    }));
   }, []);
 
   const integrations = [
@@ -52,41 +48,40 @@ const IntegrationPage = () => {
   const handleConnectClick = async (calendarName) => {
     if (calendarName === "Google Calendar") {
       try {
-        // Request the auth URL from your backend API.
         const response = await axios.get(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/oauth/authUrl"
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/oauth/authUrl"
         );
-        // Open the OAuth flow in a new tab
-        window.open(response.data.authUrl, "_blank");
 
-        // Note: The OAuth flow should eventually redirect the user back to your integration page.
-        // One way to handle this is to have the redirect URL include query parameters or store a token.
-        // For demonstration purposes, we assume the user has completed the flow and we set a flag in localStorage.
+        // Open OAuth flow in the same tab
+        window.location.href = response.data.authUrl;
       } catch (error) {
         console.error("Error fetching auth URL:", error);
       }
     } else {
-      // You may later implement modal functionality here for other integrations.
       console.log("Other calendar clicked");
     }
   };
 
-  // This effect simulates that the OAuth flow was successful.
-  // In a real app, you might parse URL query parameters (e.g., ?integration=google&success=true)
-  // or check for a token to update the connection status.
+  // Handle OAuth callback and store tokens
   useEffect(() => {
-    // Example: if the URL includes a query parameter (you might use a library like query-string)
     const queryParams = new URLSearchParams(window.location.search);
     if (queryParams.get("integration") === "google" && queryParams.get("success") === "true") {
-      // Update the state and persist it (if desired)
-      setConnectionStatus((prev) => ({
-        ...prev,
-        "Google Calendar": true,
-      }));
-      localStorage.setItem("googleConnected", "true");
+      const accessToken = queryParams.get("accessToken");
+      const refreshToken = queryParams.get("refreshToken");
 
-      // Optionally, you might want to clear the query params from the URL.
-      window.history.replaceState({}, document.title, window.location.pathname);
+      if (accessToken && refreshToken) {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("googleConnected", "true");
+
+        setConnectionStatus((prev) => ({
+          ...prev,
+          "Google Calendar": true,
+        }));
+
+        // Remove query params from the URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
     }
   }, []);
 
@@ -138,7 +133,7 @@ const IntegrationPage = () => {
               <button
                 className="mt-4 md:mt-0 px-2 py-1 border border-[#EAEAF] bg-[#F6F6F9] text-[#686A74] text-sm rounded-[36px]"
                 onClick={() => handleConnectClick(integration.name)}
-                disabled={connectionStatus[integration.name]} // Disable if already connected
+                disabled={connectionStatus[integration.name]}
               >
                 {connectionStatus[integration.name] ? "Connected" : "Connect"}
               </button>

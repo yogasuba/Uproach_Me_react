@@ -52,7 +52,7 @@ const GroupStep1 = ({ setStep }) => {
             };
 
             const response = await axios.put(
-                `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/events/${eventId}/details`,
+                `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/events/${eventId}/details`,
                 payload,
                 {
                     headers: {

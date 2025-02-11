@@ -89,7 +89,7 @@ const SocialLinksPage = () => {
 
       // API Call
       const response = await axios.put(
-        `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
+        `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
         requestBody,
         {
           headers: {

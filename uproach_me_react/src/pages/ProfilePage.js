@@ -33,7 +33,7 @@ export default function ProfilePage() {
         const token = localStorage.getItem("authToken");
         const uid = localStorage.getItem("userId");
         const response = await axios.get(
-          `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/getSocialMedia`,
+          `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/${uid}/getSocialMedia`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ export default function ProfilePage() {
         }
 
         const response = await axios.get(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile",
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/profile",
           {
             params: { uid },
             headers: {
@@ -129,7 +129,7 @@ export default function ProfilePage() {
         }
 
         const availabilityResponse = await axios.get(
-            "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/checkUsernameAvailability",
+            "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/checkUsernameAvailability",
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -238,7 +238,7 @@ export default function ProfilePage() {
         }
 
         const profileResponse = await axios.put(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-url",
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/profile-url",
           {
             uid,
             profileURL: newProfilePic,
@@ -268,7 +268,7 @@ export default function ProfilePage() {
 
         if (socialMediaPayload.length > 0) {
           const socialMediaResponse = await axios.put(
-            `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
+            `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/${uid}/socialMedia`,
             { socialMedia: socialMediaPayload },
             {
               headers: {
@@ -296,7 +296,7 @@ export default function ProfilePage() {
             // Update password in your backend
             const payload = { password: editablePassword };
             const contactResponse = await axios.put(
-              `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/updatePhoneNumberAndPassword/${uid}`,
+              `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/updatePhoneNumberAndPassword/${uid}`,
               payload,
               {
                 headers: {
@@ -328,7 +328,7 @@ export default function ProfilePage() {
       // Update Username
       if (isEditing && newProfileUrl !== profileData.username) {
         const usernameResponse = await axios.put(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/username",
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/username",
           {
             uid,
             username: newProfileUrl,
@@ -357,7 +357,7 @@ export default function ProfilePage() {
           newBio !== profileData.bio)
       ) {
         const profileDetailsResponse = await axios.put(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/profile-details",
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/profile-details",
           {
             uid,
             profileName: newProfileName,
@@ -405,7 +405,7 @@ export default function ProfilePage() {
 
       try {
         const response = await axios.get(
-          `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/user/getUserCreds`,
+          `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/user/getUserCreds`,
           {
             params: { uid }, // Pass UID as query parameter
             headers: {

@@ -39,7 +39,7 @@ export default function SigninPage() {
 
         // Send the token to your backend API
         const response = await axios.post(
-            'https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin',
+            'https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/auth/signin',
             { idToken },
             {
                 headers: {
@@ -95,7 +95,7 @@ const handleEmailSignin = async (e) => {
     const idToken = await user.getIdToken();
 
     const response = await axios.post(
-      "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/auth/signin",
+      "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/auth/signin",
       { idToken },
       { headers: { "Content-Type": "application/json" } }
     );

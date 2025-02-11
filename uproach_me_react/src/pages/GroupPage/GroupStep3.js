@@ -17,7 +17,7 @@ const GroupStep3 = ({ setStep, meetingType, setMeetingType }) => {
     const token = localStorage.getItem("authToken");
     const eventId = localStorage.getItem("eventId");
 
-    const apiUrl = "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/events/location";
+    const apiUrl = "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/events/location";
 
     const requestBody = {
       uid,

@@ -21,7 +21,7 @@ const PagesMenu = () => {
 
     axios
       .get(
-        `https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/userEvents/${uid}`,
+        `https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/userEvents/${uid}`,
         {
           headers: {
               "Content-Type": "application/json",

@@ -36,7 +36,7 @@ export default function SuccessPage() {
         }
 
         const response = await axios.post(
-          "https://k9ycr51xu4.execute-api.ap-south-1.amazonaws.com/success-page",
+          "https://c4gp5r0vsj.execute-api.ap-south-1.amazonaws.com/success-page",
           { uid },
           {
             headers: {
