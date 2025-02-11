@@ -18,7 +18,7 @@ import BillingPopup from "./Billing/BillingPopup";
 import BillingPage from "./Billing/BillingPage";
 import IntegrationPage from "./IntegrationPage";
 import BookingsMenu from "./BookingsMenu";
-import PagesMenu from "./PagesMenu";
+import PagesMenu from "./EventsLinksMenu";
 import AnalyticsMenu from "./AnalyticsMenu";
 import OneOnOnePage from "./OneonOnePage";
 import GroupPage from "./GroupPage";

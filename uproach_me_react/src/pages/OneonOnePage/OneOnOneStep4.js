@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
-const OneOnOneStep4 = ({ setStep, navigate }) => {
+
+const OneOnOneStep4 = ({ setStep }) => {
   const [amount, setAmount] = useState("");
+  const navigate = useNavigate(); // Initialize the navigate function
   const [increaseConversation, setIncreaseConversation] = useState(false);
   const slashedAmount = 1000; // Default slashed amount
 
@@ -19,8 +22,6 @@ const OneOnOneStep4 = ({ setStep, navigate }) => {
       pricing: {
         amount: amount ? amount.toString() : "0",
         actualAmount: amount ? amount.toString() : "0",
-        // When increaseConversation is false, we send the slashedAmount;
-        // otherwise, you might want to send a different value (or even omit it).
         slashedAmount: !increaseConversation ? slashedAmount.toString() : "0",
         increaseConversationBySlashingPrice: increaseConversation,
       },
@@ -37,8 +38,8 @@ const OneOnOneStep4 = ({ setStep, navigate }) => {
       }
       );
       console.log("API Response:", response.data);
-      // Navigate to the desired page on success
-      navigate("/pages");
+      navigate("/?showPopup=true"); // Pass query parameter
+
     } catch (error) {
       console.error("Error while updating pricing:", error);
       // Optionally, handle errors (show error message etc.)

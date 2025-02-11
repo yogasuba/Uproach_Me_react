@@ -54,21 +54,23 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Back Button */}
-      <button className="flex items-center text-gray-800 font-bold p-2" onClick={() => navigate(-1)}>
-        <img
-          src="/icons/back-arrow.svg"
-          alt="Back Arrow"
-          width={16}
-          height={16}
-        />
-        <span className="ml-2">Back</span>
-      </button>
 
       {/* Main Grid Container */}
       <div className="flex-1 w-full mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] pt-1">
         {/* Left Column: Booking Form */}
-        <div className="bg-white gap-6 xl:pr-20 xl:pl-20 pt-5 sm:pr-10 sm:pl-10 sm:pb-40 xl:pb-0 shadow-md w-full sm:order-2 xl:order-1">
+        <div className="bg-white gap-6 xl:pr-20 xl:pl-20 pt-5 sm:pr-10 sm:pl-10 sm:pb-10 xl:pb-0 shadow-md w-full order-1">
+          {/* Back Button */}
+          <div className="xxl:ml-[-73px] sm:ml-[-35px] mb-[13px] mt-[-20px]">
+          <button className="flex items-center text-gray-800 font-bold p-2 relative " onClick={() => navigate(-1)}>
+            <img
+              src="/icons/back-arrow.svg"
+              alt="Back Arrow"
+              width={16}
+              height={16}
+            />
+            <span className="ml-2">Back</span>
+          </button>
+          </div>
           <form className="space-y-4">
             {/* Name */}
             <div>
@@ -155,7 +157,7 @@ export default function BookingPage() {
             </div>
 
             {/* Confirm And Pay Button */}
-            <div className="mt-8 sm:fixed sm:bottom-0 sm:left-0 sm:right-0 sm:bg-white sm:p-4 sm:w-full sm:border-t sm:border-gray-200 sm:z-50 xl:relative xl:mt-8">
+            <div className="mt-8 fixed bottom-0 left-0 right-0 sm:bg-white  w-full  border-gray-200 z-50 xl:relative xl:mt-8">
               <button
                 type="button"
                 disabled={!isFormValid}
@@ -173,7 +175,7 @@ export default function BookingPage() {
         </div>
 
         {/* Right Column: Event Summary */}
-        <div className="bg-purple-100 xl:pr-20 xl:pl-20 xl:pt-8 sm:pr-5 sm:pl-5 sm:pt-2 shadow-md w-full sm:order-1 xl:order-2">
+        <div className="bg-purple-100 xl:pr-20 xl:pl-20 xl:pt-8 sm:pr-5 sm:pl-5 sm:pt-2 sm:pb-40 xl:pb-0 shadow-md w-full order-1 ">
           <h2 className="text-2xl font-bold">{event.title}</h2>
 
           {/* Duration and Google Meet */}

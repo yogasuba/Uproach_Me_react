@@ -7,7 +7,7 @@ const EventCard = ({ event }) => {
 
   const handleCardClick = () => {
     if (event?.eventId ) {
-      navigate("/events", { state: { eventId: event.eventId } }); // Pass the event ID
+      navigate("/events", { state: { eventId: event.eventId }}); // Pass the event ID
     } else {
       console.error("Event ID is missing!");
     }

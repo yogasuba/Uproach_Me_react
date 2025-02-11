@@ -13,7 +13,7 @@ export default function Sidebar() {
   const navLinks = [
     { to: "/", icon: ICONS.DASHBOARD, label: "Dashboard" },
     { to: "/bookings", icon:ICONS.BOOKING, label: "Booking" },
-    { to: "/pages", icon:ICONS.SERVICES, label: "Pages" },
+    { to: "/events_links", icon:ICONS.SERVICES, label: "Events links" },
     { to: "/analytics", icon:ICONS.ANALYTICS, label: "Analytics" },
     { to: "/teams", icon:ICONS.USERS, label: "Teams" },
     { to: "/calendar", icon:ICONS.BOOKING, label: "Calendar" },

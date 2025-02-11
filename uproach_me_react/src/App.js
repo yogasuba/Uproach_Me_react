@@ -77,7 +77,7 @@ function App() {
             <Route path="/billingplan" element={<DashboardLayout showHeader={false}><BillingPopup /></DashboardLayout>}/>
             <Route path="/integration" element={<DashboardLayout showHeader={false}><IntegrationPage /></DashboardLayout>} />
             <Route path="/bookings" element={<DashboardLayout showHeader={false}><BookingsMenu /></DashboardLayout>} />
-            <Route path="/pages" element={<DashboardLayout showHeader={false}><PagesMenu /></DashboardLayout>} />
+            <Route path="/events_links" element={<DashboardLayout showHeader={false}><PagesMenu /></DashboardLayout>} />
             <Route path="/analytics" element={<DashboardLayout showHeader={false}><AnalyticsMenu /></DashboardLayout>} />
             <Route path="/calendar" element={<DashboardLayout showHeader={false}><CalendarPage /></DashboardLayout>} />
             <Route path="/availability" element={<DashboardLayout showHeader={false}><Availability /></DashboardLayout>} />

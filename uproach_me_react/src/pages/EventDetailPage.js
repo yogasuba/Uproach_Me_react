@@ -162,14 +162,14 @@ const EventDetailPage = () => {
           {
             eventId : eventId,
             date: selectedDate,
-            time: times[selectedTime],
-            timeZone: selectedTimeZone,
+            slotTiming: times[selectedTime],
+            TimeZone: selectedTimeZone,
           },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        navigate("/booking-confirmation");
+        navigate("/booking");
       } catch (err) {
         console.error("Booking failed", err);
       }
